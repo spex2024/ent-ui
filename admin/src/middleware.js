@@ -5,6 +5,15 @@ export function middleware(req) {
 
     console.log('Token:', token); // Debugging: Log the token
 
+    const url = new URL(req.url);
+
+    if (url.pathname === '/login' || url.pathname === '/signup') {
+        if (token) {
+            // Redirect to the dashboard or home page if the user is already logged in
+            return NextResponse.redirect(new URL('/', req.url));
+        }
+    }
+
     if (token) {
         // Allow access if token is present
         return NextResponse.next();
@@ -14,6 +23,7 @@ export function middleware(req) {
     }
 }
 
+
 export const config = {
-    matcher: ['/', '/users', '/vendors', '/orders','/enterprises','/daily-orders','/return-pack'], // Adjust paths to match the routes you want to protect
+    matcher: ['/', '/users', '/vendors', '/orders','/enterprises','/daily-orders'], // Adjust paths to match the routes you want to protect
 };

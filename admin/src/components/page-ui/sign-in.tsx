@@ -47,8 +47,6 @@ export function LoginForm() {
     // Handle form submission
     const onSubmit = async (data: LoginFormValues) => {
          await login(data);
-        console.log(data);
-        // Handle login logic here
     };
 
     return (
