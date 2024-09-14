@@ -25,5 +25,5 @@ export function middleware(req) {
 
 
 export const config = {
-    matcher: ['/', '/users', '/vendors', '/orders','/enterprises','/daily-orders'], // Adjust paths to match the routes you want to protect
+    matcher: ['/', '/users', '/vendors', '/orders','/enterprises','/daily-orders','/login', '/signup'], // Adjust paths to match the routes you want to protect
 };
