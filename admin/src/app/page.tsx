@@ -62,7 +62,7 @@ export default function Dashboard() {
   const {vendors, fetchVendors} = useVendorStore()
   const {user, fetchUser} = useUserStore()
   // const { isAuthenticated } = useAuthStore();
-  const router = useRouter();
+  // const router = useRouter();
 
 
 
