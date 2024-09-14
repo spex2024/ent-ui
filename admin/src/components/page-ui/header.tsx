@@ -27,18 +27,18 @@ const Header: React.FC = () => {
     const router = useRouter();
     const { newPacks, fetchReturnedPacks } = useReturnedPacksStore();
     const {user , fetchUser}= useAdminStore()
-    const { logout:clear ,isAuthenticated } = useAuthStore();
+    // const { logout:clear ,isAuthenticated } = useAuthStore();
 
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (!isAuthenticated) {
-                router.push('/login'); // Redirect to login page if not authenticated
-            }
-        }, 1000); // Adjust the delay as needed
-
-        return () => clearTimeout(timer); // Clean up the timer if the component unmounts
-    }, [isAuthenticated, router]);
+    // useEffect(() => {
+    //     const timer = setTimeout(() => {
+    //         if (!isAuthenticated) {
+    //             router.push('/login'); // Redirect to login page if not authenticated
+    //         }
+    //     }, 1000); // Adjust the delay as needed
+    //
+    //     return () => clearTimeout(timer); // Clean up the timer if the component unmounts
+    // }, [isAuthenticated, router]);
 
     useEffect(() => {
         fetchReturnedPacks(); // Fetch packs on component mount
@@ -60,7 +60,7 @@ const Header: React.FC = () => {
 
     const handleLogout = async () => {
         await logout();
-        clear()
+        // clear()
         router.push('/login'); // Redirect to the login page after logout
     };
 
@@ -73,7 +73,7 @@ const Header: React.FC = () => {
         // Clear the timeout if the component unmounts or the user logs out before the timer completes
         return () => clearTimeout(logoutTimer);
     }, []);
-    if (!isAuthenticated) return null;
+    // if (!isAuthenticated) return null;
     return (
         <header className="z-10 w-full sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
             <nav
