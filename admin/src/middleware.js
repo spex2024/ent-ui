@@ -2,28 +2,23 @@ import { NextResponse } from 'next/server';
 
 export function middleware(req) {
     const token = req.cookies.get('token')?.value; // Use the Next.js cookies API
-
-    console.log('Token:', token); // Debugging: Log the token
-
     const url = new URL(req.url);
 
-    if (url.pathname === '/login' || url.pathname === '/signup') {
-        if (token) {
-            // Redirect to the dashboard or home page if the user is already logged in
+    if (token) {
+        // Redirect to home or dashboard if trying to access login or signup page while logged in
+        if (url.pathname === '/login' || url.pathname === '/signup') {
             return NextResponse.redirect(new URL('/', req.url));
+        }
+    } else {
+        // Redirect to login if no token is present
+        if (url.pathname !== '/login' && url.pathname !== '/signup') {
+            return NextResponse.redirect(new URL('/login', req.url));
         }
     }
 
-    if (token) {
-        // Allow access if token is present
-        return NextResponse.next();
-    } else {
-        // Redirect to the login page if token is not present
-        return NextResponse.redirect(new URL('/login', req.url));
-    }
+    return NextResponse.next();
 }
 
-
 export const config = {
-    matcher: ['/', '/users', '/vendors', '/orders','/enterprises','/daily-orders','/login', '/signup'], // Adjust paths to match the routes you want to protect
+    matcher: ['/', '/users', '/vendors', '/orders', '/enterprises', '/daily-orders', '/return-pack', '/login'],
 };
