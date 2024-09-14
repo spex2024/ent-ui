@@ -10,7 +10,7 @@ const useAuth = () => {
     const { setIsAuthenticated } = useAuthStore();
     const router = useRouter();
     // const baseurl = "http://localhost:8080";
-    const baseurl = 'https://backend.ekowenu.site';
+    const baseurl = process.env.BASE_URI
 
 
     const login = async (data) => {
