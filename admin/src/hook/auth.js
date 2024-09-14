@@ -14,6 +14,7 @@ const useAuth = () => {
 
 
     const login = async (data) => {
+        console.log(baseurl)
         setError(null);
         try {
             const response = await axios.post(`${baseurl}/api/admin/login`, data, { withCredentials: true });
