@@ -24,7 +24,9 @@ const useAuth = () => {
             }
         } catch (error) {
             setError(error.response.data.message);
+
         }
+        console.error = () => {};
     };
 
     const logout = async () => {
