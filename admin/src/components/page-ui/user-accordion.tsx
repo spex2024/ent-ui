@@ -7,7 +7,6 @@ import {
 import DataTable from "@/components/page-ui/table";
 
 export function UserAccordion({name , location , users,image}: {name: string, location: string, users:[], image:string}) {
-    console.log(location, location, users);
     return (
         <Accordion type="single" collapsible className="w-full ">
             <AccordionItem value={name}>

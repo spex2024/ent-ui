@@ -9,26 +9,11 @@ import {ScaleLoader} from "react-spinners";
 
 const Page = () => {
     const { agencies, fetchAgencies } = useAgencyStore();
-    const { isAuthenticated } = useAuthStore();
-    const router = useRouter();
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            if (!isAuthenticated) {
-                router.push('/login'); // Redirect to login page if not authenticated
-            }
-        }, 1000); // Adjust the delay as needed
-
-        return () => clearTimeout(timer); // Clean up the timer if the component unmounts
-    }, [isAuthenticated, router]);
     useEffect(() => {
         fetchAgencies();
     }, [fetchAgencies]);
 
-    // Optionally, you can return a loading indicator while checking authentication
-    if (!isAuthenticated) {
-        return null
-    }
 
 
     return (
