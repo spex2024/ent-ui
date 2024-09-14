@@ -4,7 +4,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 // const baseurl = 'https://enterprise-backend.vercel.app';
-const baseurl = 'https://enterprise-backend-l6pn.onrender.com';
+const baseurl = 'https://backend.ekowenu.site';
 
 // const baseurl = "http://localhost:8080";
 const useOrdersStore = create((set) => ({
