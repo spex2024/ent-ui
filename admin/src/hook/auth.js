@@ -10,11 +10,10 @@ const useAuth = () => {
     const { setIsAuthenticated } = useAuthStore();
     const router = useRouter();
     // const baseurl = "http://localhost:8080";
-    const baseurl = process.env.BASE_URI
+    const baseurl = 'https://backend.ekowenu.site';
 
 
     const login = async (data) => {
-        console.log(baseurl)
         setError(null);
         try {
             const response = await axios.post(`${baseurl}/api/admin/login`, data, { withCredentials: true });
