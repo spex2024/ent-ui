@@ -7,11 +7,11 @@ import { Navbar } from "@/components/navbar";
 import Menu from "@/components/page-ui/menu";
 import Cart from "@/components/page-ui/cart";
 import Vendors from "@/components/page-ui/vendors";
-import useAuthStore from "@/app/store/authenticate";
+
 
 
 export default function Home() {
-  const { isAuthenticated } = useAuthStore();
+
 
 
   return (
