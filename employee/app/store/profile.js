@@ -9,7 +9,7 @@ const useUserStore = create((set) => ({
   fetchUser: async () => {
     // const baseurl = "http://localhost:8080";
     // const baseurl = "https://enterprise-backend.vercel.app";
-    const baseurl = "https://enterprise-backend-l6pn.onrender.com";
+    const baseurl = "https://api.spexafrica.site";
 
     try {
       const response = await axios.get(`${baseurl}/api/user/employee`, {
