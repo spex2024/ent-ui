@@ -11,33 +11,17 @@ import { Link } from "@nextui-org/link";
 import { link as linkStyles } from "@nextui-org/theme";
 import NextLink from "next/link";
 import clsx from "clsx";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import ProfileAvatar from "@/components/avatar";
 import CartDrawer from "@/components/page-ui/cart-drawer";
-import useAuthStore from "@/app/store/authenticate";
 import Image from "next/image";
 import UserAvatar from "@/components/page-ui/profile";
 
 export const Navbar = () => {
-  const { isAuthenticated } = useAuthStore();
 
-  const router = useRouter();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!isAuthenticated) {
-        router.push("/login"); // Redirect to login page if not authenticated
-      }
-    }, 1000); // Adjust the delay as needed
 
-    return () => clearTimeout(timer); // Clean up the timer if the component unmounts
-  }, [isAuthenticated, router]);
-
-   if(!isAuthenticated) return  null
 
   return (
     <NextUINavbar maxWidth="xl" position="sticky" className={`dark:bg-neutral-900 dark:border-neutral-800`}
