@@ -10,7 +10,7 @@ const useAuth = () => {
     const { setIsAuthenticated } = useAuthStore();
     const router = useRouter();
     // const baseurl = "http://localhost:8080";
-    const baseurl = 'https://backend.ekowenu.site';
+    const baseurl = 'https://api.spexafrica.site';
 
 
     const login = async (data) => {
