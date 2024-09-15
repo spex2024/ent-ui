@@ -157,7 +157,7 @@ const UpdateProfile = () => {
                       : user?.profilePhoto ||
                       "https://res.cloudinary.com/ddwet1dzj/image/upload/v1722177650/spex_logo-03_png_dui5ur.png"
                   }
-                />
+                 alt={'profile'}/>
               </div>
               <label className="block">
                 <span className="sr-only">Choose profile photo</span>
