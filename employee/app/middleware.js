@@ -6,12 +6,12 @@ export function middleware(req) {
 
     if (token) {
         // Redirect to home or dashboard if trying to access login or signup page while logged in
-        if (url.pathname === '/login' || url.pathname === '/signup') {
+        if (url.pathname === '/login' || url.pathname === '/register') {
             return NextResponse.redirect(new URL('/', req.url));
         }
     } else {
         // Redirect to login if no token is present
-        if (url.pathname !== '/login' && url.pathname !== '/signup') {
+        if (url.pathname !== '/login' && url.pathname !== '/register') {
             return NextResponse.redirect(new URL('/login', req.url));
         }
     }
@@ -20,5 +20,5 @@ export function middleware(req) {
 }
 
 export const config = {
-    matcher: ['/', '/users', '/vendors', '/orders', '/enterprises', '/daily-orders', '/return-pack', '/login'],
+    matcher: ['/', '/meals', '/profile', '/order', '/register', '/return-pack', '/login','/wallet'],
 };
