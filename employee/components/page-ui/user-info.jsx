@@ -149,7 +149,6 @@ const UpdateProfile = () => {
             <div className="flex items-center space-x-6 pt-4">
               <div className="shrink-0">
                 <img
-                  alt="Current profile photo"
                   className="h-16 w-16 object-cover rounded-full border-2 border-black"
                   id="preview_img"
                   src={
