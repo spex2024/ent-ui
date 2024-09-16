@@ -67,7 +67,7 @@ export default function Home() {
           </a>
 
           <a
-              href="https://vendor.spexafrica.app"
+              href="https://vendor.spexafrica.site"
               className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-green-500"
               target="_blank"
               rel="noopener noreferrer"
