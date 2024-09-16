@@ -15,14 +15,7 @@ export default function Home() {
                 rel="noopener noreferrer"
             >
               By{" "}
-              <Image
-                  src="https://res.cloudinary.com/ddwet1dzj/image/upload/v1722947583/agency/bjmxjqsir7jxozcecfbd.png"
-                  alt="Dercolbags Packaging Limited"
-                  className=""
-                  width={60}
-                  height={24}
-                  priority
-              />
+             <p>Dercolbags Packaging Limited</p>
             </a>
           </div>
         </div>
@@ -40,7 +33,7 @@ export default function Home() {
 
         <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
           <a
-              href="https://main.d1lolo334q00y7.amplifyapp.com"
+              href="https://enterprise.spexafrica.site"
               className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-green-500"
               target="_blank"
               rel="noopener noreferrer"
@@ -57,7 +50,7 @@ export default function Home() {
           </a>
 
           <a
-              href="https://main.d3h2qrol1316a6.amplifyapp.com"
+              href="https://user.spexafrica.site"
               className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-green-500  "
               target="_blank"
               rel="noopener noreferrer"
@@ -74,7 +67,7 @@ export default function Home() {
           </a>
 
           <a
-              href="https://main.d1tchh5v04pztk.amplifyapp.com"
+              href="https://vendor.spexafrica.app"
               className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-green-500"
               target="_blank"
               rel="noopener noreferrer"
@@ -91,7 +84,7 @@ export default function Home() {
           </a>
 
           <a
-              href="https://main.d2pyl4na0l0nj7.amplifyapp.com"
+              href="https://admin.spexafrica.site"
               className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-green-500"
               target="_blank"
               rel="noopener noreferrer"
