@@ -95,7 +95,7 @@ const SignUp = () => {
             </div>
 
             <p className=" text-gray-500 dark:text-gray-300 lg:text-sm">
-              Sign in to access your account
+              Create a new account
             </p>
           </div>
         </div>
