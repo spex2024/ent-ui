@@ -2,8 +2,9 @@
 
 import { NextUIProvider } from "@nextui-org/react";
 
-import { Navbar } from "../../components/navbar";
+
 import Cart from "../../components/page-ui/cart";
+import Navbar from "../../components/navbar";
 
 export default function Layout({ children }) {
   return (
