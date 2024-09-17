@@ -12,11 +12,9 @@ const Vendors = () => {
 
     return (
         <div className="w-[90%] px-5 mx-auto">
-            {vendors.length > 0 ? (
+            {vendors && (
                 <VendorTable vendors={vendors} />
-            ) : (
-                <p>No vendors found.</p>
-            )}
+            ) }
         </div>
     );
 };
