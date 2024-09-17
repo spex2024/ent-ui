@@ -22,6 +22,7 @@ const useAuth = () => {
 
       if (response.status === 200) {
         setSuccess(response.data.message);
+        window.location.reload();
         router.push("/"); // or any protected route
       }
     } catch (error) {
