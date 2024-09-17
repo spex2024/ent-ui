@@ -19,7 +19,7 @@ import ProfileAvatar from "@/components/avatar";
 import CartDrawer from "@/components/page-ui/cart-drawer";
 import UserAvatar from "@/components/page-ui/profile";
 
-export const Navbar = () => {
+const Navbar = () => {
   return (
     <NextUINavbar
       className={`dark:bg-neutral-900 dark:border-neutral-800`}
@@ -101,3 +101,5 @@ export const Navbar = () => {
     </NextUINavbar>
   );
 };
+
+export default  Navbar
