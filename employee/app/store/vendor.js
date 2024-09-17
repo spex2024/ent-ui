@@ -14,7 +14,7 @@ const useVendorStore = create((set) => ({
   fetchVendors: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await axios.get(`${baseurl}/api/admin/vendors`, {
+      const response = await axios.get(`${baseurl}/api/user/vendors`, {
         withCredentials: true,
       });
 
