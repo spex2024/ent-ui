@@ -3,13 +3,13 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-import useAuthStore from "@/app/store/authenticate";
+import useCartStore from "@/app/store/cart";
 
 const useAuth = () => {
   const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
   const router = useRouter();
-  const { setIsAuthenticated } = useAuthStore();
+  const { clearCart } = useCartStore();
   // const baseurl = "http://localhost:8080";
   // const baseurl = "https://enterprise-backend.vercel.app";
   const baseurl = "https://api.spexafrica.site";
@@ -22,7 +22,6 @@ const useAuth = () => {
 
       if (response.status === 200) {
         setSuccess(response.data.message);
-        setIsAuthenticated(true);
         router.push("/"); // or any protected route
       }
     } catch (error) {
@@ -41,6 +40,7 @@ const useAuth = () => {
 
       if (response.data.success) {
         setSuccess(response.data.message);
+        clearCart()
         router.push("/login"); // or any public route
       }
       setSuccess(response.data.message);

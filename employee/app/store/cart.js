@@ -110,6 +110,18 @@ const useCartStore = create(
         }
       },
 
+      // Clear the cart and remove from sessionStorage on logout
+      clearCart: () => {
+        set({
+          cart: [],
+          totalPrice: 0,
+          totalQuantity: 0,
+        });
+
+        // Remove the persisted cart data from sessionStorage
+        sessionStorage.removeItem("cart-storage");
+      },
+
       toggleDrawer: () =>
         set((state) => ({ isDrawerOpen: !state.isDrawerOpen })),
     }),
