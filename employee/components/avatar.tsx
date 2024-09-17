@@ -19,7 +19,6 @@ import useAuthStore from "@/app/store/authenticate";
 export default function ProfileAvatar() {
   const { user, fetchUser } = useUserStore();
   const { logout, success, error } = useAuth();
-  const { logout: clear } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {
@@ -36,21 +35,9 @@ export default function ProfileAvatar() {
 
   const handleLogout = async () => {
     await logout();
-    clear();
     router.push("/login"); // Redirect to the login page after logout
   };
 
-  useEffect(() => {
-    // Set a timeout to automatically log out after 2 minutes (120,000 milliseconds)
-    const logoutTimer = setTimeout(() => {
-      handleLogout();
-    }, 86400000);
-
-    // Clear the timeout if the component unmounts or the user logs out before the timer completes
-    return () => clearTimeout(logoutTimer);
-  }, []);
-
-  // Empty dependency array means this effect runs only once when the component mounts
   return (
     <div className="flex items-center gap-4">
       <Dropdown placement="bottom-start">

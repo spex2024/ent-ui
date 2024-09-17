@@ -9,7 +9,6 @@ const useAuth = () => {
   const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
   const router = useRouter();
-  const { setIsAuthenticated } = useAuthStore();
   // const baseurl = "http://localhost:8080";
   // const baseurl = "https://enterprise-backend.vercel.app";
   const baseurl = "https://api.spexafrica.site";
@@ -22,7 +21,7 @@ const useAuth = () => {
         console.log(response);
       if (response.status === 200) {
         setSuccess(response.data.message);
-        router.push("/"); // or any protected route
+        router.replace("/"); // or any protected route
       }
     } catch (error) {
       setError(error.response?.data.message);
@@ -40,7 +39,6 @@ const useAuth = () => {
 
       if (response.data.success) {
         setSuccess(response.data.message);
-        setIsAuthenticated(false);
         router.push("/login"); // or any public route
       }
       setSuccess(response.data.message);
