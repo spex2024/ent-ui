@@ -19,7 +19,6 @@ const useAuth = () => {
             const response = await axios.post(`${baseurl}/api/admin/login`, data, { withCredentials: true });
             if (response.status === 200) {
                 setSuccess(response.data.message);
-                setIsAuthenticated(true);
                 router.push('/'); // or any protected route
             }
         } catch (error) {

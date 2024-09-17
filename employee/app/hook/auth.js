@@ -9,6 +9,7 @@ const useAuth = () => {
   const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
   const router = useRouter();
+  const { setIsAuthenticated } = useAuthStore();
   // const baseurl = "http://localhost:8080";
   // const baseurl = "https://enterprise-backend.vercel.app";
   const baseurl = "https://api.spexafrica.site";
@@ -18,10 +19,10 @@ const useAuth = () => {
       const response = await axios.post(`${baseurl}/api/user/login`, data, {
         withCredentials: true,
       });
-        console.log(response);
       if (response.status === 200) {
         setSuccess(response.data.message);
-        router.replace("/"); // or any protected route
+        setIsAuthenticated(true);
+        router.push("/"); // or any protected route
       }
     } catch (error) {
       setError(error.response?.data.message);
