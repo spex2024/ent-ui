@@ -83,22 +83,29 @@ const SignUp = () => {
 
   return (
     <div className="flex flex-wrap  dark:text-neutral-300 ">
-      <div className="flex w-full min-h-screen flex-col md:w-1/3">
-        <div className="flex justify-center pt-12 md:-mb-24 md:justify-start md:pl-12">
-          <Link
-            className="border-b-gray-700 border-b-4 pb-2 text-2xl font-bold text-gray-900 dark:text-neutral-300"
-            href={"/"}
-          >
-            SPEX.
-          </Link>
+      <div className="flex justify-center items-center   w-full min-h-screen flex-col md:w-1/3  lg:px-10">
+        <div className="flex justify-center   ">
+          <div className="text-center">
+            <div className="flex justify-center mx-auto ">
+              <img
+                alt="spex-africa"
+                className="w-auto h-32 sm:h-32 lg:h-24 "
+                src="https://res.cloudinary.com/ddwet1dzj/image/upload/v1722177650/spex_logo-03_png_dui5ur.png"
+              />
+            </div>
+
+            <p className=" text-gray-500 dark:text-gray-300 lg:text-sm">
+              Sign in to access your account
+            </p>
+          </div>
         </div>
-        <div className="mx-auto my-auto flex flex-col justify-center pt-8 md:justify-start md:px-4 md:pt-0 mt-20 lg:w-[30rem]">
+        <div className="w-full flex flex-col justify-center pt-8 md:justify-start md:px-4 md:pt-0 mt-5 lg:w-[30rem]">
           <form
-            className="flex flex-col gap-2 pt-3 md:pt-8"
+            className="flex flex-col gap-2 sm:pt-3 sm:px-5  lg:px-8"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <div className="flex flex-col lg:flex-row gap-3">
-              <div className="flex flex-col pt-4">
+            <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-3  h-auto lg:gap-2">
+              <div className="w-full flex flex-col ">
                 <input
                   type="text"
                   {...register("firstName")}
@@ -109,7 +116,7 @@ const SignUp = () => {
                   <p className={errorClass}>{errors.firstName.message}</p>
                 )}
               </div>
-              <div className="flex flex-col pt-4">
+              <div className="w-full flex flex-col ">
                 <input
                   type="text"
                   {...register("lastName")}
@@ -154,34 +161,37 @@ const SignUp = () => {
                 <p className={errorClass}>{errors.confirmPassword.message}</p>
               )}
             </div>
-            <div className="flex flex-col pt-4">
-              <input
-                type="text"
-                {...register("code")}
-                className={inputClass}
-                placeholder="GCBHS484"
-              />
-              {errors.code && (
-                <p className={errorClass}>{errors.code.message}</p>
-              )}
+            <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-3  h-auto">
+              <div className="w-full flex flex-col pt-4">
+                <input
+                  type="text"
+                  {...register("code")}
+                  className={inputClass}
+                  placeholder="GCBHS484"
+                />
+                {errors.code && (
+                  <p className={errorClass}>{errors.code.message}</p>
+                )}
+              </div>
+              <div className="w-full flex flex-col pt-4">
+                <input
+                  type="tel"
+                  {...register("phone")}
+                  className={inputClass}
+                  placeholder="Phone"
+                />
+                {errors.phone && (
+                  <p className={errorClass}>{errors.phone.message}</p>
+                )}
+              </div>
             </div>
-            <div className="flex flex-col pt-4">
-              <input
-                type="tel"
-                {...register("phone")}
-                className={inputClass}
-                placeholder="Phone"
-              />
-              {errors.phone && (
-                <p className={errorClass}>{errors.phone.message}</p>
-              )}
-            </div>
-            <div className="flex items-center space-x-6 pt-4">
+
+            <div className="flex items-center space-x-6 pt-2">
               <div className="shrink-0">
                 {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
                 <img
                   alt="Current profile photo"
-                  className="h-16 w-16 object-cover rounded-full border-2 border-black"
+                  className="sm:h-16 sm:w-16 lg:h-10 lg:w-10 object-cover rounded-full border-2 border-black"
                   id="preview_img"
                   src={
                     profilePhoto?.length
@@ -200,14 +210,14 @@ const SignUp = () => {
               </label>
             </div>
             <button
-              className="mt-8 w-[50%]  bg-gray-900 px-4 py-2 text-center text-base font-semibold text-white shadow-md transition dark:bg-neutral-900 dark:border-neutral-400 dark:text-neutral-300"
+              className="mt-4 w-[50%]  bg-gray-900 px-4 py-2 text-center text-base font-semibold text-white shadow-md transition dark:bg-neutral-900 dark:border-neutral-400 dark:text-neutral-300"
               type="submit"
             >
               Sign Up
             </button>
           </form>
-          <div className="mt-6 w-full flex items-start  justify-start">
-            <p className="whitespace-nowrap text-gray-600 flex gap-4 w-full items-center dark:text-neutral-300 ">
+          <div className="mt-4 w-full flex items-center justify-center sm:text-sm lg:text-xs ">
+            <p className="w-full whitespace-nowrap text-gray-600 flex gap-4 w-full items-center lg:px-10 dark:text-neutral-300 ">
               Already have an account?
               <Link
                 className="underline-offset-4 font-semibold text-gray-900 underline"

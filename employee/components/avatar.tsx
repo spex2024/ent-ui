@@ -17,7 +17,7 @@ import useAuth from "@/app/hook/auth";
 import useAuthStore from "@/app/store/authenticate";
 
 export default function ProfileAvatar() {
-  const { user, fetchUser } = useUserStore();
+  const { user, fetchUser ,loading } = useUserStore();
   const { logout, success, error } = useAuth();
   const router = useRouter();
 
@@ -37,6 +37,10 @@ export default function ProfileAvatar() {
     await logout();
     router.push("/login"); // Redirect to the login page after logout
   };
+
+  if (loading) {
+    return <Skeleton />;
+  }
 
   return (
     <div className="flex items-center gap-4">
@@ -76,3 +80,14 @@ export default function ProfileAvatar() {
     </div>
   );
 }
+
+
+const Skeleton = () => (
+    <div className="animate-pulse flex items-center gap-4">
+      <div className="rounded-full bg-gray-300 h-10 w-10"></div>
+      <div>
+        <div className="h-4 bg-gray-300 rounded w-32"></div>
+        <div className="h-3 bg-gray-300 rounded w-24 mt-1"></div>
+      </div>
+    </div>
+);
