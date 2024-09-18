@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Enterprise = () => {
     const { agencies, fetchAgencies } = useAgencyStore();
-    const [filteredAgencies, setFilteredAgencies] = useState(agencies);
+    const [filteredAgencies, setFilteredAgencies] = useState([]);
     const [statusFilter, setStatusFilter] = useState("all");
 
     useEffect(() => {
@@ -18,9 +18,9 @@ const Enterprise = () => {
         if (statusFilter === "all") {
             setFilteredAgencies(agencies);
         } else if (statusFilter === "active") {
-            setFilteredAgencies(agencies.filter((agency: { status: string; }) => agency.status === "active"));
+            setFilteredAgencies(agencies.filter((agency: { isVerified: boolean; }) => agency.isVerified === true));
         } else if (statusFilter === "inactive") {
-            setFilteredAgencies(agencies.filter((agency: { status: string; }) => agency.status === "inactive"));
+            setFilteredAgencies(agencies.filter((agency: { isVerified: boolean; }) => agency.isVerified === false));
         }
     }, [statusFilter, agencies]);
 
