@@ -25,7 +25,10 @@ const Enterprise = () => {
     }, [statusFilter, agencies]);
 
     return (
-        <div className="w-[90%] px-5 mx-auto">
+        <div className="w-[90%] px-5 mx-auto min-h-screen ">
+            <div className="w-full ">
+                <h1 className={'font-black text-xl'}>Enterprise</h1>
+            </div>
             <Tabs defaultValue="all" onValueChange={(value) => setStatusFilter(value)}>
                 <div className="flex items-center">
                     <TabsList>
