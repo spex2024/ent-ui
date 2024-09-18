@@ -1,14 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import AgencyDetailsModal from "@/components/page-ui/agency-modal";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import {Eye, TrashIcon} from "lucide-react";
+import { Eye, TrashIcon } from "lucide-react";
 import UpdateEntForm from "@/components/page-ui/update-enterprise";
 import useAuth from "@/hook/auth";
-import {toast} from "react-hot-toast";
+import { toast } from "react-hot-toast";
 
 interface Order {
     _id: string;
@@ -44,8 +44,10 @@ interface AgencyTableProps {
 export default function AgencyTable({ agencies }: AgencyTableProps) {
     const [selectedAgency, setSelectedAgency] = useState<Agency | null>(null);
     const [isModalOpen, setModalOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
-    const {deleteEnterprise , success ,error} = useAuth()
+    const { deleteEnterprise, success, error } = useAuth();
 
     const handleViewClick = (agency: Agency) => {
         setSelectedAgency(agency);
@@ -72,10 +74,22 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
         }
     }, [success, error]);
 
-    const handleDelete = async (userId: string) => {
-        await deleteEnterprise(userId);
+    const handleDelete = async (agencyId: string) => {
+        await deleteEnterprise(agencyId);
     };
 
+    // Sort agencies by creation date in ascending order
+    const sortedAgencies = [...agencies].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+
+    // Calculate pagination
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const paginatedAgencies = sortedAgencies.slice(startIndex, startIndex + itemsPerPage);
+
+    const totalPages = Math.ceil(sortedAgencies.length / itemsPerPage);
+
+    const handlePageChange = (newPage: number) => {
+        setCurrentPage(newPage);
+    };
 
     return (
         <div className="w-full p-4">
@@ -101,7 +115,7 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {agencies?.map((agency) => (
+                            {paginatedAgencies.map((agency) => (
                                 <TableRow key={agency._id}>
                                     <TableCell>
                                         <Image
@@ -115,7 +129,7 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
                                     <TableCell>{agency.company}</TableCell>
                                     <TableCell>{agency.branch}</TableCell>
                                     <TableCell>{agency.code}</TableCell>
-                                    <TableCell>{agency.isVerified ? 'Active': 'Inactive'}</TableCell>
+                                    <TableCell>{agency.isVerified ? 'Active' : 'Inactive'}</TableCell>
                                     <TableCell>{agency.phone}</TableCell>
                                     <TableCell>{agency.email}</TableCell>
                                     <TableCell>{agency.users.reduce((count, user) => count + user.orders.length, 0)}</TableCell>
@@ -141,13 +155,11 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
                                             </Tooltip>
                                             <Tooltip>
                                                 <TooltipTrigger>
-
-                                                    <UpdateEntForm agency={agency}/>
+                                                    <UpdateEntForm agency={agency} />
                                                 </TooltipTrigger>
                                                 <TooltipContent>
                                                     <div className="flex flex-col">
-                                                        <Button  size="sm"
-                                                                 className="w-full text-left">update profile</Button>
+                                                        <Button size="sm" className="w-full text-left">Update Profile</Button>
                                                     </div>
                                                 </TooltipContent>
                                             </Tooltip>
@@ -159,13 +171,11 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
                                                         className="h-8 w-8 p-0"
                                                         onClick={() => handleDelete(agency._id)}
                                                     >
-                                                        <TrashIcon size={16}/>
+                                                        <TrashIcon size={16} />
                                                     </Button>
                                                 </TooltipTrigger>
                                                 <TooltipContent>
-
-                                                    <Button  size="sm"
-                                                             className="w-full text-left" >Delete vendor</Button>
+                                                    <Button size="sm" className="w-full text-left">Delete Vendor</Button>
                                                 </TooltipContent>
                                             </Tooltip>
                                         </TooltipProvider>
@@ -174,6 +184,24 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
                             ))}
                         </TableBody>
                     </Table>
+                    {/* Pagination Controls */}
+                    <div className="flex justify-between items-center mt-4">
+                        <Button
+                            disabled={currentPage === 1}
+                            onClick={() => handlePageChange(currentPage - 1)}
+                        >
+                            Previous
+                        </Button>
+                        <span>
+                            Page {currentPage} of {totalPages}
+                        </span>
+                        <Button
+                            disabled={currentPage === totalPages}
+                            onClick={() => handlePageChange(currentPage + 1)}
+                        >
+                            Next
+                        </Button>
+                    </div>
                 </CardContent>
             </Card>
             {selectedAgency && (
