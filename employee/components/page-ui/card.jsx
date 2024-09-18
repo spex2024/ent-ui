@@ -56,7 +56,9 @@ const FoodProductCard = () => {
           </div>
         ))
       ) : (
-        <NotFound message="No meals found" />
+        <div className={`w-full flex justify-center items-center h-screen`}>
+          <NotFound message="No meals found" />
+        </div>
       )}
     </div>
   );
