@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -8,6 +8,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import {Eye, TrashIcon} from "lucide-react";
 import UpdateEntForm from "@/components/page-ui/update-enterprise";
 import useAuth from "@/hook/auth";
+import {toast} from "react-hot-toast";
 
 interface Order {
     _id: string;
@@ -43,7 +44,7 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
     const [selectedAgency, setSelectedAgency] = useState<Agency | null>(null);
     const [isModalOpen, setModalOpen] = useState(false);
 
-    const {deleteEnterprise} = useAuth()
+    const {deleteEnterprise , success ,error} = useAuth()
 
     const handleViewClick = (agency: Agency) => {
         setSelectedAgency(agency);
@@ -61,6 +62,14 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
             return total + user.orders.reduce((userTotal, order) => userTotal + order.totalPrice, 0);
         }, 0);
     };
+
+    useEffect(() => {
+        if (success) {
+            toast.success(success);
+        } else if (error) {
+            toast.error(error);
+        }
+    }, [success, error]);
 
     const handleDelete = async (userId: string) => {
         await deleteEnterprise(userId);
