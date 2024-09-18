@@ -6,7 +6,7 @@ import Cart from "../../../components/page-ui/cart";
 
 const MealList = () => {
   return (
-    <div className={`min-h-screen `}>
+    <div className={`min-h-screen w-full justify-center items-center`}>
       <FoodProductCard />
       <MealModal />
       <Cart />
