@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import AgencyDetailsModal from "@/components/page-ui/agency-modal";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Eye, TrashIcon } from "lucide-react";
+import {CircleArrowLeft, CircleArrowRight, Eye, TrashIcon} from "lucide-react";
 import UpdateEntForm from "@/components/page-ui/update-enterprise";
 import useAuth from "@/hook/auth";
 import { toast } from "react-hot-toast";
@@ -189,8 +189,9 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
                         <Button
                             disabled={currentPage === 1}
                             onClick={() => handlePageChange(currentPage - 1)}
+                            className={'bg-transparent '}
                         >
-                            Previous
+                          <CircleArrowLeft size={16}/>  Previous
                         </Button>
                         <span>
                             Page {currentPage} of {totalPages}
@@ -198,8 +199,10 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
                         <Button
                             disabled={currentPage === totalPages}
                             onClick={() => handlePageChange(currentPage + 1)}
+                            className={'bg-transparent '}
+
                         >
-                            Next
+                            Next <CircleArrowRight size={16}/>
                         </Button>
                     </div>
                 </CardContent>
