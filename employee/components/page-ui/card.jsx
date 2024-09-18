@@ -5,7 +5,8 @@ import Link from "next/link";
 
 import useSelectedMealStore from "../../app/store/selection";
 import useMealStore from "../../app/store/meal";
-import NotFound from "@/components/NotFound"; // Make sure this path is correct
+
+import NotFound from "./not-found";
 
 const FoodProductCard = () => {
   const { meal, fetchMeals } = useMealStore();
