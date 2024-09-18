@@ -189,7 +189,7 @@ const deleteVendor = async (vendorId) => {
 const deleteEnterprise = async (entId) => {
         setError(null);
         try {
-            const response = await axios.delete(`${baseurl}/api/enterprise/${entId}`, { withCredentials: true });
+            const response = await axios.delete(`${baseurl}/api/enterprise/agency/${entId}`, { withCredentials: true });
             if (response.status === 200) {
                 setSuccess(response?.data?.message);
                 // Optionally redirect or perform additional actions
@@ -222,7 +222,7 @@ const updateVendor = async (vendorId , userData) => {
 const updateEnterprise = async (entId , userData) => {
         setError(null);
         try {
-            const response = await axios.put(`${baseurl}/api/enterprise/agency/${entId}`, userData,{ headers: {
+            const response = await axios.put(`${baseurl}/api/enterprise/update/${entId}`, userData,{ headers: {
                     'Content-Type': 'multipart/form-data',
                 },});
 
