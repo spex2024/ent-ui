@@ -161,7 +161,7 @@ export default function VendorTable({ vendors }: VendorTableProps) {
                                                 <TooltipContent>
                                                     <div className="flex flex-col">
                                                         <Button  size="sm"
-                                                                 className="w-full text-left">update vendor</Button>
+                                                                 className="w-full text-left">update profile</Button>
                                                     </div>
                                                 </TooltipContent>
                                             </Tooltip>
