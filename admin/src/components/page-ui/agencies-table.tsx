@@ -189,7 +189,7 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
                         <Button
                             disabled={currentPage === 1}
                             onClick={() => handlePageChange(currentPage - 1)}
-                            className={'bg-black- text-white'}
+                            className={'bg-black text-white'}
                         >
                           <CircleArrowLeft size={16}/>  Previous
                         </Button>
