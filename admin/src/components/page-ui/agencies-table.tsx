@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import AgencyDetailsModal from "@/components/page-ui/agency-modal";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Eye } from "lucide-react";
+import UpdateVendorForm from "@/components/page-ui/update-vendor";
+import UpdateEntForm from "@/components/page-ui/update-enterprise";
 
 interface Order {
     _id: string;
@@ -117,6 +119,18 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
                                                 </TooltipTrigger>
                                                 <TooltipContent>
                                                     <p>View Details</p>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                            <Tooltip>
+                                                <TooltipTrigger>
+
+                                                    <UpdateEntForm agency={agency}/>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <div className="flex flex-col">
+                                                        <Button  size="sm"
+                                                                 className="w-full text-left">update vendor</Button>
+                                                    </div>
                                                 </TooltipContent>
                                             </Tooltip>
                                         </TooltipProvider>

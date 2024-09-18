@@ -184,7 +184,9 @@ const deleteVendor = async (vendorId) => {
         } catch (error) {
             setError(error.response?.data?.message);
         }
-    };const updateVendor = async (vendorId , userData) => {
+    };
+
+const updateVendor = async (vendorId , userData) => {
         console.log(userData,vendorId)
         setError(null);
         try {
@@ -194,6 +196,24 @@ const deleteVendor = async (vendorId) => {
 
             if (response.status === 200) {
                 router.push('/vendors');
+                setSuccess(response?.data?.message);
+                // Optionally redirect or perform additional actions
+            } else {
+                setError(response?.data?.message);
+            }
+        } catch (error) {
+            setError(error.response?.data?.message);
+        }
+    };
+const updateEnterprise = async (entId , userData) => {
+        setError(null);
+        try {
+            const response = await axios.put(`${baseurl}/api/enterprise/update/${entId}`, userData,{ headers: {
+                    'Content-Type': 'multipart/form-data',
+                },});
+
+            if (response.status === 200) {
+                window.location.reload();
                 setSuccess(response?.data?.message);
                 // Optionally redirect or perform additional actions
             } else {
@@ -218,6 +238,7 @@ const deleteVendor = async (vendorId) => {
         deleteUser,
         deleteVendor,
         updateVendor,
+        updateEnterprise,
         success,
         error,
     };
