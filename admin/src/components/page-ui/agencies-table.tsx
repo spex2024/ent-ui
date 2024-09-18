@@ -185,7 +185,7 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
                         </TableBody>
                     </Table>
                     {/* Pagination Controls */}
-                    <div className="flex justify-between items-center mt-4">
+                    <div className=" w-full flex justify-end items-center gap-5 mt-4">
                         <Button
                             disabled={currentPage === 1}
                             onClick={() => handlePageChange(currentPage - 1)}
