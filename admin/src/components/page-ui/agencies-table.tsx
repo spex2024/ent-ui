@@ -189,7 +189,7 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
                         <Button
                             disabled={currentPage === 1}
                             onClick={() => handlePageChange(currentPage - 1)}
-                            className={'bg-transparent '}
+                            className={'bg-transparent text-black'}
                         >
                           <CircleArrowLeft size={16}/>  Previous
                         </Button>
@@ -199,7 +199,7 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
                         <Button
                             disabled={currentPage === totalPages}
                             onClick={() => handlePageChange(currentPage + 1)}
-                            className={'bg-transparent '}
+                            className={'bg-transparent text-black'}
 
                         >
                             Next <CircleArrowRight size={16}/>
