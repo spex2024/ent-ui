@@ -121,9 +121,9 @@ const UpdateEntForm: React.FC<UpdateEntProps> = ({ agency }) => {
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Update Vendor Information</DialogTitle>
+                    <DialogTitle>Update Enterprise Information</DialogTitle>
                     <DialogDescription>
-                        Update the vendor details by filling the form below.
+                        Update the enterprise details by filling the form below.
                     </DialogDescription>
                 </DialogHeader>
                 <form className="flex flex-col gap-2 pt-3 md:pt-5" onSubmit={handleSubmit(onSubmit)}>

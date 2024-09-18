@@ -5,9 +5,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import AgencyDetailsModal from "@/components/page-ui/agency-modal";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Eye } from "lucide-react";
-import UpdateVendorForm from "@/components/page-ui/update-vendor";
+import {Eye, TrashIcon} from "lucide-react";
 import UpdateEntForm from "@/components/page-ui/update-enterprise";
+import useAuth from "@/hook/auth";
 
 interface Order {
     _id: string;
@@ -43,6 +43,8 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
     const [selectedAgency, setSelectedAgency] = useState<Agency | null>(null);
     const [isModalOpen, setModalOpen] = useState(false);
 
+    const {deleteEnterprise} = useAuth()
+
     const handleViewClick = (agency: Agency) => {
         setSelectedAgency(agency);
         setModalOpen(true);
@@ -58,6 +60,10 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
         return agency.users.reduce((total, user) => {
             return total + user.orders.reduce((userTotal, order) => userTotal + order.totalPrice, 0);
         }, 0);
+    };
+
+    const handleDelete = async (userId: string) => {
+        await deleteEnterprise(userId);
     };
 
 
@@ -131,6 +137,23 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
                                                         <Button  size="sm"
                                                                  className="w-full text-left">update profile</Button>
                                                     </div>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                            <Tooltip>
+                                                <TooltipTrigger>
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        className="h-8 w-8 p-0"
+                                                        onClick={() => handleDelete(agency._id)}
+                                                    >
+                                                        <TrashIcon size={16}/>
+                                                    </Button>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+
+                                                    <Button  size="sm"
+                                                             className="w-full text-left" >Delete vendor</Button>
                                                 </TooltipContent>
                                             </Tooltip>
                                         </TooltipProvider>
