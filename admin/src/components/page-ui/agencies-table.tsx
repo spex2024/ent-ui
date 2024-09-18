@@ -27,6 +27,7 @@ interface Agency {
     company: string;
     branch: string;
     code: string;
+    status:string;
     location: string;
     email: string;
     phone: string;
@@ -90,6 +91,7 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
                                 <TableHead>Name</TableHead>
                                 <TableHead>Branch</TableHead>
                                 <TableHead>Code</TableHead>
+                                <TableHead>Status</TableHead>
                                 <TableHead>Phone</TableHead>
                                 <TableHead>Email</TableHead>
                                 <TableHead>Orders</TableHead>
@@ -113,6 +115,7 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
                                     <TableCell>{agency.company}</TableCell>
                                     <TableCell>{agency.branch}</TableCell>
                                     <TableCell>{agency.code}</TableCell>
+                                    <TableCell>{agency.status}</TableCell>
                                     <TableCell>{agency.phone}</TableCell>
                                     <TableCell>{agency.email}</TableCell>
                                     <TableCell>{agency.users.reduce((count, user) => count + user.orders.length, 0)}</TableCell>
