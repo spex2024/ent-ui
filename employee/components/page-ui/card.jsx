@@ -4,26 +4,27 @@ import { ShoppingBasket } from "lucide-react";
 import Link from "next/link";
 
 import useSelectedMealStore from "../../app/store/selection";
-import useMealStore from "../../app/store/meal";
+import useUserStore from "../../app/store/profile";
 
 import NotFound from "./not-found";
 
 const FoodProductCard = () => {
-  const { meal, fetchMeals } = useMealStore();
+  const { user, fetchUser } = useUserStore();
   const { openModal } = useSelectedMealStore();
 
   useEffect(() => {
-    fetchMeals();
-  }, [fetchMeals]);
+    fetchUser();
+  }, [fetchUser]);
 
-  const meals = meal?.flatMap((item) => item.meals) || [];
+  const agency = user?.agency;
+  const vendors = agency?.vendors;
 
-  console.log("meals", meals);
+  const mealItem = vendors?.flatMap((vendor) => vendor.meals);
 
   return (
     <div className="w-full grid grid-cols-1 lg:grid-cols-4 justify-center lg:px-10 place-items-center px-5">
-      {meals.length > 0 ? (
-        meals.map((meal) => (
+      {mealItem.length > 0 ? (
+        mealItem.map((meal) => (
           <div
             key={meal._id}
             className="group my-10 w-full lg:max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md m-4"
@@ -51,7 +52,7 @@ const FoodProductCard = () => {
               </div>
               <div className="w-full flex items-center justify-between rounded-full text-center text-sm cursor-pointer">
                 <p className="text-xs">
-                  {meal.vendor.name} ({meal.vendor.location})
+                  {meal.vendor?.name} ({meal.vendor?.location})
                 </p>
               </div>
             </div>
