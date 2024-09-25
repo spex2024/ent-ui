@@ -23,7 +23,7 @@ const FoodProductCard = () => {
 
   return (
     <div className="w-full grid grid-cols-1 lg:grid-cols-4 justify-center lg:px-10 place-items-center px-5">
-      {mealItem.length > 0 ? (
+      {mealItem?.length > 0 ? (
         mealItem.map((meal) => (
           <div
             key={meal._id}
