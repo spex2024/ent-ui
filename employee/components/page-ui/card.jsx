@@ -18,6 +18,8 @@ const FoodProductCard = () => {
 
   const meals = meal?.flatMap((item) => item.meals) || [];
 
+  console.log("meals", meals);
+
   return (
     <div className="w-full grid grid-cols-1 lg:grid-cols-4 justify-center lg:px-10 place-items-center px-5">
       {meals.length > 0 ? (
