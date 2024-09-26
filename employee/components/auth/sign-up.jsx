@@ -83,7 +83,7 @@ const SignUp = () => {
 
   return (
     <div className="flex flex-wrap  dark:text-neutral-300 ">
-      <div className="flex justify-center items-center   w-full min-h-screen flex-col md:w-1/3  lg:px-10">
+      <div className="flex justify-center items-center   w-full min-h-screen flex-col md:w-1/3  lg:px-10 px-5">
         <div className="flex justify-center   ">
           <div className="text-center">
             <div className="flex justify-center mx-auto ">
@@ -216,7 +216,7 @@ const SignUp = () => {
               Sign Up
             </button>
           </form>
-          <div className="mt-4 w-full flex items-center justify-center sm:text-sm lg:text-xs ">
+          <div className="mt-4 w-full flex items-center justify-center sm:text-sm lg:text-sm ">
             <p className="w-full whitespace-nowrap text-gray-600 flex gap-4 w-full items-center lg:px-10 dark:text-neutral-300 ">
               Already have an account?
               <Link
