@@ -18,13 +18,10 @@ const Cart = () => {
   } = useCartStore();
 
   const handleCheckout = async () => {
-    try {
-      await checkout();
-      if (success) {
-        toast.success(success);
-      }
-    } catch (error) {
-      if (error) toast.error(error);
+    await checkout();
+
+    if (success) {
+      toast.success(success);
     }
   };
 
