@@ -89,6 +89,7 @@ const useCartStore = create(
               totalPrice,
               totalQuantity,
             },
+            { withCredentials: true },
           );
 
           if (response.status === 201) {
