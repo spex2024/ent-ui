@@ -16,6 +16,7 @@ const Cart = () => {
     success,
   } = useCartStore();
 
+
   const handleCheckout = async () => {
     await checkout();
 
