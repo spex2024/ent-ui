@@ -33,7 +33,7 @@ export default function Home() {
 
         <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-4 lg:text-left">
           <a
-              href="https://enterprise.spexafrica.site"
+              href="https://enterprise.spexafrica.site/ent-dashboard"
               className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-green-500"
               target="_blank"
               rel="noopener noreferrer"
