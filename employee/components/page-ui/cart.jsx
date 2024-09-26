@@ -14,7 +14,6 @@ const Cart = () => {
     isDrawerOpen,
     toggleDrawer,
     success,
-    error,
   } = useCartStore();
 
   const handleCheckout = async () => {
