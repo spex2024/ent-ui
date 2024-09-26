@@ -3,7 +3,6 @@ import { create } from "zustand";
 import axios from "axios";
 
 // const baseurl = "http://localhost:8080";
-// const baseurl = "https://enterprise-backend.vercel.app";
 const baseurl = "https://api.spexafrica.site";
 const useUserStore = create((set) => ({
   user: null,

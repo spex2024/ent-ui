@@ -2,7 +2,7 @@
 import create from "zustand";
 import { persist } from "zustand/middleware";
 import axios from "axios";
-// const baseurl = "https://enterprise-backend.vercel.app";
+
 const baseurl = "https://api.spexafrica.site";
 // const baseurl = "http://localhost:8080";
 
@@ -13,7 +13,8 @@ const useCartStore = create(
       totalPrice: 0,
       totalQuantity: 0,
       isDrawerOpen: false,
-      isCheckoutSuccess: false, // State for success message
+      success: null,
+      error: null,
 
       addToCart: (meal, options) =>
         set((state) => {
@@ -97,16 +98,16 @@ const useCartStore = create(
               cart: [],
               totalPrice: 0,
               totalQuantity: 0,
-              isCheckoutSuccess: true,
+              success: response.zdata.message || "Order placed successfully!", // Ensure a default message is set
               isDrawerOpen: false,
             });
-
-            setTimeout(() => set({ isCheckoutSuccess: false }), 25000);
-          } else {
-            console.error("Checkout failed:", response);
           }
         } catch (error) {
-          console.error("Error submitting order:", error);
+          set({
+            error: error.response
+              ? error.response.data.message
+              : "An error occurred",
+          });
         }
       },
 

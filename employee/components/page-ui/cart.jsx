@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { Trash2, ShoppingBasket, CircleX } from "lucide-react";
+import toast, { Toaster } from "react-hot-toast";
 
 import useCartStore from "../../app/store/cart";
 
@@ -12,8 +13,18 @@ const Cart = () => {
     checkout,
     isDrawerOpen,
     toggleDrawer,
-    isCheckoutSuccess,
+    success,
+    error,
   } = useCartStore();
+
+  const handleCheckout = async () => {
+    await checkout();
+    if (success) {
+      toast.success(success);
+    } else {
+      toast.error(error);
+    }
+  };
 
   return isDrawerOpen ? (
     <div className="fixed inset-0 z-50 flex  dark:bg-neutral-900 dark:border-neutral-400 dark:text-white">
@@ -60,30 +71,13 @@ const Cart = () => {
           </p>
           <button
             className="mt-4 px-4 py-2 bg-black text-white"
-            onClick={checkout}
+            onClick={handleCheckout}
           >
             Place Order
           </button>
         </div>
       </div>
-
-      {/* Success Modal */}
-      {isCheckoutSuccess === true ? (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-60">
-          <div className="bg-white p-4 rounded shadow-lg text-center">
-            <h2 className="text-green-500 font-semibold text-xl">
-              Order Placed!
-            </h2>
-            <p>Your order has been placed successfully.</p>
-            <button
-              className="mt-4 px-4 py-2 bg-black text-white"
-              onClick={toggleDrawer}
-            >
-              View Your Orders
-            </button>
-          </div>
-        </div>
-      ) : null}
+      <Toaster />
     </div>
   ) : null;
 };

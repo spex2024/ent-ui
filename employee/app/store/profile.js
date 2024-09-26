@@ -8,7 +8,6 @@ const useUserStore = create((set) => ({
   error: null,
   fetchUser: async () => {
     // const baseurl = "http://localhost:8080";
-    // const baseurl = "https://enterprise-backend.vercel.app";
     const baseurl = "https://api.spexafrica.site";
 
     try {

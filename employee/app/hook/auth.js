@@ -11,7 +11,6 @@ const useAuth = () => {
   const router = useRouter();
   const { clearCart } = useCartStore();
   // const baseurl = "http://localhost:8080";
-  // const baseurl = "https://enterprise-backend.vercel.app";
   const baseurl = "https://api.spexafrica.site";
 
   const login = async (data) => {

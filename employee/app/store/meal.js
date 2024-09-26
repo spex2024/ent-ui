@@ -1,7 +1,7 @@
 // stores/mealStore.js
 import { create } from "zustand";
 import axios from "axios";
-// const baseurl = "https://enterprise-backend.vercel.app";
+
 const baseurl = "https://api.spexafrica.site";
 // const baseurl = "http://localhost:8080";
 const useMealStore = create((set) => ({
