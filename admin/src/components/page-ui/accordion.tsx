@@ -60,7 +60,7 @@ export function AccordionCard({ name, location, user, image }: AccordionCardProp
     useEffect(() => {
         updateNewOrdersCount();
     }, [orders, updateNewOrdersCount]);
-
+     console.log( 'orders:',user)
     const handleOrderStatusChange = (updatedOrder: Order) => {
         setOrders(prevOrders => {
             const updatedOrders = prevOrders.map(order =>
