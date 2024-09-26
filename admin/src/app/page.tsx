@@ -164,10 +164,10 @@ export default function Dashboard() {
                         <TableRow key={order._id}>
                           <TableCell>
                             <div className="font-medium">
-                              {order.user.firstName} {order.user.lastName}
+                              {order.user?.firstName} {order.user?.lastName}
                             </div>
                             <div className="text-sm text-muted-foreground md:inline">
-                              {order.user.agency.company}
+                              {order.user?.agency.company}
                             </div>
                           </TableCell>
                           <TableCell>

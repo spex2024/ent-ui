@@ -1,5 +1,5 @@
 // stores/vendorStore.js
-import create from 'zustand';
+import {create} from 'zustand';
 import axios from 'axios';
 
 // const baseurl = 'https://enterprise-backend.vercel.app';
