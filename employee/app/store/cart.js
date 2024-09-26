@@ -98,7 +98,7 @@ const useCartStore = create(
               cart: [],
               totalPrice: 0,
               totalQuantity: 0,
-              success: response.zdata.message || "Order placed successfully!", // Ensure a default message is set
+              success: response.data.message || "Order placed successfully!", // Ensure a default message is set
               isDrawerOpen: false,
             });
           }
