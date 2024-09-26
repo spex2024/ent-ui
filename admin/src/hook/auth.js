@@ -7,11 +7,9 @@ import useAuthStore from "@/store/authenticate";
 const useAuth = () => {
     const [success, setSuccess] = useState(null);
     const [error, setError] = useState(null);
-    const { setIsAuthenticated } = useAuthStore();
     const router = useRouter();
     // const baseurl = "http://localhost:8080";
     const baseurl = 'https://api.spexafrica.site';
-
 
     const login = async (data) => {
         setError(null);
@@ -23,7 +21,6 @@ const useAuth = () => {
             }
         } catch (error) {
             setError(error.response.data.message);
-
         }
         console.error = () => {};
     };
@@ -47,7 +44,7 @@ const useAuth = () => {
             const response = await axios.post(`${baseurl}/api/user/register`, user);
             if (response.status === 200) {
                 setSuccess(response.data.message);
-                window.location.reload();
+                setTimeout(() => { window.location.reload(); }, 3000); // Delayed reload
                 router.push('/login');
             } else {
                 setError(response.data.message);
@@ -56,13 +53,14 @@ const useAuth = () => {
             setError(error.response.data.message);
         }
     };
+
     const addVendor = async (vendor) => {
         setError(null);
         try {
             const response = await axios.post(`${baseurl}/api/vendor/add-vendor`, vendor);
             if (response.status === 200) {
-                setSuccess(response.data.message)
-                window.location.reload();
+                setSuccess(response.data.message);
+                setTimeout(() => { window.location.reload(); }, 3000); // Delayed reload
                 router.push('/vendors');
             } else {
                 setError(response.data.message);
@@ -136,7 +134,7 @@ const useAuth = () => {
             const response = await axios.post(`${baseurl}/api/orders/complete`, { orderId }, { withCredentials: true });
             if (response.status === 200) {
                 setSuccess(response.data.message);
-                window.location.reload();
+                setTimeout(() => { window.location.reload(); }, 3000); // Delayed reload
             } else {
                 setError(response.data.message);
             }
@@ -151,7 +149,7 @@ const useAuth = () => {
             const response = await axios.post(`${baseurl}/api/orders/cancel`, { orderId }, { withCredentials: true });
             if (response.status === 200) {
                 setSuccess(response.data.message);
-                window.location.reload();
+                setTimeout(() => { window.location.reload(); }, 3000); // Delayed reload
             } else {
                 setError(response.data.message);
             }
@@ -160,15 +158,13 @@ const useAuth = () => {
         }
     };
 
-    // New deleteUser function
     const deleteUser = async (userId) => {
         setError(null);
         try {
             const response = await axios.delete(`${baseurl}/api/user/employee/${userId}`, { withCredentials: true });
             if (response.status === 200) {
                 setSuccess(response.data.message);
-                window.location.reload();
-                // Optionally redirect or perform additional actions
+                setTimeout(() => { window.location.reload(); }, 3000); // Delayed reload
             } else {
                 setError(response.data.message);
             }
@@ -176,14 +172,14 @@ const useAuth = () => {
             setError(error.response.data.message);
         }
     };
-const deleteVendor = async (vendorId) => {
+
+    const deleteVendor = async (vendorId) => {
         setError(null);
         try {
             const response = await axios.delete(`${baseurl}/api/vendor/${vendorId}`, { withCredentials: true });
             if (response.status === 200) {
                 setSuccess(response?.data?.message);
-                window.location.reload();
-                // Optionally redirect or perform additional actions
+                setTimeout(() => { window.location.reload(); }, 3000); // Delayed reload
             } else {
                 setError(response?.data?.message);
             }
@@ -192,14 +188,13 @@ const deleteVendor = async (vendorId) => {
         }
     };
 
-const deleteEnterprise = async (entId) => {
+    const deleteEnterprise = async (entId) => {
         setError(null);
         try {
             const response = await axios.delete(`${baseurl}/api/enterprise/agency/${entId}`, { withCredentials: true });
             if (response.status === 200) {
                 setSuccess(response?.data?.message);
-                window.location.reload();
-                // Optionally redirect or perform additional actions
+                setTimeout(() => { window.location.reload(); }, 3000); // Delayed reload
             } else {
                 setError(response?.data?.message);
             }
@@ -208,18 +203,34 @@ const deleteEnterprise = async (entId) => {
         }
     };
 
-const updateVendor = async (vendorId , userData) => {
+    const deleteOrder = async (orderId) => {
         setError(null);
         try {
-            const response = await axios.put(`${baseurl}/api/vendor/update/${vendorId}`, userData,{ headers: {
+            const response = await axios.delete(`${baseurl}/api/orders/${orderId}`, { withCredentials: true });
+            if (response.status === 200) {
+                setSuccess(response?.data?.message);
+                setTimeout(() => { window.location.reload(); }, 3000); // Delayed reload
+            } else {
+                setError(response?.data?.message);
+            }
+        } catch (error) {
+            setError(error.response?.data?.message);
+        }
+    };
+
+    const updateVendor = async (vendorId, userData) => {
+        setError(null);
+        try {
+            const response = await axios.put(`${baseurl}/api/vendor/update/${vendorId}`, userData, {
+                headers: {
                     'Content-Type': 'multipart/form-data',
-                },});
+                },
+            });
 
             if (response.status === 200) {
                 router.push('/vendors');
                 setSuccess(response?.data?.message);
-                window.location.reload();
-                // Optionally redirect or perform additional actions
+                setTimeout(() => { window.location.reload(); }, 3000); // Delayed reload
             } else {
                 setError(response?.data?.message);
             }
@@ -227,17 +238,19 @@ const updateVendor = async (vendorId , userData) => {
             setError(error.response?.data?.message);
         }
     };
-const updateEnterprise = async (entId , userData) => {
+
+    const updateEnterprise = async (entId, userData) => {
         setError(null);
         try {
-            const response = await axios.put(`${baseurl}/api/enterprise/update/${entId}`, userData,{ headers: {
+            const response = await axios.put(`${baseurl}/api/enterprise/update/${entId}`, userData, {
+                headers: {
                     'Content-Type': 'multipart/form-data',
-                },});
+                },
+            });
 
             if (response.status === 200) {
-                window.location.reload();
+                setTimeout(() => { window.location.reload(); }, 3000); // Delayed reload
                 setSuccess(response?.data?.message);
-                // Optionally redirect or perform additional actions
             } else {
                 setError(response?.data?.message);
             }
@@ -260,10 +273,11 @@ const updateEnterprise = async (entId , userData) => {
         deleteUser,
         deleteVendor,
         deleteEnterprise,
+        deleteOrder,
         updateVendor,
         updateEnterprise,
-        success,
         error,
+        success,
     };
 };
 

@@ -1,12 +1,13 @@
-import { SetStateAction, useState } from 'react'
+import {SetStateAction, useEffect, useState} from 'react'
 import Image from 'next/image'
-import {Check, EyeIcon, X} from 'lucide-react'
+import {Check, EyeIcon, Trash, X} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import useAuth from "@/hook/auth"
+import {toast} from "react-hot-toast";
 
 interface Meal {
     main : string;
@@ -64,8 +65,16 @@ export default function OrderTable({ users, onOrderStatusChange }: OrderTablePro
 
     const totalPages = Math.ceil(orders.length / rowsPerPage);
 
-    const { completeOrder, cancelOrder } = useAuth();
+    const { completeOrder, cancelOrder  ,deleteOrder,success ,error} = useAuth();
 
+    useEffect(() => {
+        if (success) {
+
+            toast.success(success);
+        } else if (error) {
+            toast.error(error);
+        }
+    }, [success, error]);
     const handlePageChange = (newPage: number) => {
         setCurrentPage(newPage);
     };
@@ -120,6 +129,11 @@ export default function OrderTable({ users, onOrderStatusChange }: OrderTablePro
             );
         }
     };
+
+    const handleDeleteOrder = async (orderId: string) =>{
+        console.log(orderId)
+        await  deleteOrder(orderId)
+    }
 
 
     return (
@@ -242,6 +256,32 @@ export default function OrderTable({ users, onOrderStatusChange }: OrderTablePro
                                                                         </TooltipContent>
                                                                     </Tooltip>
                                                                 </TooltipProvider>
+                                                                <TooltipProvider>
+                                                                    <Tooltip>
+                                                                        <TooltipTrigger asChild>
+                                                                            <Button
+                                                                                variant="ghost"
+                                                                                size="icon"
+                                                                                onClick={()=>handleDeleteOrder(order._id)}
+                                                                            >
+                                                                                <Trash className="h-4 w-4" />
+                                                                            </Button>
+                                                                        </TooltipTrigger>
+                                                                        <TooltipContent  className={`w-32 h-32 flex flex-col items-center justify-center bg-white text-black border border-black`}>
+                                                                            <h2 className={`font-bold mb-2`}>Order Details</h2>
+                                                                            {order?.meals.map(meal =>(
+                                                                                <div className={`w-full  px-3 space-y-2 `} key={meal.mealId}>
+                                                                                    <h1>{meal.main}</h1>
+                                                                                    <h1>{meal.protein}</h1>
+                                                                                    <h1>{meal.sauce}</h1>
+                                                                                    <h1>{meal.extras}</h1>
+
+
+                                                                                </div>
+                                                                            ))}
+                                                                        </TooltipContent>
+                                                                    </Tooltip>
+                                                                </TooltipProvider>
                                                             </>
                                                         ):(
                                                             <>
@@ -251,7 +291,6 @@ export default function OrderTable({ users, onOrderStatusChange }: OrderTablePro
                                                             <Button
                                                             variant="ghost"
                                                             size="icon"
-                                                            onClick={() => handleCancelOrder(order._id)}
                                                     >
                                                         <EyeIcon className="h-4 w-4" />
                                                     </Button>
@@ -271,6 +310,33 @@ export default function OrderTable({ users, onOrderStatusChange }: OrderTablePro
                                                 </TooltipContent>
                                                 </Tooltip>
                                                 </TooltipProvider>
+                                                            <TooltipProvider>
+                                                            <Tooltip>
+                                                            <TooltipTrigger asChild>
+                                                            <Button
+                                                            variant="ghost"
+                                                            size="icon"
+                                                            onClick={()=>handleDeleteOrder(order._id)}
+                                                    >
+                                                        <Trash className="h-4 w-4" />
+                                                    </Button>
+                                                </TooltipTrigger>
+                                                <TooltipContent  className={`w-32 h-32 flex flex-col items-center justify-center bg-white text-black border border-black`}>
+                                                    <h2 className={`font-bold mb-2`}>Order Details</h2>
+                                                    {order?.meals.map(meal =>(
+                                                        <div className={`w-full  px-3 space-y-2 `} key={meal.mealId}>
+                                                            <h1>{meal.main}</h1>
+                                                            <h1>{meal.protein}</h1>
+                                                            <h1>{meal.sauce}</h1>
+                                                            <h1>{meal.extras}</h1>
+
+
+                                                        </div>
+                                                    ))}
+                                                </TooltipContent>
+                                                </Tooltip>
+                                                </TooltipProvider>
+
                                                             </>
 
                                                             )}
