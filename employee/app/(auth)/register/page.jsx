@@ -4,7 +4,7 @@ import SignUp from "../../../components/auth/sign-up";
 
 const Register = () => {
   return (
-    <div>
+    <div className={`w-full flex items-center justify-center px-5`}>
       <SignUp />
     </div>
   );

@@ -191,7 +191,7 @@ const SignUp = () => {
                 {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
                 <img
                   alt="Current profile photo"
-                  className="sm:h-16 sm:w-16 lg:h-10 lg:w-10 object-cover rounded-full border-2 border-black"
+                  className="h-16 w-16 lg:h-10 lg:w-10 object-cover rounded-full border-2 border-black"
                   id="preview_img"
                   src={
                     profilePhoto?.length
