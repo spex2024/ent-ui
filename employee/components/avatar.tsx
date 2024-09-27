@@ -65,16 +65,16 @@ export default function ProfileAvatar() {
             <p className=" text-sm capitalize"> {user?.agency.company}</p>
             <p className=" text-xs">{user?.email}</p>
           </DropdownItem>
-          <Link href={'/profile'}>
+          <Link href={'/settings'}>
 
-            <DropdownItem key="settings">Settings</DropdownItem>
+            <DropdownItem key="user">Settings</DropdownItem>
           </Link>
           <Link href={'/order'}>
 
             <DropdownItem key="orders">Orders</DropdownItem>
           </Link>
 
-          <DropdownItem key="settings">
+          <DropdownItem key="password">
             <Link href={"/password/request"}>Reset Password</Link>
           </DropdownItem>
 
