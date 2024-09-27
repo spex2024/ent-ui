@@ -93,7 +93,7 @@ const CarbonStats = () => {
         <div className="flex flex-col gap-y-3 lg:gap-y-5 p-4 md:p-5 bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
           <div className="inline-flex justify-center items-center">
             <span className="text-xs font-semibold uppercase text-gray-600 dark:text-neutral-400">
-              Emissions Saved
+              Plastics Saved
             </span>
           </div>
 
@@ -119,7 +119,7 @@ const CarbonStats = () => {
         <div className="flex flex-col gap-y-3 lg:gap-y-5 p-4 md:p-5 bg-white border shadow-sm rounded-xl dark:bg-neutral-900 dark:border-neutral-800">
           <div className="inline-flex justify-center items-center">
             <span className="text-xs font-semibold uppercase text-gray-600 dark:text-neutral-400">
-              Revenue
+              Earned Revenue From Carbon Points
             </span>
           </div>
 
