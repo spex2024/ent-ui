@@ -132,7 +132,6 @@ export default function OrderTable({ users, onOrderStatusChange }: OrderTablePro
     };
 
     const handleDeleteOrder = async (orderId: string) =>{
-        console.log(orderId)
         await  deleteOrder(orderId)
     }
 
@@ -396,142 +395,10 @@ export default function OrderTable({ users, onOrderStatusChange }: OrderTablePro
                             </Card>
                         </TabsContent>
                         <TabsContent value="completed">
-                            <Card className="overflow-hidden">
-                                <CardHeader>
-                                    <CardTitle>Completed Orders</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <Table>
-                                        <TableHeader>
-                                            <TableRow>
-                                                <TableHead>Image</TableHead>
-                                                <TableHead>Order ID</TableHead>
-                                                <TableHead>Meals</TableHead>
-                                                <TableHead>Quantity</TableHead>
-                                                <TableHead>Ordered By</TableHead>
-                                                <TableHead>Status</TableHead>
-                                                <TableHead>Total Price</TableHead>
-                                                <TableHead>Created At</TableHead>
-                                                <TableHead>Actions</TableHead>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {filteredOrders('Completed').map((order) => (
-                                                <TableRow key={order._id}>
-                                                    <TableCell>
-                                                        <Image
-                                                            src={order.imageUrl}
-                                                            width={40}
-                                                            height={40}
-                                                            alt="Order Image"
-                                                            className="object-cover rounded-lg"
-                                                        />
-                                                    </TableCell>
-                                                    <TableCell>{order.orderId}</TableCell>
-                                                    <TableCell>
-                                                        {order.meals.map(meal => meal.main).join(', ')}
-                                                    </TableCell>
-                                                    <TableCell>{order.quantity}</TableCell>
-                                                    <TableCell>{order.userName}</TableCell>
-                                                    <TableCell>{order.status}</TableCell>
-                                                    <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
-                                                    <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
-                                                    <TableCell className="flex space-x-2">
-                                                        {/* Actions for Completed Orders */}
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </CardContent>
-                                <CardFooter className="flex items-center justify-end space-x-2">
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        disabled={currentPage === 1}
-                                        onClick={() => handlePageChange(currentPage - 1)}
-                                    >
-                                        Previous
-                                    </Button>
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        disabled={currentPage === totalPages}
-                                        onClick={() => handlePageChange(currentPage + 1)}
-                                    >
-                                        Next
-                                    </Button>
-                                </CardFooter>
-                            </Card>
+
                         </TabsContent>
                         <TabsContent value="cancelled">
-                            <Card className="overflow-hidden">
-                                <CardHeader>
-                                    <CardTitle>Cancelled Orders</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <Table>
-                                        <TableHeader>
-                                            <TableRow>
-                                                <TableHead>Image</TableHead>
-                                                <TableHead>Order ID</TableHead>
-                                                <TableHead>Meals</TableHead>
-                                                <TableHead>Quantity</TableHead>
-                                                <TableHead>Ordered By</TableHead>
-                                                <TableHead>Status</TableHead>
-                                                <TableHead>Total Price</TableHead>
-                                                <TableHead>Created At</TableHead>
-                                                <TableHead>Actions</TableHead>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {filteredOrders('Cancelled').map((order) => (
-                                                <TableRow key={order._id}>
-                                                    <TableCell>
-                                                        <Image
-                                                            src={order.imageUrl}
-                                                            width={40}
-                                                            height={40}
-                                                            alt="Order Image"
-                                                            className="object-cover rounded-lg"
-                                                        />
-                                                    </TableCell>
-                                                    <TableCell>{order.orderId}</TableCell>
-                                                    <TableCell>
-                                                        {order.meals.map(meal => meal.main).join(', ')}
-                                                    </TableCell>
-                                                    <TableCell>{order.quantity}</TableCell>
-                                                    <TableCell>{order.userName}</TableCell>
-                                                    <TableCell>{order.status}</TableCell>
-                                                    <TableCell>${order.totalPrice.toFixed(2)}</TableCell>
-                                                    <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
-                                                    <TableCell className="flex space-x-2">
-                                                        {/* Actions for Cancelled Orders */}
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </CardContent>
-                                <CardFooter className="flex items-center justify-end space-x-2">
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        disabled={currentPage === 1}
-                                        onClick={() => handlePageChange(currentPage - 1)}
-                                    >
-                                        Previous
-                                    </Button>
-                                    <Button
-                                        size="sm"
-                                        variant="outline"
-                                        disabled={currentPage === totalPages}
-                                        onClick={() => handlePageChange(currentPage + 1)}
-                                    >
-                                        Next
-                                    </Button>
-                                </CardFooter>
-                            </Card>
+
                         </TabsContent>
                     </Tabs>
                 </main>
