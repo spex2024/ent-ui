@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 
 import useUserStore from "@/app/store/profile";
 import useAuth from "@/app/hook/auth";
+import Link from "next/link";
 
 export default function UserAvatar() {
   const { user, fetchUser } = useUserStore();
@@ -61,9 +62,19 @@ export default function UserAvatar() {
             <p className=" text-xs capitalize"> {user?.agency.company}</p>
             <p className=" text-xs">{user?.email}</p>
           </DropdownItem>
-          <DropdownItem key="user">Profile</DropdownItem>
-          <DropdownItem key="orders">Orders</DropdownItem>
+          <Link href={'/profile'}>
+
+          <DropdownItem key="user">Settings</DropdownItem>
+          </Link>
+          <Link href={'/orders'}>
+
+            <DropdownItem key="orders">Orders</DropdownItem>
+          </Link>
+          <Link href={'/password/request'}>
           <DropdownItem key="settings">Reset Password</DropdownItem>
+          </Link>
+
+
 
           <DropdownItem key="logout" color="danger" onClick={handleLogout}>
             Log Out
