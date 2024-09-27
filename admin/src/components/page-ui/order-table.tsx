@@ -15,6 +15,7 @@ interface Meal {
     protein:string;
     sauce:string;
     extras:string;
+    price:number;
 }
 
 interface Vendor {
@@ -193,7 +194,7 @@ export default function OrderTable({ users, onOrderStatusChange }: OrderTablePro
                                                     <TableCell>{order.userName}</TableCell>
                                                     <TableCell>{order.code}</TableCell>
                                                     <TableCell>{order.status}</TableCell>
-                                                    <TableCell> GH₵{order.totalPrice.toFixed(2)}</TableCell>
+                                                    <TableCell>  {order.meals.map(meal => meal.price)}</TableCell>
                                                     <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
                                                     <TableCell className="flex space-x-2">
                                                         {order.status === 'Pending'? (
