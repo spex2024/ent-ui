@@ -1,11 +1,14 @@
+"use client";
+
+import { useEffect } from "react";
 import {
   Navbar as NextUINavbar,
   NavbarContent,
-  NavbarMenu,
-  NavbarMenuToggle,
   NavbarBrand,
   NavbarItem,
+  NavbarMenu,
   NavbarMenuItem,
+  NavbarMenuToggle,
 } from "@nextui-org/navbar";
 import { Link } from "@nextui-org/link";
 import { link as linkStyles } from "@nextui-org/theme";
@@ -16,10 +19,20 @@ import Image from "next/image";
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import ProfileAvatar from "@/components/avatar";
-import CartDrawer from "@/components/page-ui/cart-drawer";
 import UserAvatar from "@/components/page-ui/profile";
+import useOrderStore from "@/app/store/order";
 
 const Navbar = () => {
+  const { orders, fetchOrders } = useOrderStore();
+
+  // Fetch orders on component mount
+  useEffect(() => {
+    fetchOrders(); // Fetch the orders
+  }, [fetchOrders]);
+
+  const newOrdersExist =
+    Array.isArray(orders) && orders.some((order) => order.status === "Pending");
+
   return (
     <NextUINavbar
       className={`dark:bg-neutral-900 dark:border-neutral-800`}
@@ -51,6 +64,11 @@ const Navbar = () => {
                 href={item.href}
               >
                 {item.label}
+                {item.label === "Orders" && newOrdersExist && (
+                  <span className="absolute top-[-12px] right-[-10px] flex items-center justify-center h-5 w-8 bg-red-500 text-white text-xs font-bold rounded ">
+                    <p className={`text-xs `}>New</p>
+                  </span>
+                )}
               </NextLink>
             </NavbarItem>
           ))}
@@ -62,18 +80,16 @@ const Navbar = () => {
         <NavbarMenuToggle />
       </NavbarContent>
       <NavbarContent
-        className=" sm:flex basis-1/5 sm:basis-full hidden lg:flex"
+        className="sm:flex basis-1/5 sm:basis-full hidden lg:flex"
         justify="end"
       >
         <ThemeSwitch />
-        <CartDrawer />
         <ProfileAvatar />
       </NavbarContent>
       <NavbarContent
-        className=" sm:flex basis-1/5 sm:basis-full lg:hidden"
+        className="sm:flex basis-1/5 sm:basis-full lg:hidden"
         justify="end"
       >
-        <CartDrawer />
         <UserAvatar />
       </NavbarContent>
 
@@ -102,4 +118,4 @@ const Navbar = () => {
   );
 };
 
-export default  Navbar
+export default Navbar;

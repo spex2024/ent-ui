@@ -2,7 +2,6 @@
 
 
 import Menu from "@/components/page-ui/menu";
-import Cart from "@/components/page-ui/cart";
 import Vendors from "@/components/page-ui/vendors";
 import Navbar from "@/components/navbar";
 
@@ -13,7 +12,6 @@ export default function Home() {
       <Navbar />
       <Menu />
       <Vendors />
-      <Cart />
     </section>
   );
 }

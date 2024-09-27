@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { Eye } from "lucide-react"; // Import only the eye icon
+import { CircleOff, Eye } from "lucide-react";
 import {
   Chip,
   TableBody,
@@ -20,59 +20,74 @@ import {
   useDisclosure,
   Pagination,
 } from "@nextui-org/react";
+import toast from "react-hot-toast";
 
 import useUserStore from "../../app/store/profile";
+import useAuth from "../../app/hook/auth";
+import useOrderStore from "../../app/store/order";
 
 const statusColorMap = {
   active: "success",
   paused: "danger",
   vacation: "warning",
+  pending: "warning", // Add any additional statuses here
 };
 
-export default function OrderTable() {
-  const { user, error: userError, fetchUser } = useUserStore();
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
-  const orders = user?.orders || [];
-  const [selectedOrder, setSelectedOrder] = useState(null); // State for the selected order
+export default function App() {
+  const { orders, fetchOrders } = useOrderStore();
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 10;
 
-  // Sort orders by date and time in descending order (most recent first)
-  const sortedOrders = [...orders].sort((a, b) => {
-    const dateA = new Date(a.createdAt);
-    const dateB = new Date(b.createdAt);
+  const { cancelOrder, success, error } = useAuth();
 
-    return dateB - dateA;
-  });
+  useEffect(() => {
 
-  // Get current orders after sorting
+    fetchOrders(); // Fetch orders directly from the order store
+  }, [ fetchOrders]);
+
+  useEffect(() => {
+    if (success) {
+      toast.success(success);
+    } else if (error) {
+      toast.error(error);
+    }
+  }, [success, error]);
+
+  // Sort orders by date and time in descending order if orders is defined
+  const sortedOrders = Array.isArray(orders)
+    ? [...orders].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    : [];
+
+  // Pagination logic
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = sortedOrders.slice(indexOfFirstOrder, indexOfLastOrder);
 
   // Map order details including date and time
   const orderDetails = currentOrders.map((order) => ({
+    _id: order._id,
+    orderId: order.orderId,
+    vendor: order.vendor.name, // assuming vendor has a name property
     meals: order.meals,
-    id: order.orderId,
-    price: order.totalPrice,
-    quantity: order.quantity,
-    status: order.status,
-    imageUrl: order.imageUrl,
-    date: new Date(order.createdAt).toLocaleDateString(), // Extract date
+    quantity: order.meals.length, // Assuming each order has an array of meals
+    status: order.status || "pending", // Default status if not defined
+    imageUrl: order.imageUrl, // Assuming the imageUrl property exists
+    date: new Date(order.createdAt).toLocaleDateString(),
     time: new Date(order.createdAt).toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
-    }), // Extract time
+    }),
   }));
 
   const handleViewDetails = (order) => {
     setSelectedOrder(order);
-    onOpen(); // Open the modal when viewing details
+    onOpen();
+  };
+
+  const handleCancel = async (orderId) => {
+    await cancelOrder(orderId);
   };
 
   const renderCell = useCallback(
@@ -81,7 +96,7 @@ export default function OrderTable() {
         case "imageUrl":
           return (
             <img
-              alt={`Order ${order.id}`}
+              alt={`Order ${order.orderId}`}
               src={order.imageUrl}
               style={{ width: "50px", height: "50px", objectFit: "cover" }}
             />
@@ -98,7 +113,7 @@ export default function OrderTable() {
           return (
             <Chip
               className="capitalize"
-              color={statusColorMap[order.status]}
+              color={statusColorMap[order.status] || "default"}
               size="sm"
               variant="flat"
             >
@@ -112,14 +127,25 @@ export default function OrderTable() {
         case "actions":
           return (
             <div className="relative flex items-center justify-center gap-5 cursor-pointer">
-              <Tooltip content="View Details">
-                <Eye
-                  color={"#000"}
-                  size={22}
-                  strokeWidth={2}
-                  onClick={() => handleViewDetails(order)}
-                />
-              </Tooltip>
+              {order.status === "Pending" ? (
+                <Tooltip content="Cancel Order">
+                  <CircleOff
+                    color={"#000"}
+                    size={22}
+                    strokeWidth={2}
+                    onClick={() => handleCancel(order._id)}
+                  />
+                </Tooltip>
+              ) : (
+                <Tooltip content="View Details">
+                  <Eye
+                    color={"#000"}
+                    size={22}
+                    strokeWidth={2}
+                    onClick={() => handleViewDetails(order)}
+                  />
+                </Tooltip>
+              )}
             </div>
           );
         default:
@@ -136,13 +162,13 @@ export default function OrderTable() {
           columns={[
             { uid: "imageUrl", name: "Image" },
             { uid: "meals", name: "Meal Name" },
-            { uid: "id", name: "Order ID" },
-            { uid: "price", name: "Price" },
+            { uid: "orderId", name: "Order ID" },
+            { uid: "vendor", name: "Vendor" },
             { uid: "quantity", name: "Qty" },
             { uid: "status", name: "Status" },
-            { uid: "actions", name: "Actions" },
             { uid: "date", name: "Date" },
-            { uid: "time", name: "Time" }, // Add time column
+            { uid: "time", name: "Time" },
+            { uid: "actions", name: "Actions" },
           ]}
         >
           {(column) => (
@@ -156,17 +182,17 @@ export default function OrderTable() {
         </TableHeader>
         <TableBody items={orderDetails}>
           {(order) => (
-            <TableRow key={order.id}>
+            <TableRow key={order.orderId}>
               {[
                 "imageUrl",
                 "meals",
-                "id",
-                "price",
+                "orderId",
+                "vendor",
                 "quantity",
                 "status",
-                "actions",
                 "date",
-                "time", // Render the time column
+                "time",
+                "actions",
               ].map((columnKey) => (
                 <TableCell key={columnKey}>
                   {renderCell(order, columnKey)}
@@ -177,18 +203,19 @@ export default function OrderTable() {
         </TableBody>
       </Table>
 
-      {/* Pagination Component */}
       <Pagination
         isCompact
         showControls
         className="mt-4"
         color="primary"
         page={currentPage}
-        total={Math.ceil(orders.length / ordersPerPage)}
+        total={Math.ceil(sortedOrders.length / ordersPerPage)} // Updated total calculation
         onChange={(page) => setCurrentPage(page)}
       />
 
-      {/* Modal for displaying order details */}
+      {success && <div className="toast-success">{success}</div>}
+      {error && <div className="toast-error">{error}</div>}
+
       <Modal
         className="modal-custom"
         isDismissable={false}
@@ -205,7 +232,7 @@ export default function OrderTable() {
                 </ModalHeader>
                 {selectedOrder?.imageUrl && (
                   <img
-                    alt={`Order ${selectedOrder.id}`}
+                    alt={`Order ${selectedOrder.orderId}`}
                     src={selectedOrder.imageUrl}
                     style={{
                       width: "100%",
@@ -224,10 +251,10 @@ export default function OrderTable() {
                 {selectedOrder && (
                   <>
                     <p>
-                      <strong>Order ID:</strong> {selectedOrder.id}
+                      <strong>Order ID:</strong> {selectedOrder.orderId}
                     </p>
                     <p>
-                      <strong>Price:</strong> GH₵{selectedOrder.price}
+                      <strong>Price:</strong> GH₵{selectedOrder.price || 0}
                     </p>
                     <p>
                       <strong>Quantity:</strong> {selectedOrder.quantity}
@@ -247,12 +274,10 @@ export default function OrderTable() {
                       <strong>Meals:</strong>
                       <ul>
                         {selectedOrder.meals.map((meal, index) => (
-                          <ul key={index} className={`flex gap-4 text-xs`}>
-                            <li>{meal.main}</li>
-                            <li>{meal.protein}</li>
-                            <li>{meal.sauce}</li>
-                            <li>{meal.extras}</li>
-                          </ul>
+                          <li key={index} className={`flex gap-4 text-xs`}>
+                            <span>{meal.main}</span>
+                            {/* Add any additional meal details here */}
+                          </li>
                         ))}
                       </ul>
                     </div>
@@ -260,7 +285,7 @@ export default function OrderTable() {
                 )}
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onOpenChange}>
+                <Button flat color="error" onClick={onOpenChange}>
                   Close
                 </Button>
               </ModalFooter>

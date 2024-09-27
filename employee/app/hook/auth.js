@@ -134,6 +134,23 @@ const useAuth = () => {
     }
   };
 
+
+  const cancelOrder = async (orderId) => {
+    setError(null);
+    try {
+      const response = await axios.post(`${baseurl}/api/orders/cancel`, { orderId }, { withCredentials: true });
+      if (response.status === 200) {
+        setSuccess(response.data.message);
+        setTimeout(() => { window.location.reload(); }, 3000); // Delayed reload
+      } else {
+        setError(response.data.message);
+      }
+    } catch (error) {
+      setError(error.response.data.message);
+    }
+  };
+
+
   // New function for updating the user profile
   const updateProfile = async (userId, userData) => {
     setError(null);
@@ -166,7 +183,8 @@ const useAuth = () => {
     resetPassword,
     resendVerification,
     returnPack,
-    updateProfile, // include the new function in the returned object
+    updateProfile,
+    cancelOrder,
     success,
     error,
   };

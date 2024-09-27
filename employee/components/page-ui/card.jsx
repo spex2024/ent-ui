@@ -7,14 +7,19 @@ import useSelectedMealStore from "../../app/store/selection";
 import useUserStore from "../../app/store/profile";
 
 import NotFound from "./not-found";
+import useCartStore from "../../app/store/cart";
 
 const FoodProductCard = () => {
   const { user, fetchUser } = useUserStore();
   const { openModal } = useSelectedMealStore();
-
+  const {  clearNotifications } = useCartStore();
+  useEffect(() => {
+    clearNotifications();
+  }, [clearNotifications]);
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
+
 
   const agency = user?.agency;
   const vendors = agency?.vendors;
