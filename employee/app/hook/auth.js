@@ -93,6 +93,7 @@ const useAuth = () => {
 
       if (response.status === 200) {
         setSuccess(response.data.message);
+        window.location.reload();
       } else {
         setError(response.data.message);
       }
@@ -148,6 +149,7 @@ const useAuth = () => {
 
       if (response.status === 200) {
         setSuccess(response.data.message);
+        window.location.reload();
       } else {
         setError(response.data.message);
       }
