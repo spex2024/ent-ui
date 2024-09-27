@@ -62,20 +62,16 @@ export default function UserAvatar() {
             <p className=" text-xs capitalize"> {user?.agency.company}</p>
             <p className=" text-xs">{user?.email}</p>
           </DropdownItem>
-          <Link href={'/profile'}>
+          <DropdownItem key="user">
+            <Link href={"/profile"}>Settings</Link>
+          </DropdownItem>
+          <DropdownItem key="orders">
+            <Link href={"/orders"}>Orders</Link>
+          </DropdownItem>
 
-          <DropdownItem key="user">Settings</DropdownItem>
-          </Link>
-          <Link href={'/order'}>
-
-            <DropdownItem key="orders">Orders</DropdownItem>
-          </Link>
-          <Link href={'/password/request'}>
-          <DropdownItem key="settings">Reset Password</DropdownItem>
-          </Link>
-
-
-
+          <DropdownItem key="settings">
+            <Link href={"/password/request"}>Reset Password</Link>
+          </DropdownItem>
           <DropdownItem key="logout" color="danger" onClick={handleLogout}>
             Log Out
           </DropdownItem>
