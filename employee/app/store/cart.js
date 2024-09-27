@@ -21,6 +21,7 @@ const useCartStore = create(
           const itemIndex = state.cart.findIndex(
             (item) =>
               item.mealId === meal._id &&
+                item.main === meal.main.name&&
               item.protein === options["protein"] &&
               item.sauce === options["sauce"] &&
               item.extras === options["extras"],

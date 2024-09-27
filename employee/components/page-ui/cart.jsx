@@ -44,10 +44,12 @@ const Cart = () => {
             {cart.map((item, index) => (
               <li key={index} className="flex justify-between items-center">
                 <div className="flex-1">
-                  <div className="text-xs text-gray-500 space-y-1">
-                    <div>Option-One: {item.protein}</div>
-                    <div>Option-Two: {item.sauce}</div>
-                    <div>Option-Three: {item.extras}</div>
+
+                  <div className="text-sm text-gray-500 space-y-1">
+                    <div className={`font-bold text-medium`}>{item.main}</div>
+                    <div>{item.protein}</div>
+                    <div> {item.sauce}</div>
+                    <div>{item.extras}</div>
                   </div>
                 </div>
                 <div className="flex items-center">
