@@ -87,7 +87,7 @@ const Navbar = () => {
         <ProfileAvatar />
       </NavbarContent>
       <NavbarContent
-        className="sm:flex basis-1/5 sm:basis-full lg:hidden"
+        className="basis-1/5 sm:hidden lg:hidden"
         justify="end"
       >
         <UserAvatar />
