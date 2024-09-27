@@ -66,7 +66,7 @@ export default function UserAvatar() {
             <Link href={"/profile"}>Settings</Link>
           </DropdownItem>
           <DropdownItem key="orders">
-            <Link href={"/orders"}>Orders</Link>
+            <Link href={"/order"}>Orders</Link>
           </DropdownItem>
 
           <DropdownItem key="settings">
