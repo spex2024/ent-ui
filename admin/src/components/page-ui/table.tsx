@@ -1,4 +1,4 @@
-import {SetStateAction, useEffect, useState} from 'react'
+import React, {SetStateAction, useEffect, useState} from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {
@@ -60,6 +60,7 @@ interface User {
     isVerified: Boolean;
     points: number;
     orders: []
+    status: string;
 }
 
 interface DataTableProps {
@@ -103,12 +104,21 @@ export default function DataTable({ user }: DataTableProps) {
         return user.filter((user) => status === 'active' ? user.isVerified : !user.isVerified)
     }
 
+    const getOrderCountByStatus = (orders: User[], status: string) => {
+        return orders.filter(order => order.status === status).length;
+    };
+    const limitChars = (text: string, maxChars: number) => {
+        return text.length > maxChars
+            ? text.slice(0, maxChars) + '...'
+            : text;
+    };
+
     const renderTable = (filteredUsers: User[]) => {
         const currentRows = filteredUsers.slice(startIndex, endIndex)
         return (
             <Table>
                 <TableHeader>
-                    <TableRow>
+                    <TableRow className={`text-xs`}>
                         <TableHead>Image</TableHead>
                         <TableHead>Name</TableHead>
                         <TableHead>Points</TableHead>
@@ -116,11 +126,13 @@ export default function DataTable({ user }: DataTableProps) {
                         <TableHead>Email</TableHead>
                         <TableHead>Phone</TableHead>
                         <TableHead>Total Orders</TableHead>
+                        <TableHead>Completed Orders</TableHead>
+                        <TableHead>Cancelled Orders</TableHead>
                         <TableHead>Created At</TableHead>
                         <TableHead>Actions</TableHead>
                     </TableRow>
                 </TableHeader>
-                <TableBody className={'text-sm'}>
+                <TableBody className={'text-xs'}>
                     {currentRows.map((user) => (
                         <TableRow key={user._id}>
                             <TableCell>
@@ -132,12 +144,14 @@ export default function DataTable({ user }: DataTableProps) {
                                     className="object-cover rounded-lg"
                                 />
                             </TableCell>
-                            <TableCell>{user.firstName} {user.lastName}</TableCell>
+                            <TableCell>{user.firstName} {limitChars(user.lastName,5)}</TableCell>
                             <TableCell>{user.points}</TableCell>
                             <TableCell>{user.isVerified === true ? 'Active' : 'Inactive'}</TableCell>
-                            <TableCell>{user.email}</TableCell>
+                            <TableCell>{limitChars(user.email,10)}</TableCell>
                             <TableCell>{user.phone}</TableCell>
                             <TableCell>{user.orders.length}</TableCell>
+                            <TableCell>{getOrderCountByStatus(user.orders,'completed')}</TableCell>
+                            <TableCell>{getOrderCountByStatus(user.orders, 'cancelled')}</TableCell>
                             <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
                             <TableCell>
                                 <TooltipProvider>
@@ -150,13 +164,20 @@ export default function DataTable({ user }: DataTableProps) {
                                                 size="icon"
                                                 className="h-8 w-8 p-0"
                                             >
-                                                <EyeIcon/>
+                                                <EyeIcon size={16} strokeWidth={1.25}/>
                                             </Button>
                                         </TooltipTrigger>
-                                        <TooltipContent>
+                                        <TooltipContent className={`w-52 h-32 flex flex-col items-center justify-center bg-white text-black border border-black`}>
                                             <div className="flex flex-col">
-                                                <Button  size="sm"
-                                                        className="w-full text-left">View user details</Button>
+                                                    <div className={`w-full  px-3 space-y-2 `}>
+                                                        <h1>{user.firstName} {user.lastName}</h1>
+                                                        <h1>{user.email}</h1>
+                                                        <h1>{user.phone}</h1>
+                                                        <h1>Status: {user.isVerified === true ? 'Active' : 'Inactive'}</h1>
+
+
+                                                    </div>
+
                                             </div>
                                         </TooltipContent>
                                     </Tooltip>
@@ -167,7 +188,7 @@ export default function DataTable({ user }: DataTableProps) {
                                                 size="icon"
                                                 className="h-8 w-8 p-0"
                                             >
-                                                <LucideEdit3 size={16}/>
+                                            <LucideEdit3 size={16} strokeWidth={1.25}/>
                                             </Button>
                                         </TooltipTrigger>
                                         <TooltipContent>
@@ -185,7 +206,7 @@ export default function DataTable({ user }: DataTableProps) {
                                                 className="h-8 w-8 p-0"
                                                 onClick={() => handleDelete(user._id)}
                                             >
-                                                <TrashIcon size={16}/>
+                                                <TrashIcon size={16} strokeWidth={1.25}/>
                                             </Button>
                                         </TooltipTrigger>
                                         <TooltipContent>

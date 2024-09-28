@@ -76,17 +76,17 @@ export default function AgencyDetailsModal({ isOpen, onClose, agency }: AgencyDe
 
                 <div className="w-full p-4 sm:p-10 text-sm flex flex-col justify-between h-1/2">
                     <div className="flex flex-col gap-5">
-                        <h3 id="agency-details-modal-label" className="mb-1 text-md font-bold text-gray-800 dark:text-neutral-200">
+                        <h3 id="agency-details-modal-label" className="mb-1 text-md font-bold text-gray-800 dark:text-neutral-200 uppercase">
                             {agency.company} ({agency.code})
                         </h3>
 
                         <h1 className="font-bold text-md">Contact</h1>
-                        <div className="w-full grid grid-cols-2 gap-2 text-xs">
+                        <div className="w-full grid grid-cols-2 gap-2 text-xs capitalize">
                             <div className="flex gap-2">
                                 <Building size={20} strokeWidth={1.25} />
                                 {agency.branch}
                             </div>
-                            <div className="flex gap-3">
+                            <div className="flex gap-3 capitalize">
                                 <MapPin size={20} strokeWidth={1.25} />
                                 {agency.location}
                             </div>

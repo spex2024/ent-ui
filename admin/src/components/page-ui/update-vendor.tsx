@@ -117,7 +117,7 @@ const UpdateVendorForm: React.FC<UpdateVendorProps> = ({ vendor }) => {
                     size="icon"
                     className="h-8 w-8 p-0 "
                 >
-                    <LucideEdit3 size={16} />
+                    <LucideEdit3 size={16} strokeWidth={1.25} />
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">

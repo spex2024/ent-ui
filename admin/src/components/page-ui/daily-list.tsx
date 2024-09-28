@@ -109,7 +109,7 @@ export function DailyAccordionCard({ enterprise, location, user, image }: Accord
                 <AccordionTrigger>
                     <div className="flex items-center gap-3">
                         <img src={image} alt={enterprise} width={50} className="rounded-full w-12 h-12 border-2 border-black" />
-                        <ul className="flex items-center">
+                        <ul className="flex items-center capitalize">
                             <li>{enterprise}</li>
                             <Minus size={20} strokeWidth={1} />
                             <li>{location}</li>
@@ -129,7 +129,7 @@ export function DailyAccordionCard({ enterprise, location, user, image }: Accord
                         orders.map((order) => (
                             <div key={order._id} className="w-full flex flex-col py-2 border-l-2 p-5 gap-1 text-xs">
                                 <div className="w-full flex flex-col">
-                                    <h1 className="text-sm font-bold">User Info</h1>
+                                    <h1 className="text-sm font-bold capitalize">User Info</h1>
                                     <p><strong>User:</strong> {order.userName}</p>
                                     <p><strong>Pack No.:</strong> {order.userCode}</p>
                                 </div>
@@ -139,7 +139,7 @@ export function DailyAccordionCard({ enterprise, location, user, image }: Accord
                                         <p><strong>Order Id:</strong> {order.orderId}</p>
                                         <p><strong>Status:</strong> {order.status}</p>
                                         {order.meals.map((meal, index) => (
-                                            <div key={index} className="w-full flex flex-col gap-1">
+                                            <div key={index} className="w-full flex flex-col gap-1 capitalize">
                                                 <p><strong>Main Meal:</strong> {meal.main}</p>
                                                 <p><strong>Option-1:</strong> {meal.protein}</p>
                                                 <p><strong>Option-2:</strong> {meal.sauce}</p>

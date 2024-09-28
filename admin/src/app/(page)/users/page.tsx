@@ -16,7 +16,7 @@ const Page = () => {
     }, [fetchAgencies]);
 
     return (
-        <div className="w-[80%] px-5 mx-auto">
+        <div className="w-[85%] px-5 mx-auto">
             {agencies.length > 0 ? (
                 agencies.map((agency: { company: string; branch: string; users: []; imageUrl: string; }) => {
                     const { company, branch, users, imageUrl } = agency;

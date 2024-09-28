@@ -1,6 +1,6 @@
-import {SetStateAction, useEffect, useState} from 'react'
+import React, {SetStateAction, useEffect, useState} from 'react'
 import Image from 'next/image'
-import {Check, EyeIcon, Trash, X} from 'lucide-react'
+import {Check, CircleArrowLeft, CircleArrowRight, EyeIcon, Trash, X} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -160,7 +160,7 @@ export default function OrderTable({ users, onOrderStatusChange }: OrderTablePro
                                 <CardContent>
                                     <Table>
                                         <TableHeader>
-                                            <TableRow>
+                                            <TableRow className={`text-xs`}>
                                                 <TableHead>Image</TableHead>
                                                 <TableHead>Order ID</TableHead>
                                                 <TableHead>Meals</TableHead>
@@ -175,7 +175,7 @@ export default function OrderTable({ users, onOrderStatusChange }: OrderTablePro
                                         </TableHeader>
                                         <TableBody>
                                             {filteredOrders('all').map((order) => (
-                                                <TableRow key={order._id}>
+                                                <TableRow key={order._id} className={`text-xs`}>
                                                     <TableCell>
                                                         <Image
                                                             src={order.imageUrl}
@@ -190,10 +190,10 @@ export default function OrderTable({ users, onOrderStatusChange }: OrderTablePro
                                                         {order.meals.map(meal => meal.main).join(', ')}
                                                     </TableCell>
                                                     <TableCell>{order.quantity}</TableCell>
-                                                    <TableCell>{order.userName}</TableCell>
+                                                    <TableCell className={`capitalize`}>{order.userName}</TableCell>
                                                     <TableCell>{order.code}</TableCell>
                                                     <TableCell>{order.status}</TableCell>
-                                                    <TableCell>  {order.meals.map(meal => meal.price)}</TableCell>
+                                                    <TableCell> GH₵ {order.meals.map(meal => meal.price)}</TableCell>
                                                     <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
                                                     <TableCell className="flex space-x-2">
                                                         {order.status === 'Pending'? (
@@ -267,18 +267,10 @@ export default function OrderTable({ users, onOrderStatusChange }: OrderTablePro
                                                                                 <Trash className="h-4 w-4" />
                                                                             </Button>
                                                                         </TooltipTrigger>
-                                                                        <TooltipContent  className={`w-32 h-32 flex flex-col items-center justify-center bg-white text-black border border-black`}>
-                                                                            <h2 className={`font-bold mb-2`}>Order Details</h2>
-                                                                            {order?.meals.map(meal =>(
-                                                                                <div className={`w-full  px-3 space-y-2 `} key={meal.mealId}>
-                                                                                    <h1>{meal.main}</h1>
-                                                                                    <h1>{meal.protein}</h1>
-                                                                                    <h1>{meal.sauce}</h1>
-                                                                                    <h1>{meal.extras}</h1>
+                                                                        <TooltipContent  className={` flex flex-col items-center justify-center bg-white text-black border border-black`}>
+                                                                            <h2 className={`font-bold `}>delete order</h2>
 
 
-                                                                                </div>
-                                                                            ))}
                                                                         </TooltipContent>
                                                                     </Tooltip>
                                                                 </TooltipProvider>
@@ -321,18 +313,9 @@ export default function OrderTable({ users, onOrderStatusChange }: OrderTablePro
                                                         <Trash className="h-4 w-4" />
                                                     </Button>
                                                 </TooltipTrigger>
-                                                <TooltipContent  className={`w-32 h-32 flex flex-col items-center justify-center bg-white text-black border border-black`}>
-                                                    <h2 className={`font-bold mb-2`}>Order Details</h2>
-                                                    {order?.meals.map(meal =>(
-                                                        <div className={`w-full  px-3 space-y-2 `} key={meal.mealId}>
-                                                            <h1>{meal.main}</h1>
-                                                            <h1>{meal.protein}</h1>
-                                                            <h1>{meal.sauce}</h1>
-                                                            <h1>{meal.extras}</h1>
+                                                <TooltipContent  className={`flex flex-col items-center justify-center bg-white text-black border border-black`}>
+                                                    <h2 className={`font-bold`}>delete order</h2>
 
-
-                                                        </div>
-                                                    ))}
                                                 </TooltipContent>
                                                 </Tooltip>
                                                 </TooltipProvider>
@@ -346,22 +329,27 @@ export default function OrderTable({ users, onOrderStatusChange }: OrderTablePro
                                         </TableBody>
                                     </Table>
                                 </CardContent>
-                                <CardFooter className="flex items-center justify-end space-x-2">
+                                <CardFooter className="flex items-center justify-end space-x-2 text-xs">
                                     <Button
                                         size="sm"
-                                        variant="outline"
+                                        variant="ghost"
+                                        className={' text-black flex gap-2 rounded-none'}
                                         disabled={currentPage === 1}
                                         onClick={() => handlePageChange(currentPage - 1)}
                                     >
-                                        Previous
+                                        <CircleArrowLeft size={16}/> Previous
                                     </Button>
+                                    <span>
+                            Page {currentPage} of {totalPages}
+                        </span>
                                     <Button
                                         size="sm"
-                                        variant="outline"
+                                        variant="ghost"
+                                        className={' text-black flex gap-2 rounded-none'}
                                         disabled={currentPage === totalPages}
                                         onClick={() => handlePageChange(currentPage + 1)}
                                     >
-                                        Next
+                                        Next <CircleArrowRight size={16}/>
                                     </Button>
                                 </CardFooter>
                             </Card>

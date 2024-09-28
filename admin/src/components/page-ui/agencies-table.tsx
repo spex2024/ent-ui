@@ -14,6 +14,12 @@ interface Order {
     _id: string;
     orderId: string;
     totalPrice: number;
+    meals :[
+        meal:{
+            price:number
+        }
+    ];
+
 }
 
 interface User {
@@ -62,9 +68,14 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
     // Helper function to calculate total purchase
     const calculateTotalPurchase = (agency: Agency) => {
         return agency.users.reduce((total, user) => {
-            return total + user.orders.reduce((userTotal, order) => userTotal + order.totalPrice, 0);
+            return total + user.orders.reduce((userTotal, order) => {
+                // Sum the prices of all meals in each order
+                const orderTotal = order.meals.reduce((mealTotal, meal) => mealTotal + meal.price, 0);
+                return userTotal + orderTotal;
+            }, 0);
         }, 0);
     };
+
 
     useEffect(() => {
         if (success) {
@@ -116,7 +127,7 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
                         </TableHeader>
                         <TableBody>
                             {paginatedAgencies.map((agency) => (
-                                <TableRow key={agency._id}>
+                                <TableRow key={agency._id} className={`text-xs`}>
                                     <TableCell>
                                         <Image
                                             src={agency.imageUrl}
@@ -126,8 +137,8 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
                                             className={`rounded-full w-12 h-12 border-2 border-black`}
                                         />
                                     </TableCell>
-                                    <TableCell>{agency.company}</TableCell>
-                                    <TableCell>{agency.branch}</TableCell>
+                                    <TableCell  className={`capitalize text-xs`}>{agency.company}</TableCell>
+                                    <TableCell className={`capitalize text-xs`}>{agency.branch}</TableCell>
                                     <TableCell>{agency.code}</TableCell>
                                     <TableCell>{agency.isVerified ? 'Active' : 'Inactive'}</TableCell>
                                     <TableCell>{agency.phone}</TableCell>
@@ -185,11 +196,12 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
                         </TableBody>
                     </Table>
                     {/* Pagination Controls */}
-                    <div className=" w-full flex justify-end items-center gap-5 mt-4">
+                    <div className=" w-full flex justify-end items-center gap-5 mt-4 text-xs">
                         <Button
                             disabled={currentPage === 1}
                             onClick={() => handlePageChange(currentPage - 1)}
-                            className={' text-white flex gap-2 rounded-none '}
+                            className={' text-black flex gap-2 rounded-none '}
+                            variant='ghost'
                         >
                           <CircleArrowLeft size={16}/>  Previous
                         </Button>
@@ -199,7 +211,8 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
                         <Button
                             disabled={currentPage === totalPages}
                             onClick={() => handlePageChange(currentPage + 1)}
-                            className={' text-white flex gap-2 rounded-none'}
+                            className={' text-black flex gap-2 rounded-none'}
+                            variant='ghost'
 
                         >
                             Next <CircleArrowRight size={16}/>
