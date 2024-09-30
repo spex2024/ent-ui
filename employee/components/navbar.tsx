@@ -31,7 +31,7 @@ const Navbar = () => {
   }, [fetchOrders]);
 
   const newOrdersExist =
-    Array.isArray(orders) && orders.some((order) => order.status === "Pending");
+    Array.isArray(orders) && orders.some((order) => order.status === "pending");
 
   return (
     <NextUINavbar

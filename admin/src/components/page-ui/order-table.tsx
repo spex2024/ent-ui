@@ -218,8 +218,7 @@ export default function OrderTable({ users, onOrderStatusChange }: OrderTablePro
                                                                     <Tooltip>
                                                                         <TooltipTrigger asChild>
                                                                             <Button
-                                                                                variant="outline"
-                                                                                color={`destructive`}
+                                                                                variant="destructive"
                                                                                 size="icon"
                                                                                 onClick={() => handleCancelOrder(order._id)}
                                                                             >

@@ -22,7 +22,6 @@ import {
 } from "@nextui-org/react";
 import toast from "react-hot-toast";
 
-import useUserStore from "../../app/store/profile";
 import useAuth from "../../app/hook/auth";
 import useOrderStore from "../../app/store/order";
 
@@ -30,6 +29,8 @@ const statusColorMap = {
   active: "success",
   paused: "danger",
   vacation: "warning",
+  completed: "success",
+  cancelled: "danger",
   pending: "warning", // Add any additional statuses here
 };
 
@@ -127,7 +128,7 @@ export default function App() {
         case "actions":
           return (
             <div className="relative flex items-center justify-center gap-5 cursor-pointer">
-              {order.status === "Pending" ? (
+              {order.status === "pending" ? (
                 <Tooltip content="Cancel Order">
                   <CircleOff
                     color={"#000"}
