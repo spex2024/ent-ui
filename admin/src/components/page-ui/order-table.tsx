@@ -202,7 +202,7 @@ export default function OrderTable({ users, onOrderStatusChange }: OrderTablePro
                                                                     <Tooltip>
                                                                         <TooltipTrigger asChild>
                                                                             <Button
-                                                                                variant="outline"
+                                                                                variant="default"
                                                                                 size="icon"
                                                                                 onClick={() => handleCompleteOrder(order._id)}
                                                                             >
@@ -219,6 +219,7 @@ export default function OrderTable({ users, onOrderStatusChange }: OrderTablePro
                                                                         <TooltipTrigger asChild>
                                                                             <Button
                                                                                 variant="outline"
+                                                                                color={`destructive`}
                                                                                 size="icon"
                                                                                 onClick={() => handleCancelOrder(order._id)}
                                                                             >

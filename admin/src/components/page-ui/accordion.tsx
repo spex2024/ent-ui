@@ -46,7 +46,7 @@ export function AccordionCard({ name, location, user, image }: AccordionCardProp
 
     const updateNewOrdersCount = useCallback(() => {
         const pendingOrdersCount = orders.reduce((count, order) =>
-                count + (order.status === 'Pending' ? 1 : 0)
+                count + (order.status === 'pending' ? 1 : 0)
             , 0);
 
         setNewOrdersCount(pendingOrdersCount);
@@ -60,7 +60,7 @@ export function AccordionCard({ name, location, user, image }: AccordionCardProp
     useEffect(() => {
         updateNewOrdersCount();
     }, [orders, updateNewOrdersCount]);
-     console.log( 'orders:',user)
+
     const handleOrderStatusChange = (updatedOrder: Order) => {
         setOrders(prevOrders => {
             const updatedOrders = prevOrders.map(order =>
