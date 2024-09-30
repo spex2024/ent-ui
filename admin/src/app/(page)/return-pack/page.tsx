@@ -1,4 +1,3 @@
-
 'use client'
 import {
     Check, EyeIcon,
@@ -54,20 +53,20 @@ import useReturnedPacksStore from "@/store/return-pack";
 import { useEffect, useState } from "react";
 import useAuth from "@/hook/auth";
 import useAuthStore from "@/store/authenticate";
-import {useRouter} from "next/navigation";
-import {ScaleLoader} from "react-spinners";
-import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
+import { useRouter } from "next/navigation";
+import { ScaleLoader } from "react-spinners";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface Pack {
     _id: string;
     code: string;
     status: string;
     createdAt: string;
-    user : {
+    user: {
         firstName: string,
         lastName: string,
-        code : string,
-        agency :{
+        code: string,
+        agency: {
             company: string,
         }
     }
@@ -88,9 +87,12 @@ export default function ReturnPackPage() {
     }, [fetchReturnedPacks]);
 
     useEffect(() => {
+        // Sort returned packs by createdAt in descending order
+        const sortedPacks = returnedPacks.sort((a: { createdAt: string | number | Date; }, b: { createdAt: string | number | Date; }) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
         const startIndex = (currentPage - 1) * ROWS_PER_PAGE;
-        const endIndex = Math.min(startIndex + ROWS_PER_PAGE, returnedPacks.length);
-        setPaginatedPacks(returnedPacks.slice(startIndex, endIndex));
+        const endIndex = Math.min(startIndex + ROWS_PER_PAGE, sortedPacks.length);
+        setPaginatedPacks(sortedPacks.slice(startIndex, endIndex));
     }, [returnedPacks, currentPage]);
 
     const totalPages = Math.ceil(returnedPacks.length / ROWS_PER_PAGE);
@@ -113,12 +115,8 @@ export default function ReturnPackPage() {
         }
     };
 
-
-
-
-
     return (
-        <div className="flex min-h-screen w-full flex-col bg-gray-100 px-20">
+        <div className="flex min-h-screen w-full flex-col  px-20">
             <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
                 <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
                     <Tabs defaultValue="all">
@@ -170,7 +168,7 @@ export default function ReturnPackPage() {
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent>
-                                    <Table>
+                                    <Table className={`text-xs`}>
                                         <TableHeader>
                                             <TableRow>
                                                 <TableHead>Code</TableHead>
@@ -181,7 +179,7 @@ export default function ReturnPackPage() {
                                         </TableHeader>
                                         <TableBody>
                                             {paginatedPacks.map((pack: Pack) => (
-                                                <TableRow key={pack?._id}>
+                                                <TableRow key={pack?._id} className={`text-xs`}>
                                                     <TableCell className="font-medium text-gray-900">{pack?.code}</TableCell>
                                                     <TableCell>
                                                         <Badge
@@ -203,7 +201,7 @@ export default function ReturnPackPage() {
                                                     </TableCell>
                                                     <TableCell>
                                                         {
-                                                            pack.status === 'Pending'? (
+                                                            pack.status === 'Pending' ? (
                                                                 <>
                                                                     <TooltipProvider>
                                                                         <Tooltip>
@@ -243,52 +241,38 @@ export default function ReturnPackPage() {
                                                                                 <Button
                                                                                     variant="ghost"
                                                                                     size="icon"
-
                                                                                 >
                                                                                     <EyeIcon className="h-4 w-4" />
                                                                                 </Button>
                                                                             </TooltipTrigger>
-                                                                            <TooltipContent  className={`w-36 h-36 flex flex-col items-center justify-center bg-white text-black border border-black`}>
+                                                                            <TooltipContent className={`w-36 h-36 flex flex-col items-center justify-center bg-white text-black border border-black`}>
                                                                                 <h2 className={`font-bold mb-2`}>Order Details</h2>
-                                                                                    <div className={`w-full  px-3 space-y-2 `}>
-                                                                                        <h1>{pack?.code}</h1>
-
-
-
-                                                                                    </div>
-
+                                                                                <div className={`w-full  px-3 space-y-2 `}>
+                                                                                    <h1>{pack?.code}</h1>
+                                                                                </div>
                                                                             </TooltipContent>
                                                                         </Tooltip>
                                                                     </TooltipProvider>
                                                                 </>
-                                                            ): (
-                                                               <>
-                                                                   <TooltipProvider>
-                                                                       <Tooltip>
-                                                                           <TooltipTrigger asChild>
-                                                                               <Button
-                                                                                   variant="ghost"
-                                                                                   size="icon"
-
-                                                                               >
-                                                                                   <EyeIcon className="h-4 w-4" />
-                                                                               </Button>
-                                                                           </TooltipTrigger>
-                                                                           <TooltipContent  className={`w-72 h-36 flex flex-col items-center justify-center bg-white text-black border border-black`}>
-                                                                               <h2 className={`w-full font-bold mb-2 px-3`}>Pack Details</h2>
-                                                                               <div className={`w-full  px-3 space-y-2 text-xs`}>
-                                                                                   <h1> Code : {pack?.code}</h1>
-                                                                                   <h1> User : {`${pack?.user?.firstName} ${pack?.user?.lastName}`}</h1>
-                                                                                   <h1> Enterprise: {pack?.user?.agency.company}</h1>
-
-
-
-                                                                               </div>
-
-                                                                           </TooltipContent>
-                                                                       </Tooltip>
-                                                                   </TooltipProvider>
-                                                               </>
+                                                            ) : (
+                                                                <TooltipProvider>
+                                                                    <Tooltip>
+                                                                        <TooltipTrigger asChild>
+                                                                            <Button
+                                                                                variant="ghost"
+                                                                                size="icon"
+                                                                            >
+                                                                                <EyeIcon className="h-4 w-4" />
+                                                                            </Button>
+                                                                        </TooltipTrigger>
+                                                                        <TooltipContent className={`w-36 h-36 flex flex-col items-center justify-center bg-white text-black border border-black`}>
+                                                                            <h2 className={`font-bold mb-2`}>Order Details</h2>
+                                                                            <div className={`w-full  px-3 space-y-2 `}>
+                                                                                <h1>{pack?.code}</h1>
+                                                                            </div>
+                                                                        </TooltipContent>
+                                                                    </Tooltip>
+                                                                </TooltipProvider>
                                                             )
                                                         }
                                                     </TableCell>
@@ -297,44 +281,23 @@ export default function ReturnPackPage() {
                                         </TableBody>
                                     </Table>
                                 </CardContent>
-                                <CardFooter className="w-full bg-white border-t border-gray-200 flex justify-between items-center py-4">
-                                    <Pagination className="flex items-center w-[70%]">
-                                        <PaginationContent>
-                                            <PaginationItem>
-                                                <PaginationPrevious
-                                                    href="#"
-                                                    onClick={() => handlePageChange(currentPage - 1)}
-                                                />
-                                            </PaginationItem>
-                                            {Array.from({ length: totalPages }, (_, index) => (
-                                                <PaginationItem key={index + 1}>
-                                                    <PaginationLink
-                                                        href="#"
-                                                        onClick={() => handlePageChange(index + 1)}
-                                                        isActive={currentPage === index + 1}
-                                                    >
-                                                        {index + 1}
-                                                    </PaginationLink>
-                                                </PaginationItem>
-                                            ))}
-                                            <PaginationItem>
-                                                <PaginationNext
-                                                    href="#"
-                                                    onClick={() => handlePageChange(currentPage + 1)}
-                                                />
-                                            </PaginationItem>
-                                        </PaginationContent>
+                                <CardFooter className="flex items-center justify-center cursor-pointer">
+                                    <Pagination className="flex items-center justify-center text-sx">
+                                        <PaginationPrevious onClick={() => handlePageChange(currentPage - 1)} >
+                                            Previous
+                                        </PaginationPrevious>
+                                        <PaginationItem>{currentPage}</PaginationItem>
+                                        <PaginationNext onClick={() => handlePageChange(currentPage + 1)} >
+                                            Next
+                                        </PaginationNext>
                                     </Pagination>
-                                    <div className="text-xs text-muted-foreground w-[50%]">
-                                        Showing <strong>{paginatedPacks.length > 0 ? ((currentPage - 1) * ROWS_PER_PAGE) + 1 : 0}</strong> -{' '}
-                                        <strong>{Math.min(currentPage * ROWS_PER_PAGE, returnedPacks.length)}</strong> of <strong>{returnedPacks.length}</strong> requests
-                                    </div>
                                 </CardFooter>
                             </Card>
                         </TabsContent>
+                        {/* Add content for other tabs as needed */}
                     </Tabs>
                 </main>
             </div>
         </div>
-    )
+    );
 }

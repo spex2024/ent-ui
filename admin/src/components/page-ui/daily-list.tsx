@@ -56,7 +56,7 @@ export function DailyAccordionCard({ enterprise, location, user, image }: Accord
 
     const updateNewOrdersCount = useCallback(() => {
         const pendingOrdersCount = orders.reduce((count, order) =>
-                count + (order.status === 'Pending' ? 1 : 0)
+                count + (order.status === 'pending' ? 1 : 0)
             , 0);
 
         setNewOrdersCount(pendingOrdersCount);
@@ -71,8 +71,11 @@ export function DailyAccordionCard({ enterprise, location, user, image }: Accord
             }))
         );
 
-        const todayOrders = allOrders.filter(order => isToday(order.createdAt));
-        todayOrders.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+        // Only include today's orders with "Pending" or "Completed" status
+        const todayOrders = allOrders
+            .filter(order => isToday(order.createdAt) && (order.status === 'pending' || order.status === 'completed'))
+            .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+
         setOrders(todayOrders);
     }, [user]);
 
@@ -83,7 +86,26 @@ export function DailyAccordionCard({ enterprise, location, user, image }: Accord
     const handlePrint = () => {
         const doc = new jsPDF({ orientation: 'landscape' });
 
+        // Get page width for centering
+        const pageWidth = doc.internal.pageSize.getWidth();
+
+        // Logo settings
+        const imgData = 'https://res.cloudinary.com/ddwet1dzj/image/upload/v1725378998/agency/qgrjezzrof09ozkejksn.png'; // Use a valid image path or base64 data
+        const logoWidth = 30;
+        const logoHeight = 30;
+        const logoX = (pageWidth - logoWidth) / 2; // Center logo
+        doc.addImage(imgData, 'PNG', logoX, 10, logoWidth, logoHeight); // Centered logo
+
+        // Title settings
+        const title = "Daily Orders";
+        doc.setFontSize(12);
+        const titleWidth = doc.getTextWidth(title);
+        const titleX = (pageWidth - titleWidth) / 2; // Center title
+        doc.text(title, titleX, 40); // Centered title below logo
+
+        // Add table with orders data and change text and line color to black
         (doc as any).autoTable({
+            startY: 50, // Position the table below the title
             head: [['User', 'Code', 'Enterprise', 'Branch', 'Vendor', 'Quantity', 'Total Price', 'Meals']],
             body: orders.map(order => [
                 order.userName,
@@ -97,11 +119,18 @@ export function DailyAccordionCard({ enterprise, location, user, image }: Accord
             ]),
             styles: {
                 fontSize: 8,
+                textColor: 'black',  // Set text color to black
+                lineColor: 'black',  // Set line color to black
+            },
+            headStyles: {
+                fillColor: 'black',   // Set header background color to black
+                textColor: 'white',   // Set header text color to white
             },
         });
 
         doc.save('orders.pdf');
     };
+
 
     return (
         <Accordion type="single" collapsible className="w-full">
