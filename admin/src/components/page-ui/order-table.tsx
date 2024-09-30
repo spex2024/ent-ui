@@ -196,7 +196,7 @@ export default function OrderTable({ users, onOrderStatusChange }: OrderTablePro
                                                     <TableCell> GH₵ {order.meals.map(meal => meal.price)}</TableCell>
                                                     <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
                                                     <TableCell className="flex space-x-2">
-                                                        {order.status === 'Pending'? (
+                                                        {order.status === 'pending'? (
                                                             <>
                                                                 <TooltipProvider>
                                                                     <Tooltip>
