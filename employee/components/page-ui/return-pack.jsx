@@ -11,7 +11,7 @@ const ReturnPack = () => {
   const { returnedPacks, fetchReturnedPacks } = useReturnedPacksStore();
 
   const [currentPage, setCurrentPage] = useState(1);
-  const packsPerPage = 5;
+  const packsPerPage = 10;
 
   useEffect(() => {
     fetchUser();
