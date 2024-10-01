@@ -3,8 +3,7 @@ import {
     Check, EyeIcon,
     File,
     ListFilter,
-    MoreHorizontal,
-    PlusCircle, X,
+    X,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -42,19 +41,13 @@ import {
 } from "@/components/ui/tabs";
 import {
     Pagination,
-    PaginationContent,
-    PaginationEllipsis,
     PaginationItem,
-    PaginationLink,
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination";
 import useReturnedPacksStore from "@/store/return-pack";
 import { useEffect, useState } from "react";
 import useAuth from "@/hook/auth";
-import useAuthStore from "@/store/authenticate";
-import { useRouter } from "next/navigation";
-import { ScaleLoader } from "react-spinners";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface Pack {
@@ -104,12 +97,10 @@ export default function ReturnPackPage() {
     };
 
     const handleAction = async (id: string, action: 'approve' | 'reject') => {
-        console.log(`Handling action: id=${id}, action=${action}`);
         try {
             await handlePackRequest({ id, action });
-            console.log(`Action ${action} handled successfully`);
             updatePackStatus(id, action === 'approve' ? 'Approved' : 'Rejected');
-            console.log(`Pack with ID ${id} ${action === 'approve' ? 'approved' : 'rejected'}`);
+
         } catch (err) {
             console.error(`Failed to ${action} pack with ID ${id}`, err);
         }
@@ -202,12 +193,12 @@ export default function ReturnPackPage() {
                                                     <TableCell>
                                                         {
                                                             pack.status === 'Pending' ? (
-                                                                <>
+                                                                <div className={`flex items-center justify-items-center gap-2`}>
                                                                     <TooltipProvider>
                                                                         <Tooltip>
                                                                             <TooltipTrigger asChild>
                                                                                 <Button
-                                                                                    variant="outline"
+                                                                                    variant="default"
                                                                                     size="icon"
                                                                                     onClick={() => handleAction(pack?._id, 'approve')}
                                                                                 >
@@ -223,7 +214,7 @@ export default function ReturnPackPage() {
                                                                         <Tooltip>
                                                                             <TooltipTrigger asChild>
                                                                                 <Button
-                                                                                    variant="outline"
+                                                                                    variant="destructive"
                                                                                     size="icon"
                                                                                     onClick={() => handleAction(pack?._id, 'reject')}
                                                                                 >
@@ -239,7 +230,7 @@ export default function ReturnPackPage() {
                                                                         <Tooltip>
                                                                             <TooltipTrigger asChild>
                                                                                 <Button
-                                                                                    variant="ghost"
+                                                                                    variant="outline"
                                                                                     size="icon"
                                                                                 >
                                                                                     <EyeIcon className="h-4 w-4" />
@@ -253,7 +244,7 @@ export default function ReturnPackPage() {
                                                                             </TooltipContent>
                                                                         </Tooltip>
                                                                     </TooltipProvider>
-                                                                </>
+                                                                </div>
                                                             ) : (
                                                                 <TooltipProvider>
                                                                     <Tooltip>

@@ -14,7 +14,6 @@ const Page = () => {
         fetchAgencies();
     }, [fetchAgencies]);
 
-   console.log(agencies);
 
     return (
         <div className="w-[80%] px-5 mx-auto">
