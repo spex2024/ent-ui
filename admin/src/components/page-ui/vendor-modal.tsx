@@ -19,11 +19,13 @@ interface Vendor {
     _id: string;
     name: string;
     location: string;
+    email:string;
     agencies: Agency[];
     imageUrl: string;
     code: string;
     owner: string;
     orders: Order[];
+    totalSales : number;
 }
 
 interface VendorDetailsModalProps {
@@ -78,8 +80,9 @@ export default function VendorDetailsModal({ isOpen, onClose, vendor }: VendorDe
                         <p><strong>Location:</strong> {vendor.location}</p>
                         <p><strong>Code:</strong> {vendor.code}</p>
                         <p><strong>Owner:</strong> {vendor.owner}</p>
+                        <p><strong>Owner:</strong> {vendor.email}</p>
                         <p><strong>Agencies:</strong> {vendor.agencies.map(agency => agency.company).join(', ')}</p>
-                        <p><strong>Total Sales:</strong> GH₵{calculateTotalSales(vendor.orders).toFixed(2)}</p>
+                        <p><strong>Total Sales:</strong>GH₵ {vendor.totalSales.toFixed(2)}</p>
                         <p><strong>Total Orders:</strong> {vendor.orders.length}</p>
                     </div>
                 </div>
