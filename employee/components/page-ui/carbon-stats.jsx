@@ -125,7 +125,7 @@ const CarbonStats = () => {
 
           <div className="text-center">
             <h3 className="text-3xl sm:text-2xl lg:text-xl font-semibold text-gray-800 dark:text-neutral-200">
-              GH₵ {user?.moneyBalance}
+              GH₵ {user?.moneyBalance.toFixed(2)}
             </h3>
           </div>
         </div>
