@@ -36,6 +36,7 @@ interface Vendor {
     location: string;
     agencies: Agency[];
     imageUrl: string;
+    email:string;
     phone: string;
     code: string;
     owner: string;
