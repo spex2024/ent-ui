@@ -104,9 +104,9 @@ export default function FoodProductCard() {
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger>
-                        <h3 className="text-xs sm:text-sm font-semibold line-clamp-1 mb-1 sm:mb-0">
+                        <p className="text-xs sm:text-sm font-semibold line-clamp-1 mb-1 sm:mb-0">
                           {meal.main?.name || "Unnamed Meal"}
-                        </h3>
+                        </p>
                       </TooltipTrigger>
                       <TooltipContent>
                         <p>{meal.main?.name || "Unnamed Meal"}</p>
