@@ -1,8 +1,8 @@
-
 'use client';
-import React, { useEffect } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import Link from "next/link";
-import { UsersIcon, Menu, Package2, Search } from "lucide-react";
+import { UsersIcon, Menu, Package2, Search, ChevronDown, X } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,29 +12,26 @@ import {
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
-    DropdownMenuTrigger
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 import useAuth from "@/hook/auth";
 import toast from 'react-hot-toast';
 import useReturnedPacksStore from "@/store/return-pack";
 import useAdminStore from "@/store/user";
-import useAuthStore from "@/store/authenticate";
-
+import Image  from "next/image";
 
 const Header: React.FC = () => {
+    const [isOpen, setIsOpen] = useState(false);
     const { logout, success, error } = useAuth();
     const router = useRouter();
     const { newPacks, fetchReturnedPacks } = useReturnedPacksStore();
-    const {user , fetchUser}= useAdminStore()
+    const { user, fetchUser } = useAdminStore();
 
     useEffect(() => {
-        fetchReturnedPacks(); // Fetch packs on component mount
-    }, [fetchReturnedPacks]);
-  useEffect(() => {
-        fetchUser(); // Fetch packs on component mount
-    }, [fetchUser]);
-
+        fetchReturnedPacks();
+        fetchUser();
+    }, [fetchReturnedPacks, fetchUser]);
 
     useEffect(() => {
         if (success) {
@@ -44,165 +41,135 @@ const Header: React.FC = () => {
         }
     }, [success, error]);
 
-
-
     const handleLogout = async () => {
         await logout();
-        // clear()
-        router.push('/login'); // Redirect to the login page after logout
+        router.push('/login');
     };
 
+    const navItems = [
+        { href: '/', label: 'Dashboard' },
+        { href: '/daily-orders', label: 'Daily Orders' },
+        { href: '/orders', label: 'Orders' },
+        { href: '/users', label: 'Users' },
+        { href: '/vendors', label: 'Vendors' },
+        { href: '/enterprises', label: 'Enterprise' },
+        {
+            href: '#',
+            label: 'Subscription',
+            subItems: [
+                { href: 'add-subscription', label: 'One-Time' },
+                { href: '/custom', label: 'Custom' },
+            ]
+        },
+        { href: "/return-pack", label: "Return Pack" },
+    ];
 
     return (
         <header className="z-10 w-full sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
-            <nav
-                className="hidden lg:w-[80%] flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-                <Link
-                    href={'/'}
-                    className="flex items-center gap-2 text-lg font-semibold md:text-base"
-                >
-                    <Package2 className="h-6 w-6"/>
-                    <span className="sr-only">Acme Inc</span>
+            <div className="flex items-center flex-1">
+                <Link href={'/'} className="flex items-center gap-2 text-lg font-semibold md:text-base mr-4">
+                    <Image
+                        alt={"spex africa"}
+                        height={70}
+                        src={
+                            "https://res.cloudinary.com/ddwet1dzj/image/upload/v1722177650/spex_logo-03_png_dui5ur.png"
+                        }
+                        width={70}
+                    />
                 </Link>
-                <Link
-                    href={'/'}
-                    className="text-foreground transition-colors hover:text-foreground"
-                >
-                    Dashboard
-                </Link>
-                <Link
-                    href={'/daily-orders'}
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                >
-                    Daily Orders
-                </Link> <Link
-                    href={'/orders'}
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                >
-                    Orders
-                </Link>
-                <Link
-                    href={'/users'}
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                >
-                    Users
-                </Link>
-                <Link
-                    href={'/vendors'}
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                >
-                    Vendors
-                </Link>
-                <Link
-                    href={'/enterprises'}
-                    className="text-muted-foreground transition-colors hover:text-foreground"
-                >
-                    Enterprise
-                </Link>
-                <Link
-                    href={"/return-pack"}
-                    className="relative text-muted-foreground transition-colors hover:text-foreground"
-                >
-                    Return Pack
-                    {newPacks > 0 && (
-                        <span className="absolute -top-3 -right-3 text-xs font-light text-white bg-red-600 rounded-full h-4 w-4 flex items-center justify-center">
-                            {newPacks}
-                        </span>
-                    )}
-                </Link>
-            </nav>
-            <Sheet>
+                <nav className="hidden lg:flex flex-row items-center gap-6 text-sm font-medium">
+                    {navItems.map((item, index) => (
+                        item.subItems ? (
+                            <DropdownMenu key={index}>
+                                <DropdownMenuTrigger className="flex items-center text-muted-foreground transition-colors hover:text-foreground">
+                                    {item.label}
+                                    <ChevronDown className="ml-1 h-4 w-4" />
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    {item.subItems.map((subItem, subIndex) => (
+                                        <DropdownMenuItem key={subIndex}>
+                                            <Link href={subItem.href} className="w-full text-xs">
+                                                {subItem.label}
+                                            </Link>
+                                        </DropdownMenuItem>
+                                    ))}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        ) : (
+                            <Link
+                                key={index}
+                                href={item.href}
+                                className={`text-muted-foreground transition-colors hover:text-foreground ${item.label === 'Return Pack' ? 'relative' : ''}`}
+                            >
+                                {item.label}
+                                {item.label === 'Return Pack' && newPacks > 0 && (
+                                    <span className="absolute -top-3 -right-3 text-xs font-light text-white bg-red-600 rounded-full h-4 w-4 flex items-center justify-center">
+                    {newPacks}
+                  </span>
+                                )}
+                            </Link>
+                        )
+                    ))}
+                </nav>
+            </div>
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
                 <SheetTrigger asChild>
-                    <Button
-                        variant="outline"
-                        size="icon"
-                        className="shrink-0 md:hidden"
-                    >
-                        <Menu className="h-5 w-5"/>
+                    <Button variant="outline" size="icon" className="shrink-0 lg:hidden" onClick={() => setIsOpen(true)}>
+                        {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
                         <span className="sr-only">Toggle navigation menu</span>
                     </Button>
                 </SheetTrigger>
-                <SheetContent side="left">
-                    <nav className="grid gap-6 text-lg font-medium">
-                        <Link
-                            href={'/'}
-                            className="flex items-center gap-2 text-lg font-semibold"
-                        >
-                            <Package2 className="h-6 w-6"/>
-                            <span className="sr-only">Acme Inc</span>
-                        </Link>
-                        <Link href={'/'} className="hover:text-foreground">
-                            Dashboard
-                        </Link>
-                        <Link
-                            href={'/daily-orders'}
-                            className="text-muted-foreground hover:text-foreground"
-                        >
-
-                            Daily Orders
-                        </Link>
-                        <Link
-                            href={'/orders'}
-                            className="text-muted-foreground hover:text-foreground"
-                        >
-
-                            Orders
-                        </Link>
-                        <Link
-                            href={'/users'}
-                            className="text-muted-foreground hover:text-foreground"
-                        >
-                            Users
-                        </Link>
-                        <Link
-                            href={'/vendors'}
-                            className="text-muted-foreground hover:text-foreground"
-                        >
-                            Vendors
-                        </Link>
-                        <Link
-                            href={'/enterprises'}
-                            className="text-muted-foreground hover:text-foreground"
-                        >
-                            Enterprise
-                        </Link>
-                        <Link
-                            href={'/return-pack'}
-                            className="text-muted-foreground hover:text-foreground"
-                        >
-                            Return Pack
-                        </Link>
+                <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+                    <nav className="grid gap-6 text-lg font-medium mt-6">
+                        {navItems.map((item, index) => (
+                            item.subItems ? (
+                                <DropdownMenu key={index}>
+                                    <DropdownMenuTrigger className="flex items-center text-muted-foreground hover:text-foreground">
+                                        {item.label}
+                                        <ChevronDown className="ml-1 h-4 w-4" />
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        {item.subItems.map((subItem, subIndex) => (
+                                            <DropdownMenuItem key={subIndex}>
+                                                <Link href={subItem.href} className="w-full" onClick={() => setIsOpen(false)}>
+                                                    {subItem.label}
+                                                </Link>
+                                            </DropdownMenuItem>
+                                        ))}
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            ) : (
+                                <Link
+                                    key={index}
+                                    href={item.href}
+                                    className="text-muted-foreground hover:text-foreground"
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    {item.label}
+                                </Link>
+                            )
+                        ))}
                     </nav>
                 </SheetContent>
             </Sheet>
-            <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-                <form className="ml-auto flex-1 sm:flex-initial">
-                    <div className="relative">
-                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground"/>
-                        <Input
-                            type="search"
-                            placeholder="Search products..."
-                            className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
-                        />
-                    </div>
-                </form>
-                <DropdownMenu >
+            <div className="flex items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
+
+                <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="secondary" size="icon" className="rounded-full">
-                            <UsersIcon className="h-5 w-5"/>
+                            <UsersIcon className="h-5 w-5" />
                             <span className="sr-only">Toggle user menu</span>
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className={`w-52`}>
-                        <DropdownMenuLabel className="w-full h-14 items-center justify-start flex flex-col ">
-                            <p className={`w-full font-bold flex gap-2`}>{user.firstName} {user.lastName}</p>
-                            <p className={`w-full font-light`}>{user.username}</p>
-
+                    <DropdownMenuContent align="end" className="w-52">
+                        <DropdownMenuLabel className="flex flex-col items-start justify-center h-14">
+                            <p className="font-bold">{user.firstName} {user.lastName}</p>
+                            <p className="font-light text-sm">{user.username}</p>
                         </DropdownMenuLabel>
-                        <DropdownMenuSeparator/>
+                        <DropdownMenuSeparator />
                         <DropdownMenuItem>Settings</DropdownMenuItem>
                         <DropdownMenuItem>Support</DropdownMenuItem>
-                        <DropdownMenuSeparator/>
+                        <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -212,6 +179,3 @@ const Header: React.FC = () => {
 };
 
 export default Header;
-
-
-
