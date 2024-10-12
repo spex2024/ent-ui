@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/carousel";
 import useVendorStore from "@/app/store/vendor";
 import useUserStore from "@/app/store/profile";
-import Menu from "@/components/page-ui/menu";
+
 
 const menuItems = [
   {
@@ -96,9 +96,9 @@ export default function Component() {
                           )}
                       </div>
                       <div className="flex-grow text-center sm:text-left sm:px-5 sm:justify-center lg:gap-5">
-                        <h3 className="text-xl font-semibold mb-1">
+                        <p className="text-xl font-semibold mb-1">
                           {menuItem?.alt || "name"}
-                        </h3>
+                        </p>
                         <p className="text-md text-white/80 mb-2">
                           {menuItem.text || "name"}
                         </p>
