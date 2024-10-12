@@ -77,17 +77,6 @@ export default function Component() {
                   Be part of the sustainable food packaging revolution!
                   Together, we can make a difference, one smart pack at a time.
                 </p>
-                {/*<div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">*/}
-                {/*  <Button className="bg-green-500 text-white hover:bg-green-600 px-8 py-6 text-lg">*/}
-                {/*    Order Now*/}
-                {/*  </Button>*/}
-                {/*  <Button*/}
-                {/*    className="text-black border-white hover:bg-white hover:text-black px-8 py-6 text-lg"*/}
-                {/*    variant="outline"*/}
-                {/*  >*/}
-                {/*    View Restaurants*/}
-                {/*  </Button>*/}
-                {/*</div>*/}
               </div>
             </div>
 
