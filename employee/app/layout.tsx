@@ -5,12 +5,13 @@ import { Toaster } from "react-hot-toast";
 
 import { Providers } from "./store/providers";
 
-
 import { fontSans } from "@/config/fonts";
+import TopNav from "@/components/page-ui/top-nav";
 
 export const metadata: Metadata = {
   title: "Spex Africa - Employee Interface",
-  description: "SPEX (Smart Pack Exchange) is a meal marketplace that leverages a web platform/app to connect food vendors with enterprises and users seeking sustainable food packaging",
+  description:
+    "SPEX (Smart Pack Exchange) is a meal marketplace that leverages a web platform/app to connect food vendors with enterprises and users seeking sustainable food packaging",
   icons: {
     icon: "https://res.cloudinary.com/ddwet1dzj/image/upload/v1724079914/favicon_l68bd5.ico",
   },
@@ -40,9 +41,7 @@ export default function RootLayout({
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
           <div className="relative flex flex-col h-screen">
             <Toaster />
-            <main className="mx-auto w-full   flex-grow">
-              {children}
-            </main>
+            <main className="mx-auto w-full   flex-grow">{children}</main>
             {/*<footer className="w-full flex items-center justify-center py-3">*/}
             {/*  <Link*/}
             {/*    isExternal*/}

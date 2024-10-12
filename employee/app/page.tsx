@@ -1,17 +1,23 @@
 "use client";
 
-
-import Menu from "@/components/page-ui/menu";
-import Vendors from "@/components/page-ui/vendors";
-import Navbar from "@/components/navbar";
-
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import {ClimbingBoxLoader, ClipLoader} from "react-spinners"; // Import a spinner from react-spinners
 
 export default function Home() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      router.replace("/home");
+      setLoading(false); // stop loading after the redirect
+    }, 3000); // Optionally delay for user experience (e.g., 2 seconds)
+  }, [router]);
+
   return (
-    <section className="w-full min-h-screen dark:bg-neutral-900 dark:border-neutral-800">
-      <Navbar />
-      <Menu />
-      <Vendors />
-    </section>
+    <div className="flex items-center justify-center h-screen">
+      {loading && <ClimbingBoxLoader color="#71bc44" size={20} />} {/* Spinner */}
+    </div>
   );
 }

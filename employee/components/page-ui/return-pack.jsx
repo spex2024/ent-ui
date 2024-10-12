@@ -78,12 +78,12 @@ const ReturnPack = () => {
 
         {currentPacks?.map((item) => (
           <div
-            key={item._id}
+            key={item?._id}
             className="w-full flex items-center justify-between px-8 py-3 gap-2 text-black text-sm"
           >
-            <h1 className={`font-bold`}>{item.code}</h1>
+            <h1 className={`font-bold`}>{item?.code}</h1>
             <h1 className={"text-xs text-gray-500"}>
-              {item.name}
+              {item?.name}
               {new Date(item.createdAt).toLocaleString("en-US", {
                 weekday: "short",
                 year: "numeric",

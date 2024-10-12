@@ -6,24 +6,29 @@ export const siteConfig = {
   navItems: [
     {
       label: "Home",
-      href: "/",
+      href: "/home",
     },
     {
       label: "Orders",
       href: "/order",
     },
+
+    {
+      label: "Meals",
+      href: "/meal",
+    },
+    {
+      label: "Return",
+      href: "/return-pack",
+    },
+    {
+      label: "Wallet",
+      href: "/wallet",
+    },
     {
       label: "Settings",
       href: "/profile",
     },
-    // {
-    //   label: "Blog",
-    //   href: "/(pages)",
-    // },
-    // {
-    //   label: "About",
-    //   href: "/(auth)",
-    // },
   ],
   navMenuItems: [
     {
@@ -67,4 +72,3 @@ export const siteConfig = {
   //   sponsor: "https://patreon.com/jrgarciadev",
   // },
 };
-

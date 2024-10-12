@@ -10,9 +10,7 @@ const MealList = () => {
   return (
     <div className={`min-h-screen w-full justify-center items-center`}>
 
-      <FoodProductCard />
-      <MealModal />
-      <Cart />
+     <h1>Hello</h1>
     </div>
   );
 };

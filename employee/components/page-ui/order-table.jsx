@@ -68,15 +68,15 @@ export default function App() {
 
   // Map order details including date and time
   const orderDetails = currentOrders.map((order) => ({
-    _id: order._id,
-    orderId: order.orderId,
-    vendor: order.vendor.name, // assuming vendor has a name property
-    meals: order.meals,
-    quantity: order.meals.length, // Assuming each order has an array of meals
-    status: order.status || "pending", // Default status if not defined
-    imageUrl: order.imageUrl, // Assuming the imageUrl property exists
-    date: new Date(order.createdAt).toLocaleDateString(),
-    time: new Date(order.createdAt).toLocaleTimeString([], {
+    _id: order?._id,
+    orderId: order?.orderId,
+    vendor: order?.vendor.name, // assuming vendor has a name property
+    meals: order?.meals,
+    quantity: order?.meals.length, // Assuming each order has an array of meals
+    status: order?.status || "pending", // Default status if not defined
+    imageUrl: order?.imageUrl, // Assuming the imageUrl property exists
+    date: new Date(order?.createdAt).toLocaleDateString(),
+    time: new Date(order?.createdAt).toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
     }),
@@ -114,17 +114,17 @@ export default function App() {
           return (
             <Chip
               className="capitalize"
-              color={statusColorMap[order.status] || "default"}
+              color={statusColorMap[order?.status] || "default"}
               size="sm"
               variant="flat"
             >
-              {order.status}
+              {order?.status}
             </Chip>
           );
         case "date":
-          return order.date;
+          return order?.date;
         case "time":
-          return order.time;
+          return order?.time;
         case "actions":
           return (
             <div className="relative flex items-center justify-center gap-5 cursor-pointer">

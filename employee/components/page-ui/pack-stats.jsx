@@ -1,17 +1,19 @@
-'use client'
+"use client";
 import React, { useEffect } from "react";
+
 import useUserStore from "../../app/store/profile";
 
 const PackStats = () => {
   const { user, fetchUser } = useUserStore();
+
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
 
-  const completeOrdersCount = user?.orders?.reduce((count, order) => {
-    return order.status.toLowerCase() === "completed" ? count + 1 : count;
-  }, 0) || 0;
-
+  const completeOrdersCount =
+    user?.orders?.reduce((count, order) => {
+      return order.status.toLowerCase() === "completed" ? count + 1 : count;
+    }, 0) || 0;
 
   return (
     <div className="w-full px-4 py-10 sm:px-6 lg:px-8 lg:py-5 mx-auto">

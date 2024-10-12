@@ -35,10 +35,10 @@ const VendorList = () => {
     <div className="w-full h-auto py-10  px-10 grid lg:grid-cols-4 gap-3 place-items-center">
       {vendors?.map((vendor) => (
         <VendorCard
-          key={vendor._id}
-          imageUrl={vendor.imageUrl}
-          location={vendor.location}
-          name={vendor.name}
+          key={vendor?._id}
+          imageUrl={vendor?.imageUrl}
+          location={vendor?.location}
+          name={vendor?.name}
         />
       ))}
     </div>

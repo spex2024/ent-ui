@@ -35,10 +35,11 @@ const Navbar = () => {
 
   return (
     <NextUINavbar
-      className={`dark:bg-neutral-900 dark:border-neutral-800`}
+      className={`dark:bg-neutral-900 dark:border-neutral-800 max-w-6xl mx-auto py-2`}
       maxWidth="xl"
       position="sticky"
     >
+
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
@@ -58,7 +59,7 @@ const Navbar = () => {
               <NextLink
                 className={clsx(
                   linkStyles({ color: "foreground" }),
-                  "data-[active=true]:text-primary data-[active=true]:font-medium",
+                  "data-[active=true]:text-primary data-[active=true]:font-medium text-sm hover:text-[#71bc44]",
                 )}
                 color="foreground"
                 href={item.href}
@@ -105,7 +106,7 @@ const Navbar = () => {
                       ? "danger"
                       : "foreground"
                 }
-                href="#"
+                href={item.href}
                 size="lg"
               >
                 {item.label}

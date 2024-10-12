@@ -1,75 +1,111 @@
 "use client";
+
 import React, { useEffect } from "react";
-import { ShoppingBasket } from "lucide-react";
-import Link from "next/link";
+import { ShoppingCart, Star } from "lucide-react";
 
 import useSelectedMealStore from "../../app/store/selection";
 import useUserStore from "../../app/store/profile";
-
-import NotFound from "./not-found";
 import useCartStore from "../../app/store/cart";
 
-const FoodProductCard = () => {
+import NotFound from "./not-found";
+
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+export default function FoodProductCard() {
   const { user, fetchUser } = useUserStore();
   const { openModal } = useSelectedMealStore();
-  const {  clearNotifications } = useCartStore();
+  const { clearNotifications } = useCartStore();
+
   useEffect(() => {
     clearNotifications();
-  }, [clearNotifications]);
-  useEffect(() => {
     fetchUser();
-  }, [fetchUser]);
-
+  }, [clearNotifications, fetchUser]);
 
   const agency = user?.agency;
   const vendors = agency?.vendors;
+  const mealItems = vendors?.flatMap((vendor) => vendor.meals) || [];
 
-  const mealItem = vendors?.flatMap((vendor) => vendor.meals);
+  if (mealItems.length === 0) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <NotFound message="No meals found" />
+      </div>
+    );
+  }
+
+  const limitWords = (text, maxWords) => {
+    const words = text.split(" ");
+
+    return words.length > maxWords
+      ? words.slice(0, maxWords).join(" ") + "..."
+      : text;
+  };
 
   return (
-    <div className="w-full grid grid-cols-1 lg:grid-cols-4 justify-center lg:px-10 place-items-center px-5">
-      {mealItem?.length > 0 ? (
-        mealItem.map((meal) => (
-          <div
+    <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 md:gap-6">
+        {mealItems.map((meal) => (
+          <Card
             key={meal._id}
-            className="group my-10 w-full lg:max-w-xs flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md m-4"
+            className="group overflow-hidden rounded-lg transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
           >
-            <Link
-              className="relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl"
-              href="#"
-            >
+            <div className="relative aspect-[4/3] overflow-hidden">
               <img
-                alt="mealimage"
-                className="peer absolute top-0 right-0 h-full w-full object-cover"
+                alt={meal.main?.name || "Meal image"}
+                className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
                 src={meal?.imageUrl}
               />
-            </Link>
-            <div className="mt-4 px-5 pb-5">
-              <div className="mt-2 mb-5 flex items-center justify-between">
-                <Link href="#">
-                  <h5 className="text-2xl tracking-tight text-slate-900 font-bold">
-                    {meal.main?.name || ""}
-                  </h5>
-                </Link>
-                <button onClick={() => openModal(meal)}>
-                  <ShoppingBasket className="text-black" />
-                </button>
-              </div>
-              <div className="w-full flex items-center justify-between rounded-full text-center text-sm cursor-pointer">
-                <p className="text-xs">
-                  {meal.vendor?.name} ({meal.vendor?.location})
-                </p>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              <Badge
+                className="absolute bg-[#71bc44] text-white top-2 left-2 text-[10px] sm:text-xs rounded-full"
+                variant="secondary"
+              >
+                {limitWords(meal.vendor?.location, 3)}
+              </Badge>
+              <div className="absolute bottom-2 left-2 flex items-center">
+                <Star className="w-3 h-3 sm:w-4 sm:h-4 text-yellow-400 fill-yellow-400" />
+                <span className="ml-1 text-[10px] sm:text-xs font-bold text-white">
+                  4.5
+                </span>
               </div>
             </div>
-          </div>
-        ))
-      ) : (
-        <div className={`w-full flex justify-center items-center h-screen`}>
-          <NotFound message="No meals found" />
-        </div>
-      )}
+            <CardContent className="p-2 sm:p-3">
+              <div className="flex flex-col sm:flex-row justify-between items-start mb-2">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <h3 className="text-xs sm:text-sm font-semibold line-clamp-1 mb-1 sm:mb-0">
+                        {meal.main?.name || "Unnamed Meal"}
+                      </h3>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{meal.main?.name || "Unnamed Meal"}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+                <Button
+                  className="h-6 sm:h-7 w-[40%] sm:w-[40%] text-[10px] sm:text-xs bg-[#71bc44] text-white hover:bg-primary/20 hover:text-primary flex items-center justify-center sm:gap-2 gap-3"
+                  variant="ghost"
+                  onClick={() => openModal(meal)}
+                >
+                  Place Order
+                </Button>
+              </div>
+              <p className="text-[10px] sm:text-xs text-muted-foreground line-clamp-1 mb-1 sm:mb-2">
+                {meal.vendor?.name}
+              </p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
-};
-
-export default FoodProductCard;
+}

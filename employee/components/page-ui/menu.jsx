@@ -3,6 +3,7 @@
 import React from "react";
 import { Link } from "@nextui-org/react";
 import { PackageCheck, ShoppingBasket, WalletIcon } from "lucide-react";
+
 import useUserStore from "@/app/store/profile";
 
 const menuItems = [
@@ -26,7 +27,6 @@ const menuItems = [
     showNotification: true, // Add this flag to indicate where to show notification
   },
 ];
-
 
 const Menu = () => {
   const { user } = useUserStore();
