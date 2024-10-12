@@ -108,10 +108,10 @@ export default function Component() {
                       </div>
                       <div className="flex-grow text-center sm:text-left sm:px-5 sm:justify-center lg:gap-5">
                         <h3 className="text-xl font-semibold mb-1">
-                          {menuItem.alt}
+                          {menuItem?.alt || "name"}
                         </h3>
                         <p className="text-md text-white/80 mb-2">
-                          {menuItem.text}
+                          {menuItem.text || "name"}
                         </p>
                       </div>
                       <Button
