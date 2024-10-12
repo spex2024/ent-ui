@@ -57,7 +57,9 @@ export default function SubscriptionForm() {
     return (
         <Card className="w-full max-w-xl mx-auto shadow-none border-none">
             <CardHeader>
-                <CardTitle className="text-2xl font-bold">Add Subscription Plan</CardTitle>
+                <CardTitle className="text-2xl font-bold">
+                   <h2> Add Subscription Plan</h2>
+                </CardTitle>
             </CardHeader>
             <CardContent>
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
