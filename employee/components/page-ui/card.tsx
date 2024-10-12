@@ -122,7 +122,7 @@ export default function FoodProductCard() {
                   </Button>
                 </div>
                 <p className="text-[10px] sm:text-xs text-muted-foreground line-clamp-1 mb-1 sm:mb-2">
-                  {meal.vendor?.name}
+                  {meal?.vendor?.name}
                 </p>
               </CardContent>
             </Card>

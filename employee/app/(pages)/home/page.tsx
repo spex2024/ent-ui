@@ -108,7 +108,7 @@ export default function Component() {
                         size="sm"
                         variant="secondary"
                       >
-                        <span className="sr-only">{menuItem.alt}</span>
+                        <span className="sr-only">{menuItem?.alt}</span>
                         <ChevronRight className="h-4 w-4" />
                       </Button>
                     </CardContent>
@@ -182,7 +182,7 @@ export default function Component() {
                               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
                               <div className="absolute bottom-0 left-0 right-0 p-2">
                                 <h3 className="text-sm font-bold text-white truncate">
-                                  {restaurant?.name}
+                                  {restaurant?.name || "no name"}
                                 </h3>
                                 <div className="flex items-center justify-between text-xs text-white/80">
                                   <span>{restaurant?.location}</span>

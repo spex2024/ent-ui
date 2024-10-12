@@ -58,10 +58,10 @@
 //                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
 //                       <div className="absolute bottom-0 left-0 right-0 p-2">
 //                         <h3 className="text-sm font-bold text-white truncate">
-//                           {vendor.name}
+//                           {vendor?.name || "N/A"}
 //                         </h3>
 //                         <div className="flex items-center justify-between text-xs text-white/80">
-//                           <span>{vendor.location}</span>
+//                           <span>{vendor?.location || "N/A"}</span>
 //                           <div className="flex items-center">
 //                             <span className="text-yellow-400 mr-1">★</span>
 //                             <span>{vendor.rating || "N/A"}</span>
