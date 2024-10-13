@@ -11,7 +11,7 @@ const useAuth = () => {
   const router = useRouter();
   const { clearCart } = useCartStore();
   // const baseurl = "http://localhost:8080";
-  const baseurl = "https://api.spexafrica.site";
+  const baseurl = "https://api.spexafrica.app";
 
   const login = async (data) => {
     try {

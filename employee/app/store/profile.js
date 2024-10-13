@@ -8,7 +8,7 @@ const useUserStore = create((set) => ({
   error: null,
   fetchUser: async () => {
     // const baseurl = "http://localhost:8080";
-    const baseurl = "https://api.spexafrica.site";
+    const baseurl = "https://api.spexafrica.app";
 
     try {
       const response = await axios.get(`${baseurl}/api/user/employee`, {

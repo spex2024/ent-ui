@@ -9,7 +9,7 @@ const useOrderStore = create((set) => ({
   error: null,
   fetchOrders: async () => {
     // const baseurl = "http://localhost:8080";
-    const baseurl = "https://api.spexafrica.site";
+    const baseurl = "https://api.spexafrica.app";
 
     try {
       const response = await axios.get(`${baseurl}/api/orders/user`, {
