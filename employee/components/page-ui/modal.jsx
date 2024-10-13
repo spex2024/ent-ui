@@ -26,7 +26,7 @@ const MealModal = () => {
       }, 3000); // 3 seconds delay
     }
   }, [success, error]);
-// Trigger this effect only when success or error changes
+
 
   const placeOrder = (selectedMeal, selectedOptions) => {
     submitOrder(selectedMeal, selectedOptions);

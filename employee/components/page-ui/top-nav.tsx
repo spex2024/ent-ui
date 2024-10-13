@@ -1,5 +1,6 @@
 import React from "react";
 import { Globe } from "lucide-react";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 
@@ -15,22 +16,26 @@ const TopNav = () => {
             </Button>
             <div className="flex items-center space-x-4">
               <span className="text-sm font-semibold text-gray-600">
-                Partner with Spex as a:
+                Sign up with Spex as a:
               </span>
-              <Button
-                className="text-sm text-[#71bc44] hover:text-primary"
-                size="sm"
-                variant="ghost"
-              >
-                Vendor
-              </Button>
-              <Button
-                className="text-sm text-[#71bc44]  hover:text-primary"
-                size="sm"
-                variant="ghost"
-              >
-                Enterprise
-              </Button>
+              <Link href={"https://enterprise.spexafrica.app"}>
+                <Button
+                  className="text-sm text-[#71bc44] hover:text-primary"
+                  size="sm"
+                  variant="ghost"
+                >
+                  Enterprise
+                </Button>
+              </Link>
+              <Link href={"https://vendor.spexafrica.app"}>
+                <Button
+                  className="text-sm text-[#71bc44] hover:text-primary"
+                  size="sm"
+                  variant="ghost"
+                >
+                  Vendor
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

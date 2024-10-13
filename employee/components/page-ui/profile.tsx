@@ -59,7 +59,7 @@ export default function UserAvatar() {
             className="h-16 gap-4 flex w-full bg-slate-800 text-white py-8"
           >
             <p className="text-xs font-semibold ">{`${user?.firstName} ${user?.lastName} (${user?.code})`}</p>
-            <p className=" text-xs capitalize"> {user?.agency.company}</p>
+            <p className=" text-xs capitalize"> {user?.agency?.company}</p>
             <p className=" text-xs">{user?.email}</p>
           </DropdownItem>
           <DropdownItem key="user">

@@ -62,7 +62,7 @@ export default function ProfileAvatar() {
             key="profile"
             className="h-16 gap-10 flex w-full bg-slate-800 text-white py-5"
           >
-            <p className=" text-sm capitalize"> {user?.agency.company}</p>
+            <p className=" text-sm capitalize"> {user?.agency?.company}</p>
             <p className=" text-xs">{user?.email}</p>
           </DropdownItem>
           <DropdownItem key="user">

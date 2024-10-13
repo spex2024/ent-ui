@@ -8,6 +8,7 @@ import useUserStore from "../../app/store/profile";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import UpdateProfile from "@/components/page-ui/user-info";
 
 export default function UserProfile() {
   const { user, fetchUser } = useUserStore();
@@ -54,6 +55,7 @@ export default function UserProfile() {
               <MapPin className="w-3 h-3" />
               {user?.agency?.location || "Location"}
             </Badge>
+            <UpdateProfile />
           </div>
           <div className="pt-4 border-t">
             <h2 className="text-lg font-semibold mb-2">Additional Info</h2>

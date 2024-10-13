@@ -4,11 +4,31 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import toast from "react-hot-toast";
-import { Minus } from "lucide-react";
+import { toast } from "sonner";
+import { Pencil, User, X } from "lucide-react";
 
 import useAuth from "../../app/hook/auth";
 import useUserStore from "../../app/store/profile";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const schema = z.object({
   firstName: z.string().nonempty("First name is required"),
@@ -20,18 +40,23 @@ const schema = z.object({
   phone: z.string().nonempty("Phone number is required"),
   profilePhoto: z
     .any()
-    .refine((file) => !file || (file && file.length > 0), "Profile photo is optional"),
+    .refine(
+      (file) => !file || (file && file.length > 0),
+      "Profile photo is optional",
+    ),
 });
 
-const UpdateProfile = () => {
-  const {
-    register,
-    reset,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm({
+export default function UpdateProfile() {
+  const [open, setOpen] = React.useState(false);
+  const form = useForm({
     resolver: zodResolver(schema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      profilePhoto: null,
+    },
   });
 
   const { updateProfile, success, error } = useAuth();
@@ -39,15 +64,15 @@ const UpdateProfile = () => {
 
   useEffect(() => {
     if (user) {
-      reset({
+      form.reset({
         firstName: user.firstName || "",
         lastName: user.lastName || "",
         email: user.email || "",
         phone: user.phone || "",
-        profilePhoto: null, // No default profile photo; handle this differently if needed
+        profilePhoto: null,
       });
     }
-  }, [user, reset]);
+  }, [user, form.reset]);
 
   useEffect(() => {
     fetchUser();
@@ -56,6 +81,7 @@ const UpdateProfile = () => {
   useEffect(() => {
     if (success) {
       toast.success(success);
+      setOpen(false);
     } else if (error) {
       toast.error(error);
     }
@@ -72,113 +98,136 @@ const UpdateProfile = () => {
     if (data.profilePhoto && data.profilePhoto[0]) {
       formData.append("profilePhoto", data.profilePhoto[0]);
     }
-    const userId = user._id
+    const userId = user._id;
 
     try {
       console.log("Submitting form data:", formData, userId);
-      await updateProfile(userId,formData);
-      reset();
+      await updateProfile(userId, formData);
+      form.reset();
     } catch (error) {
       console.error("There was an error updating the profile:", error);
     }
   };
 
-  const profilePhoto = watch("profilePhoto");
-
-  const inputClass =
-    "w-full flex-1 appearance-none border border-gray-300 bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 text-sm focus:outline-none dark:text-neutral-300 dark:bg-neutral-900 dark:border-neutral-400";
-  const errorClass = "text-red-500";
-
   return (
-    <div className="w-[60%] flex flex-col flex-wrap dark:text-neutral-300">
-      <div className="flex w-full min-h-screen flex-col md:w-1/3">
-        <div className="mx-auto my-auto flex flex-col justify-center pt-8 md:justify-start md:px-4 md:pt-0 mt-20 lg:w-[30rem]">
-          <form
-            className="flex flex-col gap-2 pt-3 md:pt-5"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <div className="w-full flex items-center justify-center text-lg capitalize">
-              <Minus size={28} strokeWidth={0.75} />
-              <p>Update Profile</p>
-              <Minus size={28} strokeWidth={0.75} />
-            </div>
-            <div className="w-full flex flex-col pt-4">
-              <input
-                type="text"
-                {...register("firstName")}
-                className={inputClass}
-                placeholder="First Name"
-              />
-              {errors.firstName && (
-                <p className={errorClass}>{errors.firstName.message}</p>
-              )}
-            </div>
-            <div className="flex flex-col pt-4">
-              <input
-                type="text"
-                {...register("lastName")}
-                className={inputClass}
-                placeholder="Last Name"
-              />
-              {errors.lastName && (
-                <p className={errorClass}>{errors.lastName.message}</p>
-              )}
-            </div>
-            <div className="flex flex-col pt-4">
-              <input
-                type="email"
-                {...register("email")}
-                className={inputClass}
-                placeholder="Email"
-              />
-              {errors.email && (
-                <p className={errorClass}>{errors.email.message}</p>
-              )}
-            </div>
-            <div className="flex flex-col pt-4">
-              <input
-                type="tel"
-                {...register("phone")}
-                className={inputClass}
-                placeholder="Phone"
-              />
-              {errors.phone && (
-                <p className={errorClass}>{errors.phone.message}</p>
-              )}
-            </div>
-            <div className="flex items-center space-x-6 pt-4">
-              <div className="shrink-0">
-                <img
-                  className="h-16 w-16 object-cover rounded-full border-2 border-black"
-                  id="preview_img"
-                  src={
-                    profilePhoto?.length
-                      ? URL.createObjectURL(profilePhoto[0])
-                      : user?.profilePhoto ||
-                      "https://res.cloudinary.com/ddwet1dzj/image/upload/v1722177650/spex_logo-03_png_dui5ur.png"
-                  }
-                 alt={'profile'}/>
-              </div>
-              <label className="block">
-                <span className="sr-only">Choose profile photo</span>
-                <input
-                  type="file"
-                  {...register("profilePhoto")}
-                  className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline">Update Profile</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Edit profile</DialogTitle>
+          <DialogDescription>
+            Make changes to your profile here. Click save when you are done.
+          </DialogDescription>
+        </DialogHeader>
+        <Form {...form}>
+          <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
+            <div className="space-y-4">
+              <div className="flex items-center space-x-4">
+                <Avatar className="w-20 h-20">
+                  <AvatarImage
+                    alt="Profile"
+                    src={
+                      form.watch("profilePhoto")?.length
+                        ? URL.createObjectURL(form.watch("profilePhoto")[0])
+                        : user?.profilePhoto ||
+                          "https://res.cloudinary.com/ddwet1dzj/image/upload/v1722177650/spex_logo-03_png_dui5ur.png"
+                    }
+                  />
+                  <AvatarFallback>
+                    <User className="w-10 h-10" />
+                  </AvatarFallback>
+                </Avatar>
+                <FormField
+                  control={form.control}
+                  className={`py-3`}
+                  name="profilePhoto"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          accept="image/*"
+                          className="w-full text-sm text-slate-500 file:mr-4 border-0 shadow-none file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
+                          type="file"
+                          onChange={(e) => field.onChange(e.target.files)}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-              </label>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>First Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="John" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Last Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Doe" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input placeholder="john.doe@example.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Phone</FormLabel>
+                    <FormControl>
+                      <Input placeholder="+1 (555) 000-0000" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
-            <button
-              className="mt-8 w-[50%] bg-gray-900 px-4 py-2 text-center text-base font-semibold text-white shadow-md transition dark:bg-neutral-900 dark:border-neutral-400 dark:text-neutral-300"
-              type="submit"
-            >
-              Update Profile
-            </button>
+            <div className="flex justify-end space-x-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setOpen(false)}
+              >
+                <X className="w-4 h-4 mr-2" /> Cancel
+              </Button>
+              <Button type="submit">
+                <Pencil className="w-4 h-4 mr-2" /> Save Changes
+              </Button>
+            </div>
           </form>
-        </div>
-      </div>
-    </div>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
-};
-
-export default UpdateProfile;
+}

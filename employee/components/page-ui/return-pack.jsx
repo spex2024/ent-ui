@@ -1,124 +1,132 @@
-"use client";
-import React, { useEffect, useState } from "react";
+'use client'
 
-import useUserStore from "../../app/store/profile";
-import useReturnedPacksStore from "../../app/store/return-pack";
+import React, { useEffect, useState } from "react"
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
+import { Package, ChevronLeft, ChevronRight } from "lucide-react"
+import useUserStore from "@/app/store/profile"
+import useReturnedPacksStore from "@/app/store/return-pack"
+import ReturnPackForm from "./return-pack-form"
 
-import ReturnPackForm from "./return-pack-form";
+export default function ReturnPack() {
+  const { user, fetchUser } = useUserStore()
+  const { returnedPacks, fetchReturnedPacks } = useReturnedPacksStore()
 
-const ReturnPack = () => {
-  const { user, fetchUser } = useUserStore();
-  const { returnedPacks, fetchReturnedPacks } = useReturnedPacksStore();
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const packsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1)
+  const packsPerPage = 10
 
   useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
+    fetchUser()
+  }, [fetchUser])
 
   useEffect(() => {
-    fetchReturnedPacks();
-  }, [fetchReturnedPacks]);
+    fetchReturnedPacks()
+  }, [fetchReturnedPacks])
 
-  // Safely access the pack object
-  const pack = user?.pack;
+  const pack = user?.pack
+  const sortedPacks = returnedPacks?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 
-  // Sort returnedPacks by createdAt date, with the latest first
-  const sortedPacks = returnedPacks?.sort(
-    (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-  );
+  const indexOfLastPack = currentPage * packsPerPage
+  const indexOfFirstPack = indexOfLastPack - packsPerPage
+  const currentPacks = sortedPacks?.slice(indexOfFirstPack, indexOfLastPack)
 
-  // Pagination logic: slice sortedPacks to display packsPerPage packs per page
-  const indexOfLastPack = currentPage * packsPerPage;
-  const indexOfFirstPack = indexOfLastPack - packsPerPage;
-  const currentPacks = sortedPacks?.slice(indexOfFirstPack, indexOfLastPack);
-
-  // Calculate total pages
-  const totalPages = Math.ceil(sortedPacks?.length / packsPerPage);
+  const totalPages = Math.ceil(sortedPacks?.length / packsPerPage)
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
-      setCurrentPage((prevPage) => prevPage + 1);
+      setCurrentPage((prevPage) => prevPage + 1)
     }
-  };
+  }
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
-      setCurrentPage((prevPage) => prevPage - 1);
+      setCurrentPage((prevPage) => prevPage - 1)
     }
-  };
+  }
 
   return (
-    <div className="w-full min-h-screen grid grid-cols-1 lg:grid-cols-3 gap-6 lg:px-10 lg:py-10">
-      <div className="w-full lg:col-span-2 h-auto bg-white place-items-center border-black py-20 dark:bg-neutral-900 dark:border-neutral-400 dark:text-white">
-        {pack?.status === "active" ? (
-          <div className="w-full flex flex-col items-center justify-center px-5 py-5 gap-10">
-            <div className="flex items-center justify-start px-5 py-5 gap-4 text-black dark:text-white text-sm">
-              <span className={`h-2 w-2 rounded-full bg-green-500`} />
-              <h1>{pack?.status}</h1>
-              <h1>{pack?.userCode}</h1>
-              <h1>{pack?.agency}</h1>
-            </div>
-            <ReturnPackForm />
-          </div>
-        ) : (
-          <div className="w-full flex flex-col items-center justify-center px-5 py-5 gap-10">
-            <div className="flex items-center justify-start px-5 py-5 gap-4 text-black dark:text-white text-lg">
-              <h1>0 active pack(s) found</h1>
-            </div>
-          </div>
-        )}
-      </div>
+      <div className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <Card className="lg:col-span-2">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold">Return Pack</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {pack?.status === "active" ? (
+                  <div className="space-y-6">
+                    <div className="flex items-center space-x-4 text-sm">
+                      <span className="h-3 w-3 rounded-full bg-green-500" />
+                      <span className="font-medium">{pack.status}</span>
+                      <span>{pack.userCode}</span>
+                      <span>{pack.agency}</span>
+                    </div>
+                    <Separator />
+                    <ReturnPackForm />
+                  </div>
+              ) : (
+                  <div className="text-center py-12">
+                    <Package className="mx-auto h-12 w-12 text-gray-400" />
+                    <h3 className="mt-2 text-sm font-medium text-gray-900">No active packs</h3>
+                    <p className="mt-1 text-sm text-gray-500">Get started by creating a new pack.</p>
+                  </div>
+              )}
+            </CardContent>
+          </Card>
 
-      <div className="w-full lg:col-span-1 h-auto bg-white dark:bg-neutral-900 dark:border-neutral-800">
-        <div className="flex items-center justify-start px-5 py-5 gap-4 text-black dark:text-white text-xl">
-          <h1 className={`font-bold underline`}>Returned Pack History</h1>
+          <Card className="lg:col-span-1 flex flex-col">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold">Returned Pack History</CardTitle>
+            </CardHeader>
+            <CardContent className="flex-grow overflow-auto">
+              <div className="space-y-4">
+                {currentPacks?.slice(0, 10).map((item) => (
+                    <div key={item?._id} className="flex justify-between items-center text-sm">
+                      <span className="font-medium">{item?.code}</span>
+                      <div className="text-right">
+                        <p className="text-gray-500">{item?.name}</p>
+                        <p className="text-xs text-gray-400">
+                          {new Date(item.createdAt).toLocaleString("en-US", {
+                            weekday: "short",
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                ))}
+              </div>
+            </CardContent>
+            <CardFooter className="border-t">
+              <div className="flex justify-between items-center w-full">
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handlePrevPage}
+                    disabled={currentPage === 1}
+                >
+                  <ChevronLeft className="h-4 w-4 mr-2" />
+                  Prev
+                </Button>
+                <span className="text-sm text-gray-500">
+                Page {currentPage} of {totalPages}
+              </span>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages}
+                >
+                  Next
+                  <ChevronRight className="h-4 w-4 ml-2" />
+                </Button>
+              </div>
+            </CardFooter>
+          </Card>
         </div>
-
-        {currentPacks?.map((item) => (
-          <div
-            key={item?._id}
-            className="w-full flex items-center justify-between px-8 py-3 gap-2 text-black text-sm"
-          >
-            <h1 className={`font-bold`}>{item?.code}</h1>
-            <h1 className={"text-xs text-gray-500"}>
-              {item?.name}
-              {new Date(item.createdAt).toLocaleString("en-US", {
-                weekday: "short",
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-              })}
-            </h1>
-          </div>
-        ))}
-
-        {/* Pagination controls */}
-        <div className="flex justify-between items-center px-8 py-3">
-          <button
-            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
-            disabled={currentPage === 1}
-            onClick={handlePrevPage}
-          >
-            Previous
-          </button>
-          <span>
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
-            disabled={currentPage === totalPages}
-            onClick={handleNextPage}
-          >
-            Next
-          </button>
-        </div>
       </div>
-    </div>
-  );
-};
-
-export default ReturnPack;
+  )
+}
