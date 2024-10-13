@@ -95,7 +95,7 @@ export default function Dashboard() {
                 <CardTitle className="text-sm font-medium">Vendors</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{vendors.length}</div>
+                <div className="text-2xl font-bold">{vendors?.length}</div>
               </CardContent>
             </Card>
             <Card x-chunk="dashboard-01-chunk-3">
@@ -135,14 +135,14 @@ export default function Dashboard() {
                         <TableRow key={order._id}>
                           <TableCell>
                             <div className="font-medium capitalize">{order.user?.firstName} {order.user?.lastName}</div>
-                            <div className="text-xs text-muted-foreground md:inline capitalize">{order.user?.agency.company}</div>
+                            <div className="text-xs text-muted-foreground md:inline capitalize">{order.user?.agency?.company}</div>
                           </TableCell>
-                          <TableCell>{order.meals.map((meal) => (
-                              <div key={meal.mealId}>{meal.main || 'N/A'}</div>))}</TableCell>
-                          <TableCell>{order.quantity}</TableCell>
-                          <TableCell><Badge className="text-xs capitalize" variant="outline">{order.status}</Badge></TableCell>
-                          <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
-                          <TableCell>GH₵{order.meals.reduce((total, meal) => total + (meal.price || 0), 0)}</TableCell>
+                          <TableCell>{order?.meals.map((meal) => (
+                              <div key={meal?.mealId}>{meal.main || 'N/A'}</div>))}</TableCell>
+                          <TableCell>{order?.quantity}</TableCell>
+                          <TableCell><Badge className="text-xs capitalize" variant="outline">{order?.status}</Badge></TableCell>
+                          <TableCell>{new Date(order?.createdAt).toLocaleDateString()}</TableCell>
+                          <TableCell>GH₵{order?.meals.reduce((total, meal) => total + (meal.price || 0), 0)}</TableCell>
                         </TableRow>
                     ))}
                   </TableBody>

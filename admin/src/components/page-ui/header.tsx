@@ -163,8 +163,8 @@ const Header: React.FC = () => {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-52">
                         <DropdownMenuLabel className="flex flex-col items-start justify-center h-14">
-                            <p className="font-bold">{user.firstName} {user.lastName}</p>
-                            <p className="font-light text-sm">{user.username}</p>
+                            <p className="font-bold">{user?.firstName} {user?.lastName}</p>
+                            <p className="font-light text-sm">{user?.username}</p>
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>Settings</DropdownMenuItem>

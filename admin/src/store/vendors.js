@@ -3,8 +3,8 @@ import {create} from 'zustand';
 import axios from 'axios';
 
 
-const baseurl = 'https://api.spexafrica.app';
-// const baseurl = "http://localhost:8080";
+// const baseurl = 'https://api.spexafrica.app';
+const baseurl = "http://localhost:8080";
 
 const useVendorStore = create((set) => ({
     vendors: [],

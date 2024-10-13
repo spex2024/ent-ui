@@ -185,15 +185,15 @@ export default function OrderTable({ users, onOrderStatusChange }: OrderTablePro
                                                             className="object-cover rounded-lg"
                                                         />
                                                     </TableCell>
-                                                    <TableCell>{order.orderId}</TableCell>
+                                                    <TableCell>{order?.orderId}</TableCell>
                                                     <TableCell>
-                                                        {order.meals.map(meal => meal.main).join(', ')}
+                                                        {order?.meals.map(meal => meal.main).join(', ')}
                                                     </TableCell>
-                                                    <TableCell>{order.quantity}</TableCell>
-                                                    <TableCell className={`capitalize`}>{order.userName}</TableCell>
-                                                    <TableCell>{order.code}</TableCell>
-                                                    <TableCell>{order.status}</TableCell>
-                                                    <TableCell> GH₵ {order.meals.map(meal => meal.price)}</TableCell>
+                                                    <TableCell>{order?.quantity}</TableCell>
+                                                    <TableCell className={`capitalize`}>{order?.userName}</TableCell>
+                                                    <TableCell>{order?.code}</TableCell>
+                                                    <TableCell>{order?.status}</TableCell>
+                                                    <TableCell> GH₵ {order?.meals?.map(meal => meal.price)}</TableCell>
                                                     <TableCell>{new Date(order.createdAt).toLocaleDateString()}</TableCell>
                                                     <TableCell className="flex space-x-2">
                                                         {order.status === 'pending'? (
