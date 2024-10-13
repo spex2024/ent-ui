@@ -11,8 +11,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Trash2, Plus, Loader2, Users } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { toast } from "sonner" // Change the toast import to Sonner
+
 import axios from "axios"
+import {toast} from "react-hot-toast";
 
 const subscriptionSchema = z.object({
     plan: z.enum(['Gold', 'Silver', 'Bronze', 'Custom'], { required_error: 'Plan is required' }),
