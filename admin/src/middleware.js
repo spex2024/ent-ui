@@ -20,5 +20,5 @@ export function middleware(req) {
 }
 
 export const config = {
-    matcher: ['/', '/users', '/vendors', '/orders', '/enterprises', '/daily-orders', '/return-pack', '/login'],
+    matcher: ['/', '/users', '/vendors', '/orders', '/enterprises', '/daily-orders', '/return-pack', '/login','/add-subscription'],
 };

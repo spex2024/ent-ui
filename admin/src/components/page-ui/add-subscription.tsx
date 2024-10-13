@@ -1,149 +1,222 @@
 'use client'
 
-import React from 'react'
-import { useForm, useFieldArray } from 'react-hook-form'
+import React, { useState } from 'react'
+import { useForm, Controller } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Trash2, Plus } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Trash2, Plus, Loader2, Users } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { toast } from "sonner" // Change the toast import to Sonner
 import axios from "axios"
 
 const subscriptionSchema = z.object({
-    plan: z.string().optional(),
-    price: z
-        .number()
-        .min(0, 'Price must be a positive number')
-        .optional(), // Ensure price is a number
-    paymentType: z.string().optional(),
-    staff: z
-        .number()
-        .min(1, 'At least 1 staff is required')
-        .optional(), // Ensure staff is a number, not a string
+    plan: z.enum(['Gold', 'Silver', 'Bronze', 'Custom'], { required_error: 'Plan is required' }),
+    price: z.number().min(0, 'Price must be a positive number').optional(),
+    paymentType: z.enum(['one-time', 'three-months', 'custom'], { required_error: 'Payment type is required' }).optional(),
+    staff: z.number().int().min(0, 'At least 1 staff is required').optional(),
     features: z.array(z.string().min(1, 'Feature is required')).min(1, 'At least one feature is required'),
 })
 
 type SubscriptionFormInputs = z.infer<typeof subscriptionSchema>
 
 export default function SubscriptionForm() {
-    const { control, register, handleSubmit, formState: { errors }, reset } = useForm<SubscriptionFormInputs>({
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const { control, register, handleSubmit, formState: { errors }, reset, watch } = useForm<SubscriptionFormInputs>({
         resolver: zodResolver(subscriptionSchema),
         defaultValues: {
-            features: [''], // Start with an empty string for the first feature
+            plan: 'Bronze',
+            price: 0,
+            paymentType: 'custom',
+            staff: 0,
+            features: [''],
         },
     })
 
-    const { fields, append, remove } = useFieldArray({
-        control,
-        name: 'features',
-    })
-    const baseurl = 'https://api.spexafrica.site';
-// const baseurl = "http://localhost:8080";
+    const selectedPlan = watch('plan')
+    const paymentType = watch('paymentType')
+
+    const baseurl = 'https://api.spexafrica.app'
+
     const onSubmit = async (data: SubscriptionFormInputs) => {
-        console.log(data)
+        setIsSubmitting(true)
         try {
             const response = await axios.post(`${baseurl}/api/subscriptions/add`, data)
             console.log(response.data)
-            reset() // Reset the form
-            // Handle success (e.g., show a success message)
+            reset()
+            toast.success("Subscription plan added successfully.") // Use Sonner's success toast
         } catch (error) {
             console.error('Failed to add subscription:', error)
-            // Handle error (e.g., show an error message)
+            toast.error("Failed to add subscription. Please try again.") // Use Sonner's error toast
+        } finally {
+            setIsSubmitting(false)
         }
     }
 
     return (
-        <Card className="w-full max-w-xl mx-auto shadow-none border-none">
-            <CardHeader>
-                <CardTitle className="text-2xl font-bold">
-                   <h2> Add Subscription Plan</h2>
-                </CardTitle>
+        <Card className="w-full max-w-2xl mx-auto border-none" style={{ backgroundColor: '#71bc44' }}>
+            <CardHeader className="space-y-1">
+                <CardTitle className="text-2xl font-bold text-white">Add Subscription Plan</CardTitle>
+                <CardDescription className="text-white opacity-80">Create a new subscription plan for your service.</CardDescription>
             </CardHeader>
-            <CardContent>
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                    <div className="space-y-2">
-                        <Label htmlFor="plan">Plan Name</Label>
-                        <Input
-                            id="plan"
-                            type="text"
-                            placeholder="e.g., Basic, Pro, Enterprise"
-                            {...register('plan')}
-                        />
-                        {errors.plan && <p className="text-sm text-red-500">{errors.plan.message}</p>}
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
+            <CardContent className="bg-white rounded-b-lg">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+                    <div className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="price">Price</Label>
-                            <Input
-                                id="price"
-                                type="number"
-                                step="0.01"
-                                placeholder="e.g., 9.99"
-                                {...register('price', { valueAsNumber: true })} // Ensure input value is parsed as a number
+                            <Label htmlFor="plan">Plan</Label>
+                            <Controller
+                                name="plan"
+                                control={control}
+                                render={({ field }) => (
+                                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                        <SelectTrigger id="plan">
+                                            <SelectValue placeholder="Select a plan" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Gold">Gold</SelectItem>
+                                            <SelectItem value="Silver">Silver</SelectItem>
+                                            <SelectItem value="Bronze">Bronze</SelectItem>
+                                            <SelectItem value="Custom">Custom</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                )}
                             />
-                            {errors.price && <p className="text-sm text-red-500">{errors.price.message}</p>}
+                            {errors.plan && <p className="text-sm text-red-500">{errors.plan.message}</p>}
+                        </div>
+
+                        <div className="space-y-4" style={{ minHeight: '200px' }}>
+                            {selectedPlan !== 'Custom' && (
+                                <>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="price">Price (GHS)</Label>
+                                            <div className="relative">
+                                                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500">GHS</span>
+                                                <Input
+                                                    id="price"
+                                                    type="number"
+                                                    step="0.01"
+                                                    placeholder="0.00"
+                                                    {...register('price', { valueAsNumber: true })}
+                                                    className="pl-12"
+                                                />
+                                            </div>
+                                            {errors.price && <p className="text-sm text-red-500">{errors.price.message}</p>}
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label htmlFor="staff">Number of Staff</Label>
+                                            <div className="relative">
+                                                <Users className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+                                                <Input
+                                                    id="staff"
+                                                    type="number"
+                                                    placeholder="1"
+                                                    {...register('staff', { valueAsNumber: true })}
+                                                    className="pl-10"
+                                                />
+                                            </div>
+                                            {errors.staff && <p className="text-sm text-red-500">{errors.staff.message}</p>}
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <Label>Payment Type</Label>
+                                        <Controller
+                                            name="paymentType"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <RadioGroup
+                                                    onValueChange={field.onChange}
+                                                    defaultValue={field.value}
+                                                    className="flex flex-col space-y-1"
+                                                >
+                                                    <div className="flex items-center space-x-2">
+                                                        <RadioGroupItem value="one-time" id="one-time" />
+                                                        <Label htmlFor="one-time">One-time payment</Label>
+                                                    </div>
+                                                    <div className="flex items-center space-x-2">
+                                                        <RadioGroupItem value="three-months" id="three-months" />
+                                                        <Label htmlFor="three-months">3-months installment</Label>
+                                                    </div>
+                                                </RadioGroup>
+                                            )}
+                                        />
+                                        {errors.paymentType && <p className="text-sm text-red-500">{errors.paymentType.message}</p>}
+                                    </div>
+                                </>
+                            )}
+
+                            {selectedPlan === 'Custom' && (
+                                <div className="space-y-2">
+                                    <p className="text-sm text-gray-500 italic">Custom plan details are not required. Please add features below.</p>
+                                </div>
+                            )}
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="paymentType">Payment Type</Label>
-                            <Input
-                                id="paymentType"
-                                type="text"
-                                placeholder="e.g., Monthly, Yearly"
-                                {...register('paymentType')}
+                            <Label>Features</Label>
+                            <Controller
+                                name="features"
+                                control={control}
+                                render={({ field }) => (
+                                    <div className="space-y-2">
+                                        {field.value.map((feature, index) => (
+                                            <div key={index} className="flex items-center space-x-2">
+                                                <Input
+                                                    type="text"
+                                                    placeholder="Enter a feature"
+                                                    value={feature}
+                                                    onChange={(e) => {
+                                                        const newFeatures = [...field.value]
+                                                        newFeatures[index] = e.target.value
+                                                        field.onChange(newFeatures)
+                                                    }}
+                                                    className="flex-grow"
+                                                />
+                                                <Button
+                                                    type="button"
+                                                    variant="destructive"
+                                                    size="icon"
+                                                    onClick={() => {
+                                                        const newFeatures = field.value.filter((_, i) => i !== index)
+                                                        field.onChange(newFeatures)
+                                                    }}
+                                                    aria-label="Remove feature"
+                                                >
+                                                    <Trash2 className="h-4 w-4"/>
+                                                </Button>
+                                            </div>
+                                        ))}
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => field.onChange([...field.value, ''])}
+                                            className="mt-2"
+                                        >
+                                            <Plus className="h-4 w-4 mr-2"/> Add Feature
+                                        </Button>
+                                    </div>
+                                )}
                             />
-                            {errors.paymentType && <p className="text-sm text-red-500">{errors.paymentType.message}</p>}
+                            {errors.features && <p className="text-sm text-red-500">{errors.features.message}</p>}
                         </div>
                     </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="staff">Number of Staff</Label>
-                        <Input
-                            id="staff"
-                            type="number"
-                            placeholder="no. of staff"
-                            {...register('staff', { valueAsNumber: true })} // Ensure input value is parsed as a number
-                        />
-                        {errors.staff && <p className="text-sm text-red-500">{errors.staff.message}</p>}
-                    </div>
-
-                    <div className="space-y-2">
-                        <Label>Features</Label>
-                        {fields.map((field, index) => (
-                            <div key={field.id} className="flex items-center space-x-2">
-                                <Input
-                                    type="text"
-                                    placeholder="Enter a feature"
-                                    {...register(`features.${index}`)} // Use the index directly since features are strings
-                                />
-                                <Button
-                                    type="button"
-                                    variant="destructive"
-                                    size="icon"
-                                    onClick={() => remove(index)}
-                                >
-                                    <Trash2 className="h-4 w-4"/>
-                                </Button>
-                            </div>
-                        ))}
-                        {errors.features && <p className="text-sm text-red-500">{errors.features.message}</p>}
-                    </div>
-
-                    <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="mt-2"
-                        onClick={() => append('')} // Append an empty string
-                    >
-                        <Plus className="h-4 w-4 mr-2"/> Add Feature
-                    </Button>
-
-                    <Button type="submit" className="w-full">
-                        Submit Subscription
+                    <Button type="submit" className="w-full bg-[#71bc44] hover:bg-[#5a9d35]" disabled={isSubmitting}>
+                        {isSubmitting ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Submitting...
+                            </>
+                        ) : (
+                            'Submit Subscription'
+                        )}
                     </Button>
                 </form>
             </CardContent>
