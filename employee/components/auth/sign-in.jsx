@@ -1,12 +1,18 @@
 "use client";
-import React, { useEffect } from "react";
+
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { Eye, EyeOff, ArrowRight, Mail, Lock } from "lucide-react";
 
 import useAuth from "../../app/hook/auth";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const schema = z.object({
   email: z
@@ -19,7 +25,7 @@ const schema = z.object({
     .nonempty("Password is required"),
 });
 
-const SignIn = () => {
+export default function SignIn() {
   const {
     register,
     handleSubmit,
@@ -29,6 +35,7 @@ const SignIn = () => {
   });
 
   const { login, success, error } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (success) {
@@ -42,94 +49,118 @@ const SignIn = () => {
     await login(data);
   };
 
-  const inputClass =
-    "w-full block appearance-none border border-gray-300 bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 text-sm focus:outline-none  dark:bg-neutral-900 dark:border-neutral-400 dark:text-white";
-  const errorClass = "text-red-500";
-
   return (
-    <div className="flex flex-wrap h-screen">
-      <div className="flex w-full flex-col md:w-1/3 justify-center gap-5">
-        <div className="text-center">
-          <div className="flex justify-center mx-auto">
-            <img
-              alt="spex-africa"
-              className="w-auto h-32 sm:h-40"
-              src="https://res.cloudinary.com/ddwet1dzj/image/upload/v1722177650/spex_logo-03_png_dui5ur.png"
-            />
-          </div>
-
-          <p className=" text-gray-500 dark:text-gray-300">
-            Sign in to access your account
+    <div
+      className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center"
+      style={{
+        backgroundImage:
+          "url('https://res.cloudinary.com/ddwet1dzj/image/upload/v1720541343/hero-1_raxkds.jpg')",
+      }}
+    >
+      <div className="absolute inset-0 bg-black opacity-70" />
+      <div className=" p-8 rounded-lg shadow-none z-10 max-w-4xl w-full flex flex-col md:flex-row">
+        <div className="md:w-1/2 pr-8 border-r border-gray-300 hidden sm:block">
+          <img
+            alt="spex-africa"
+            className="w-40 mb-8"
+            src="https://res.cloudinary.com/ddwet1dzj/image/upload/v1722177650/spex_logo-03_png_dui5ur.png"
+          />
+          <h2 className="text-4xl font-bold mb-4 text-gray-200">
+            SPEX Marketplace
+          </h2>
+          <p className="text-lg leading-relaxed text-gray-200 mb-6">
+            Join our innovative platform connecting food vendors with
+            enterprises seeking sustainable packaging solutions. Together, we
+            are revolutionizing the world of eco-friendly dining.
+          </p>
+          <p className="text-[#71bc44] font-semibold">
+            Sustainable. Innovative. Connected.
           </p>
         </div>
-        <div className="w-full flex flex-col justify-center pt-8 items-center md:px-4 px-5 ">
-          <form
-            className="w-full block gap-3   space-y-5 lg:px-10 "
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <div className="block  pt-4">
-              <input
-                type="email"
-                {...register("email")}
-                className={inputClass}
-                placeholder="Email"
-              />
-              {errors.email && (
-                <p className={errorClass}>{errors.email.message}</p>
-              )}
-            </div>
-            <div className="flex flex-col pt-4">
-              <input
-                type="password"
-                {...register("password")}
-                className={inputClass}
-                placeholder="Password"
-              />
-              {errors.password && (
-                <p className={errorClass}>{errors.password.message}</p>
-              )}
-            </div>
-            <div className="flex flex-col  text-sm text-gray-500 underline">
-              <Link href={"/password/request"}>
-                <p>forgot password</p>
-              </Link>
-            </div>
-            <button
-              className="mt-10 w-[50%] bg-gray-900 px-4 py-2 text-center text-base font-semibold text-white shadow-md transition"
-              type="submit"
-            >
-              Log in
-            </button>
-          </form>
-          <div className="mt-7 w-full flex items-center  justify-center text-sm">
-            <p className="whitespace-nowrap text-gray-600 flex gap-4 w-full items-center px-7">
-              Do not have an account?
-              <Link
-                className="underline-offset-4 font-semibold text-gray-900 underline"
-                href={"/register"}
+        <div className="md:w-1/2 md:pl-8 mt-8 md:mt-0">
+          <h3 className="text-2xl font-bold mb-6 text-gray-200">Sign In</h3>
+          <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            <div className="space-y-2">
+              <Label
+                className="text-sm font-medium text-gray-200"
+                htmlFor="email"
               >
-                Sign up for free.
+                Email
+              </Label>
+              <div className="relative">
+                <Input
+                  id="email"
+                  placeholder="m@example.com"
+                  type="email"
+                  {...register("email")}
+                  className={`pl-10 ${errors.email ? "border-red-500" : "border-gray-200"} focus:border-[#71bc44] focus:ring focus:ring-[#71bc44] focus:ring-opacity-50 placeholder:text-gray-300 text-white`}
+                />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-200 h-5 w-5" />
+              </div>
+              {errors.email && (
+                <p className="text-sm text-red-500">{errors.email.message}</p>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label
+                className="text-sm font-medium text-gray-200"
+                htmlFor="password"
+              >
+                Password
+              </Label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  placeholder="Enter your password"
+                  type={showPassword ? "text" : "password"}
+                  {...register("password")}
+                  className={`pl-10 pr-10 ${errors.password ? "border-red-500" : "border-gray-200"} text-white focus:border-[#71bc44] focus:ring focus:ring-[#71bc44] focus:ring-opacity-50 placeholder:text-300`}
+                />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-300 h-5 w-5" />
+                <button
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-300 hover:text-gray-600"
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+              {errors.password && (
+                <p className="text-sm text-red-500">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+            <div className="flex items-center justify-between">
+              <Link
+                className="text-sm text-[#71bc44] hover:underline"
+                href="/password/request"
+              >
+                Forgot password?
               </Link>
-            </p>
-          </div>
-        </div>
-      </div>
-      <div className="pointer-events-none relative hidden h-screen select-none bg-black md:block md:w-2/3">
-        <div className="absolute bottom-0 z-10 px-8 text-white opacity-100">
-          <p className="mb-8 text-3xl font-semibold leading-10">
-            SPEX is a meal marketplace that leverages a web platform/app to
-            connect food vendors with enterprises and users seeking sustainable
-            food packaging.
+              <Button
+                className="bg-[#71bc44] text-white hover:bg-[#5a9636] transition-colors duration-300"
+                type="submit"
+              >
+                Sign In <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </div>
+          </form>
+          <p className="mt-8 text-center text-sm text-gray-300">
+            Don not have an account?{" "}
+            <Link
+              className="text-[#71bc44] hover:underline font-medium"
+              href="/register"
+            >
+              Sign up for free
+            </Link>
           </p>
         </div>
-        <img
-          alt="Background"
-          className="absolute top-0 h-full w-full object-cover object-center opacity-40 -z-1"
-          src="https://res.cloudinary.com/ddwet1dzj/image/upload/v1720541343/hero-1_raxkds.jpg"
-        />
       </div>
     </div>
   );
-};
-
-export default SignIn;
+}
