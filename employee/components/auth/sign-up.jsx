@@ -1,250 +1,238 @@
-"use client";
-import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import Link from "next/link";
-import toast from "react-hot-toast";
+"use client"
 
-import useAuth from "../../app/hook/auth";
+import React, { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+import Link from "next/link"
+import toast from "react-hot-toast"
+import { User, Mail, Lock, Phone, Hash, Upload, X, Eye, EyeOff } from "lucide-react"
+import { motion } from "framer-motion"
+
+import useAuth from "../../app/hook/auth"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 const schema = z
-  .object({
-    firstName: z.string().nonempty("First name is required"),
-    lastName: z.string().nonempty("Last name is required"),
-    email: z
-      .string()
-      .email("Invalid email address")
-      .nonempty("Email is required"),
-    password: z
-      .string()
-      .min(8, "Password must be at least 8 characters long")
-      .nonempty("Password is required"),
-    confirmPassword: z
-      .string()
-      .min(8, "Password must be at least 8 characters long")
-      .nonempty("Confirm Password is required"),
-    code: z.string().nonempty("Code is required"),
-    phone: z.string().nonempty("Phone number is required"),
-    profilePhoto: z
-      .any()
-      .refine((file) => file && file.length > 0, "Profile photo is required"),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
+    .object({
+      firstName: z.string().nonempty("First name is required"),
+      lastName: z.string().nonempty("Last name is required"),
+      email: z
+          .string()
+          .email("Invalid email address")
+          .nonempty("Email is required"),
+      password: z
+          .string()
+          .min(8, "Password must be at least 8 characters long")
+          .nonempty("Password is required"),
+      confirmPassword: z
+          .string()
+          .min(8, "Password must be at least 8 characters long")
+          .nonempty("Confirm Password is required"),
+      code: z.string().nonempty("Code is required"),
+      phone: z.string().nonempty("Phone number is required"),
+      profilePhoto: z
+          .any()
+          .refine((file) => file && file.length > 0, "Profile photo is required"),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: "Passwords do not match",
+      path: ["confirmPassword"],
+    })
 
-const SignUp = () => {
+export default function SignUp() {
   const {
     register,
     reset,
     handleSubmit,
     watch,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
-  });
+  })
 
-  const { addUser, success, error } = useAuth();
+  const { addUser, success, error } = useAuth()
+  const [previewUrl, setPreviewUrl] = useState(null)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   useEffect(() => {
     if (success) {
-      toast.success(success);
+      toast.success(success)
     } else if (error) {
-      toast.error(error);
+      toast.error(error)
     }
-  }, [success, error]);
-  const onSubmit = async (data) => {
-    const formData = new FormData();
+  }, [success, error])
 
-    formData.append("firstName", data.firstName);
-    formData.append("lastName", data.lastName);
-    formData.append("email", data.email);
-    formData.append("password", data.password);
-    formData.append("confirmPassword", data.confirmPassword);
-    formData.append("code", data.code);
-    formData.append("phone", data.phone);
-    formData.append("profilePhoto", data.profilePhoto[0]);
+  const onSubmit = async (data) => {
+    const formData = new FormData()
+
+    formData.append("firstName", data.firstName)
+    formData.append("lastName", data.lastName)
+    formData.append("email", data.email)
+    formData.append("password", data.password)
+    formData.append("confirmPassword", data.confirmPassword)
+    formData.append("code", data.code)
+    formData.append("phone", data.phone)
+    formData.append("profilePhoto", data.profilePhoto[0])
 
     try {
-      await addUser(formData);
-      reset();
+      await addUser(formData)
+      reset()
+      setPreviewUrl(null)
     } catch (error) {
-      console.error("There was an error uploading the image:", error);
+      console.error("There was an error uploading the image:", error)
     }
-  };
+  }
 
-  const profilePhoto = watch("profilePhoto");
+  const profilePhoto = watch("profilePhoto")
 
-  const inputClass =
-    "w-full flex-1 appearance-none border border-gray-300 bg-white px-4 py-2 text-base text-gray-700 placeholder-gray-400 text-sm focus:outline-none  dark:text-neutral-300 dark:bg-neutral-900 dark:border-neutral-400  ";
-  const errorClass = "text-red-500";
+  useEffect(() => {
+    if (profilePhoto && profilePhoto.length > 0) {
+      const file = profilePhoto[0]
+      setPreviewUrl(URL.createObjectURL(file))
+    }
+  }, [profilePhoto])
+
+  const removePhoto = () => {
+    setValue("profilePhoto", null)
+    setPreviewUrl(null)
+  }
 
   return (
-    <div className="flex flex-wrap  dark:text-neutral-300 ">
-      <div className="flex justify-center items-center   w-full min-h-screen flex-col md:w-1/3  lg:px-10 px-5">
-        <div className="flex justify-center   ">
-          <div className="text-center">
-            <div className="flex justify-center mx-auto ">
-              <img
-                alt="spex-africa"
-                className="w-auto h-32 sm:h-32 lg:h-24 "
-                src="https://res.cloudinary.com/ddwet1dzj/image/upload/v1722177650/spex_logo-03_png_dui5ur.png"
-              />
-            </div>
-
-            <p className=" text-gray-500 dark:text-gray-300 lg:text-sm">
-              Create a new account
-            </p>
-          </div>
-        </div>
-        <div className="w-full flex flex-col justify-center pt-8 md:justify-start md:px-4 md:pt-0 mt-5 lg:w-[30rem]">
-          <form
-            className="flex flex-col gap-2 sm:pt-3 sm:px-5  lg:px-8"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-3  h-auto lg:gap-2">
-              <div className="w-full flex flex-col ">
-                <input
-                  type="text"
-                  {...register("firstName")}
-                  className={inputClass}
-                  placeholder="First Name"
-                />
-                {errors.firstName && (
-                  <p className={errorClass}>{errors.firstName.message}</p>
-                )}
-              </div>
-              <div className="w-full flex flex-col ">
-                <input
-                  type="text"
-                  {...register("lastName")}
-                  className={inputClass}
-                  placeholder="Last Name"
-                />
-                {errors.lastName && (
-                  <p className={errorClass}>{errors.lastName.message}</p>
-                )}
-              </div>
-            </div>
-            <div className="flex flex-col pt-4">
-              <input
-                type="email"
-                {...register("email")}
-                className={inputClass}
-                placeholder="Email"
-              />
-              {errors.email && (
-                <p className={errorClass}>{errors.email.message}</p>
-              )}
-            </div>
-            <div className="flex flex-col pt-4">
-              <input
-                type="password"
-                {...register("password")}
-                className={inputClass}
-                placeholder="Password"
-              />
-              {errors.password && (
-                <p className={errorClass}>{errors.password.message}</p>
-              )}
-            </div>
-            <div className="flex flex-col pt-4">
-              <input
-                type="password"
-                {...register("confirmPassword")}
-                className={inputClass}
-                placeholder="Confirm Password"
-              />
-              {errors.confirmPassword && (
-                <p className={errorClass}>{errors.confirmPassword.message}</p>
-              )}
-            </div>
-            <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-3  h-auto">
-              <div className="w-full flex flex-col pt-4">
-                <input
-                  type="text"
-                  {...register("code")}
-                  className={inputClass}
-                  placeholder="GCBHS484"
-                />
-                {errors.code && (
-                  <p className={errorClass}>{errors.code.message}</p>
-                )}
-              </div>
-              <div className="w-full flex flex-col pt-4">
-                <input
-                  type="tel"
-                  {...register("phone")}
-                  className={inputClass}
-                  placeholder="Phone"
-                />
-                {errors.phone && (
-                  <p className={errorClass}>{errors.phone.message}</p>
-                )}
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-6 pt-2">
-              <div className="shrink-0">
-                {/* eslint-disable-next-line jsx-a11y/img-redundant-alt */}
+      <div className="min-h-screen flex items-center justify-center bg-cover bg-center bg-fixed p-4" style={{backgroundImage: "url('https://res.cloudinary.com/ddwet1dzj/image/upload/v1720541196/spex_jrkich.jpg')"}}>
+        <div className="absolute inset-0 bg-black opacity-60" />
+        <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="relative z-10 w-full max-w-md mx-auto"
+        >
+          <div className="backdrop-blur-md bg-white/10 rounded-2xl shadow-2xl overflow-hidden">
+            <div className="p-6 sm:p-8">
+              <div className="flex flex-col items-center mb-6">
                 <img
-                  alt="Current profile photo"
-                  className="h-16 w-16 lg:h-10 lg:w-10 object-cover rounded-full border-2 border-black"
-                  id="preview_img"
-                  src={
-                    profilePhoto?.length
-                      ? URL.createObjectURL(profilePhoto[0])
-                      : "https://res.cloudinary.com/ddwet1dzj/image/upload/v1722177650/spex_logo-03_png_dui5ur.png"
-                  }
+                    alt="spex-africa"
+                    className="w-24 mb-4 hover:scale-105 transition-transform duration-300"
+                    src="https://res.cloudinary.com/ddwet1dzj/image/upload/v1722177650/spex_logo-03_png_dui5ur.png"
                 />
+                <h2 className="text-2xl font-bold text-white text-center">Join SPEX</h2>
+                <p className="text-white text-center mt-2">Revolutionize sustainable food packaging</p>
               </div>
-              <label className="block">
-                <span className="sr-only">Choose profile photo</span>
-                <input
-                  type="file"
-                  {...register("profilePhoto")}
-                  className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
-                />
-              </label>
-            </div>
-            <button
-              className="mt-4 w-[50%]  bg-gray-900 px-4 py-2 text-center text-base font-semibold text-white shadow-md transition dark:bg-neutral-900 dark:border-neutral-400 dark:text-neutral-300"
-              type="submit"
-            >
-              Sign Up
-            </button>
-          </form>
-          <div className="mt-4 w-full flex items-center justify-center sm:text-sm lg:text-sm ">
-            <p className="w-full whitespace-nowrap text-gray-600 flex gap-4 w-full items-center lg:px-10 dark:text-neutral-300 ">
-              Already have an account?
-              <Link
-                className="underline-offset-4 font-semibold text-gray-900 underline"
-                href={"/login"}
-              >
-                Sign in.
-              </Link>
-            </p>
-          </div>
-        </div>
-      </div>
-      <div className="pointer-events-none relative hidden h-screen select-none bg-black md:block md:w-2/3">
-        <div className="absolute bottom-0 z-10 px-8 text-white opacity-100">
-          <p className="mb-8 text-3xl font-semibold leading-10">
-            SPEX is a meal marketplace that leverages a web platform/app to
-            connect food vendors with enterprises and users seeking sustainable
-            food packaging.
-          </p>
-        </div>
-        <img
-          alt="Background"
-          className="absolute top-0 h-full w-full object-cover opacity-40 -z-1"
-          src="https://res.cloudinary.com/ddwet1dzj/image/upload/v1720541196/spex_jrkich.jpg"
-        />
-      </div>
-    </div>
-  );
-};
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { name: "firstName", label: "First Name", placeholder: "John", icon: User },
+                    { name: "lastName", label: "Last Name", placeholder: "Doe", icon: User },
+                  ].map((field) => (
+                      <div key={field.name}>
+                        <Label htmlFor={field.name} className="sr-only">{field.label}</Label>
+                        <div className="relative">
+                          <Input
+                              id={field.name}
+                              {...register(field.name)}
+                              className={`pl-10 bg-white/20 border-white/30 text-white placeholder-white/50 ${errors[field.name] ? "border-red-500" : ""}`}
+                              placeholder={field.placeholder}
+                          />
+                          <field.icon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/50 h-5 w-5" />
+                        </div>
+                        {errors[field.name] && <p className="text-red-300 text-xs mt-1">{errors[field.name].message}</p>}
+                      </div>
+                  ))}
+                </div>
+                {[
+                  { name: "email", label: "Email", type: "email", placeholder: "john@example.com", icon: Mail },
+                  { name: "password", label: "Password", type: showPassword ? "text" : "password", placeholder: "••••••••", icon: Lock },
+                  { name: "confirmPassword", label: "Confirm Password", type: showConfirmPassword ? "text" : "password", placeholder: "••••••••", icon: Lock },
+                  { name: "code", label: "Code", placeholder: "GCBHS484", icon: Hash },
+                  { name: "phone", label: "Phone", type: "tel", placeholder: "+1234567890", icon: Phone },
+                ].map((field) => (
+                    <div key={field.name}>
+                      <Label htmlFor={field.name} className="sr-only">{field.label}</Label>
+                      <div className="relative">
+                        <Input
+                            id={field.name}
+                            type={field.type}
+                            {...register(field.name)}
+                            className={`pl-10 pr-10 bg-white/20 border-white/30 text-white placeholder-white/50 ${errors[field.name] ? "border-red-500" : ""}`}
+                            placeholder={field.placeholder}
+                        />
+                        <field.icon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/50 h-5 w-5" />
+                        {(field.name === "password" || field.name === "confirmPassword") && (
+                            <button
+                                type="button"
+                                onClick={() => field.name === "password" ? setShowPassword(!showPassword) : setShowConfirmPassword(!showConfirmPassword)}
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/50"
+                            >
+                              {(field.name === "password" && showPassword) || (field.name === "confirmPassword" && showConfirmPassword) ? (
+                                  <EyeOff className="h-5 w-5" />
+                              ) : (
+                                  <Eye className="h-5 w-5" />
+                              )}
+                            </button>
+                        )}
+                      </div>
+                      {errors[field.name] && <p className="text-red-300 text-xs mt-1">{errors[field.name].message}</p>}
+                    </div>
+                ))}
+                <div>
+                  <Label htmlFor="profilePhoto" className="sr-only">Profile Photo</Label>
+                  <div className="flex items-center space-x-4">
+                    <div className="relative">
+                      <img
+                          src={previewUrl || "https://res.cloudinary.com/ddwet1dzj/image/upload/v1722177650/spex_logo-03_png_dui5ur.png"}
+                          alt="Profile preview"
+                          className="w-16 h-16 rounded-full object-cover border-2 border-white/30"
+                      />
+                      {previewUrl && (
+                          <button
+                              type="button"
+                              onClick={removePhoto}
+                              className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors duration-200"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
+                      )}
+                    </div>
 
-export default SignUp;
+                    <div
+                        className="w-[40%] flex items-center justify-center px-4 py-2 border border-white/30 rounded-md shadow-sm text-sm font-medium text-white bg-white/20 hover:bg-white/30 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-[#71bc44] cursor-pointer transition-colors duration-200">
+                      <label className="flex">
+                        <Upload className="w-5 h-5 mr-2 text-white"/>
+                        <span>{previewUrl ? "Change" : "Upload"}</span>
+                        <Input
+                            id="profilePhoto"
+                            type="file"
+                            {...register("profilePhoto")}
+                            className="sr-only"
+                            onChange={(e) => {
+                              register("profilePhoto").onChange(e)
+                              if (e.target.files && e.target.files[0]) {
+                                setPreviewUrl(URL.createObjectURL(e.target.files[0]))
+                              }
+                            }}
+                        />
+                      </label>
+                    </div>
+
+                  </div>
+                  {errors.profilePhoto && <p className="text-red-300 text-xs mt-1">{errors.profilePhoto.message}</p>}
+                </div>
+                <Button type="submit" className="w-full bg-[#71bc44] text-white hover:bg-[#5a9636] transition-colors duration-200">
+                  Sign Up
+                </Button>
+              </form>
+              <p className="mt-6 text-center text-sm text-white">
+                Already have an account?{" "}
+                <Link href="/login" className="text-[#71bc44] hover:text-[#5a9636] font-medium transition-colors duration-200">
+                  Sign in
+                </Link>
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+  )
+}
