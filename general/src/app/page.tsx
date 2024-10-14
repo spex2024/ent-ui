@@ -52,7 +52,7 @@ export default function SPEXLandingPage() {
       title: "Eco-Friendly",
       description: "Reduce single-use plastic waste and minimize your carbon footprint with our reusable smart packs.",
       benefits: [
-        "Biodegradable materials",
+        "Reusable materials",
         "Carbon-neutral delivery",
         "Supports local recycling programs"
       ]
