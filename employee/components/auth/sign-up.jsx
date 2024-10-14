@@ -167,7 +167,7 @@ export default function SignUp() {
                       <Input
                         id={field.name}
                         {...register(field.name)}
-                        className={`pl-10 bg-white/20 border-white/30 text-white placeholder-white/50 ${errors[field.name] ? "border-red-500" : ""}`}
+                        className={`pl-10 bg-white/20 border-white/30 text-white placeholder-white/50 ${errors[field.name] ? "border-red-500" : ""} placeholder:text-gray-100`}
                         placeholder={field.placeholder}
                       />
                       <field.icon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/50 h-5 w-5" />
