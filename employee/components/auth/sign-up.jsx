@@ -147,7 +147,7 @@ export default function SignUp() {
                   { name: "password", label: "Password", type: showPassword ? "text" : "password", placeholder: "••••••••", icon: Lock },
                   { name: "confirmPassword", label: "Confirm Password", type: showConfirmPassword ? "text" : "password", placeholder: "••••••••", icon: Lock },
                   { name: "code", label: "Code", placeholder: "GCBHS484", icon: Hash },
-                  { name: "phone", label: "Phone", type: "tel", placeholder: "+1234567890", icon: Phone },
+                  { name: "phone", label: "Phone", type: "tel", placeholder: "+233 000 000 000", icon: Phone },
                 ].map((field) => (
                     <div key={field.name}>
                       <Label htmlFor={field.name} className="sr-only">{field.label}</Label>
