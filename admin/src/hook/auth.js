@@ -16,11 +16,11 @@ const useAuth = () => {
         try {
             const response = await axios.post(`${baseurl}/api/admin/login`, data, { withCredentials: true });
             if (response.status === 200) {
-                setSuccess(response.data.message);
+                setSuccess(response?.data?.message);
                 router.push('/'); // or any protected route
             }
         } catch (error) {
-            setError(error.response.data.message);
+            setError(error.response?.data?.message);
         }
         console.error = () => {};
     };
@@ -30,11 +30,11 @@ const useAuth = () => {
         try {
             const response = await axios.post(`${baseurl}/api/admin/logout`, {}, { withCredentials: true });
             if (response.data.success) {
-                setSuccess(response.data.message);
+                setSuccess(response.data?.message);
                 router.push('/login'); // or any public route
             }
         } catch (error) {
-            setError(error.response.data.message);
+            setError(error.response.data?.message);
         }
     };
 
