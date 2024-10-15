@@ -16,8 +16,9 @@ import {
   X,
   Eye,
   EyeOff,
+  Loader2,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 import useAuth from "../../app/hook/auth";
 
@@ -59,7 +60,7 @@ export default function SignUp() {
     handleSubmit,
     watch,
     setValue,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(schema),
   });
@@ -167,7 +168,9 @@ export default function SignUp() {
                       <Input
                         id={field.name}
                         {...register(field.name)}
-                        className={`pl-10 bg-white/20 border-white/30 text-white placeholder-white/50 ${errors[field.name] ? "border-red-500" : ""} placeholder:text-gray-100`}
+                        className={`pl-10 bg-white/20 border-white/30 text-white placeholder-white/50 ${
+                          errors[field.name] ? "border-red-500" : ""
+                        } placeholder:text-gray-100`}
                         placeholder={field.placeholder}
                       />
                       <field.icon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/50 h-5 w-5" />
@@ -225,7 +228,9 @@ export default function SignUp() {
                       id={field.name}
                       type={field.type}
                       {...register(field.name)}
-                      className={`pl-10 pr-10 bg-white/20 border-white/30 text-white  ${errors[field.name] ? "border-red-500" : ""} placeholder:text-gray-100`}
+                      className={`pl-10 pr-10 bg-white/20 border-white/30 text-white  ${
+                        errors[field.name] ? "border-red-500" : ""
+                      } placeholder:text-gray-100`}
                       placeholder={field.placeholder}
                     />
                     <field.icon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/50 h-5 w-5" />
@@ -309,12 +314,45 @@ export default function SignUp() {
                   </p>
                 )}
               </div>
-              <Button
-                className="w-full bg-[#71bc44] text-white hover:bg-[#5a9636] transition-colors duration-200"
-                type="submit"
-              >
-                Sign Up
-              </Button>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={isSubmitting ? "submitting" : "idle"}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  initial={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Button
+                    className="w-full bg-[#71bc44] text-white hover:bg-[#5a9636] transition-colors duration-200 relative overflow-hidden"
+                    disabled={isSubmitting}
+                    type="submit"
+                  >
+                    <motion.div
+                      animate={isSubmitting ? { x: "100%" } : { x: 0 }}
+                      className="absolute inset-0 bg-[#5a9636]"
+                      transition={{
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 20,
+                      }}
+                    />
+                    <motion.span
+                      animate={{ opacity: isSubmitting ? 0 : 1 }}
+                      className="relative z-10"
+                      transition={{ duration: 0.2 }}
+                    >
+                      Sign Up
+                    </motion.span>
+                    <motion.div
+                      animate={{ opacity: isSubmitting ? 1 : 0 }}
+                      className="absolute inset-0 flex items-center justify-center"
+                      transition={{ duration: 0.2 }}
+                    >
+                      <Loader2 className="w-6 h-6 animate-spin" />
+                    </motion.div>
+                  </Button>
+                </motion.div>
+              </AnimatePresence>
             </form>
             <p className="mt-6 text-center text-sm text-white">
               Already have an account?{" "}

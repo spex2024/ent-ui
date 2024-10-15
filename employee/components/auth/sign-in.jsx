@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { Eye, EyeOff, ArrowRight, Mail, Lock } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, Mail, Lock, Loader2 } from "lucide-react";
 
 import useAuth from "../../app/hook/auth";
 
@@ -36,16 +36,20 @@ export default function SignIn() {
 
   const { login, success, error } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (success) {
       toast.success(success);
+      setIsSubmitting(false);
     } else if (error) {
       toast.error(error);
+      setIsSubmitting(false);
     }
   }, [success, error]);
 
   const onSubmit = async (data) => {
+    setIsSubmitting(true);
     await login(data);
   };
 
@@ -144,9 +148,19 @@ export default function SignIn() {
               </Link>
               <Button
                 className="bg-[#71bc44] text-white hover:bg-[#5a9636] transition-colors duration-300"
+                disabled={isSubmitting}
                 type="submit"
               >
-                Sign In <ArrowRight className="ml-2 h-4 w-4" />
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Signing In...
+                  </>
+                ) : (
+                  <>
+                    Sign In <ArrowRight className="ml-2 h-4 w-4" />
+                  </>
+                )}
               </Button>
             </div>
           </form>
