@@ -53,6 +53,7 @@ interface User {
     firstName: string;
     lastName: string;
     email: string;
+    code:string;
     phone: string;
     returnedPack: number;
     createdAt: string;
@@ -121,6 +122,7 @@ export default function DataTable({ user }: DataTableProps) {
                     <TableRow className={`text-xs`}>
                         <TableHead>Image</TableHead>
                         <TableHead>Name</TableHead>
+                        <TableHead>Code</TableHead>
                         <TableHead>Points</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Email</TableHead>
@@ -145,6 +147,7 @@ export default function DataTable({ user }: DataTableProps) {
                                 />
                             </TableCell>
                             <TableCell>{user.firstName} {limitChars(user.lastName,5)}</TableCell>
+                            <TableCell>{user.code}</TableCell>
                             <TableCell>{user.points}</TableCell>
                             <TableCell>{user.isVerified === true ? 'Active' : 'Inactive'}</TableCell>
                             <TableCell>{limitChars(user.email,10)}</TableCell>
