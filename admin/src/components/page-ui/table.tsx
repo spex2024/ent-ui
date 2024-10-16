@@ -173,7 +173,7 @@ export default function DataTable({ user }: DataTableProps) {
                                         <TooltipContent className={`w-52 h-32 flex flex-col items-center justify-center bg-white text-black border border-black`}>
                                             <div className="flex flex-col">
                                                     <div className={`w-full  px-3 space-y-2 `}>
-                                                        <h1>{user.firstName} {user.lastName}</h1>
+                                                        <h1 className={`capitalize`}>{user.firstName} {user.lastName}</h1>
                                                         <h1>{user.email}</h1>
                                                         <h1>{user.phone}</h1>
                                                         <h1>Status: {user.isVerified === true ? 'Active' : 'Inactive'}</h1>
