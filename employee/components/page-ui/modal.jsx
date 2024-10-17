@@ -1,145 +1,114 @@
-"use client";
+'use client'
 
-import React, { useEffect } from "react";
-import { RadioGroup, Radio } from "@nextui-org/react";
+import React, { useEffect } from "react"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { motion } from "framer-motion"
+import { X } from "lucide-react"
+
+import useSelectedMealStore from "@/app/store/selection"
+import useCartStore from "@/app/store/cart"
 import toast from "react-hot-toast";
 
-import useSelectedMealStore from "@/app/store/selection";
-import useCartStore from "@/app/store/cart";
+export default function MealModal() {
+  const { selectedMeal, closeModal, handleOptionChange, selectedOptions } = useSelectedMealStore()
+  const { submitOrder, success, error } = useCartStore()
 
-const MealModal = () => {
-  const { selectedMeal, closeModal, handleOptionChange, selectedOptions } =
-    useSelectedMealStore();
-  const { submitOrder, success, error } = useCartStore();
-
-  // Handle success and error notifications after submission
   useEffect(() => {
     if (success) {
-      toast.success(success);
+      toast.success(success)
       setTimeout(() => {
-        window.location.reload();
-      }, 3000); // 3 seconds delay
+        // window.location.reload()
+      }, 3000)
     } else if (error) {
-      toast.error(error);
+      toast.error(error)
       setTimeout(() => {
-        window.location.reload();
-      }, 3000); // 3 seconds delay
+        // window.location.reload()
+      }, 3000)
     }
-  }, [success, error]);
-
+  }, [success, error])
 
   const placeOrder = (selectedMeal, selectedOptions) => {
-    submitOrder(selectedMeal, selectedOptions);
-  };
+    submitOrder(selectedMeal, selectedOptions)
+  }
 
-  if (!selectedMeal) return null;
+  if (!selectedMeal) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-500 bg-opacity-50">
-      <div className="relative p-4 lg:w-[50%] w-full">
-        <div className="relative bg-white rounded-lg shadow">
+      <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
+      >
+        <motion.div
+            initial={{ scale: 0.9, y: 50 }}
+            animate={{ scale: 1, y: 0 }}
+            exit={{ scale: 0.9, y: 50 }}
+            className="relative w-full max-w-md max-h-[90vh] overflow-y-auto bg-white rounded-2xl shadow-xl"
+        >
           <div
-            className="flex items-center justify-between p-10 border-b rounded-t h-[250px]"
-            style={{
-              backgroundImage: `url(${selectedMeal?.imageUrl})`,
-              backgroundPosition: "center",
-              backgroundSize: "cover",
-            }}
+              className="h-48 rounded-t-2xl bg-cover bg-center"
+              style={{ backgroundImage: `url(${selectedMeal?.imageUrl})` }}
           />
-          <div
-            className={`flex flex-col lg:flex-row items-start justify-between mx-auto p-5`}
-          >
-            <div className="p-4 space-y-2">
-              <h3 className="text-2xl font-bold text-gray-900">Main Dish</h3>
-              <div className="flex items-center space-x-2 font-bold">
-                <span>{selectedMeal.main.name}</span>
-              </div>
-            </div>
-            {/* Protein Option */}
-            <div className="p-4 space-y-2">
-              <h3 className="text-sm font-bold text-gray-900 uppercase">
-                Option-1
-              </h3>
-              <RadioGroup
-                value={selectedOptions["protein"] || ""}
-                onValueChange={(value) => handleOptionChange("protein", value)}
-              >
-                {selectedMeal.protein.map((option, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <Radio
-                      id={`protein-${index}`}
-                      size={"sm"}
-                      value={option.name}
-                    />
-                    <h2 className={`text-sm`}>{option.name}</h2>
-                  </div>
-                ))}
-              </RadioGroup>
-            </div>
-            {/* Sauce Option */}
-            <div className="p-4 space-y-2">
-              <h3 className="text-sm font-bold text-gray-900 uppercase">
-                Option-2
-              </h3>
-              <RadioGroup
-                value={selectedOptions["sauce"] || ""}
-                onValueChange={(value) => handleOptionChange("sauce", value)}
-              >
-                {selectedMeal.sauce.map((option, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <Radio
-                      id={`sauce-${index}`}
-                      size={"sm"}
-                      value={option.name}
-                    />
-                    <h2 className={`text-sm`}>{option.name}</h2>
-                  </div>
-                ))}
-              </RadioGroup>
-            </div>
-            {/* Extras Option */}
-            <div className="p-4 space-y-2">
-              <h3 className="text-sm font-bold text-gray-900 uppercase">
-                Option-3
-              </h3>
-              <RadioGroup
-                value={selectedOptions["extras"] || ""}
-                onValueChange={(value) => handleOptionChange("extras", value)}
-              >
-                {selectedMeal.extras.map((option, index) => (
-                  <div key={index} className="flex items-center space-x-2">
-                    <Radio
-                      id={`extras-${index}`}
-                      size="sm"
-                      value={option.name}
-                    />
-                    <h2 className={`text-sm`}>{option.name}</h2>
-                  </div>
-                ))}
-              </RadioGroup>
-            </div>
-          </div>
-          <div className="flex items-center justify-end p-4 border-t">
-            <button
-              className="text-white bg-black font-medium px-5 py-2"
-              onClick={() => {
-                placeOrder(selectedMeal, selectedOptions);
-                closeModal();
-              }}
-            >
-              Submit Order
-            </button>
-            <button
-              className="text-sm font-medium text-gray-900 ml-3 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:outline-none px-5 py-2.5"
+          <button
               onClick={closeModal}
-            >
-              Cancel
-            </button>
+              className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-100 transition-colors"
+          >
+            <X className="w-5 h-5 text-gray-600" />
+          </button>
+          <div className="p-6 space-y-6">
+            <h2 className="text-2xl font-bold text-gray-800 text-center">{selectedMeal.main.name}</h2>
+            <OptionSection
+                title="Protein"
+                options={selectedMeal.protein}
+                selectedOption={selectedOptions["protein"]}
+                onOptionChange={(value) => handleOptionChange("protein", value)}
+            />
+            <OptionSection
+                title="Sauce"
+                options={selectedMeal.sauce}
+                selectedOption={selectedOptions["sauce"]}
+                onOptionChange={(value) => handleOptionChange("sauce", value)}
+            />
+            <OptionSection
+                title="Extras"
+                options={selectedMeal.extras}
+                selectedOption={selectedOptions["extras"]}
+                onOptionChange={(value) => handleOptionChange("extras", value)}
+            />
+            <div className="flex justify-center pt-4">
+              <button
+                  className="px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition-colors"
+                  onClick={() => {
+                    placeOrder(selectedMeal, selectedOptions)
+                    closeModal()
+                  }}
+              >
+                Place Order
+              </button>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  );
-};
+        </motion.div>
+      </motion.div>
+  )
+}
 
-export default React.memo(MealModal);
+function OptionSection({ title, options, selectedOption, onOptionChange }) {
+  return (
+      <div className="space-y-2">
+        <h3 className="text-lg font-semibold text-gray-700">{title}</h3>
+        <RadioGroup value={selectedOption || ""} onValueChange={onOptionChange}>
+          <div className="grid grid-cols-2 gap-2">
+            {options.map((option, index) => (
+                <div key={index} className="flex items-center space-x-2 bg-gray-100 rounded-lg p-2">
+                  <RadioGroupItem id={`${title}-${index}`} value={option.name} className="text-green-500" />
+                  <label htmlFor={`${title}-${index}`} className="text-sm text-gray-700 cursor-pointer">
+                    {option.name}
+                  </label>
+                </div>
+            ))}
+          </div>
+        </RadioGroup>
+      </div>
+  )
+}
