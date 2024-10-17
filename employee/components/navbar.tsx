@@ -77,14 +77,14 @@ const Navbar = () => {
       </NavbarContent>
 
       <NavbarContent className="sm:hidden basis-1 pl-4" justify="end">
-        <ThemeSwitch />
+        {/*<ThemeSwitch />*/}
         <NavbarMenuToggle />
       </NavbarContent>
       <NavbarContent
         className="sm:flex basis-1/5 sm:basis-full hidden lg:flex"
         justify="end"
       >
-        <ThemeSwitch />
+        {/*<ThemeSwitch />*/}
         <ProfileAvatar />
       </NavbarContent>
       <NavbarContent
