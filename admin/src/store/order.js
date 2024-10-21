@@ -4,9 +4,12 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 
-const baseurl = 'https://api.spexafrica.app';
+// const baseurl = 'https://api.spexafrica.app';
+// // const baseurl = "http://localhost:8080";
+const baseurl = process.env.NODE_ENV === 'development'
+    ? 'http://localhost:8080'
+    : 'https://api.spexafrica.app';
 
-// const baseurl = "http://localhost:8080";
 const useOrdersStore = create((set) => ({
     orders: [],
     newOrderCount: 0,
