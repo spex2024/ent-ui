@@ -82,7 +82,7 @@ export default function Component() {
         gradient: "from-emerald-500 to-emerald-700",
       },
       {
-        title: "Earned Revenue",
+        title: "Earned Incentive",
         value: user?.moneyBalance || 0,
         icon: DollarSign,
         gradient: "from-green-500 to-green-700",
@@ -130,10 +130,9 @@ export default function Component() {
                         {formatValue(stat.value, "", "", false)}
                         <sub className="text-xs">(plastics)</sub>
                       </span>
-                       =
+                      =
                       <span className="text-2xl">
                         {formatValue(stat.subValue, "", stat.unit, true)}
-                        <sub className="text-xs">(points)</sub>
                       </span>
                     </div>
                   ) : (
@@ -141,8 +140,8 @@ export default function Component() {
                       stat.value,
                       stat.prefix,
                       stat.unit,
-                      stat.title === "Plastic Points" ||
-                        stat.title === "Earned Revenue",
+                      stat.title === "Plastic Credits" ||
+                        stat.title === "Earned Incentive",
                     )
                   )}
                 </div>
@@ -222,7 +221,7 @@ function ImpactCard({ title, emissionSaved, gramPoints, points }) {
               </span>
             </p>
             <p className="text-sm text-green-600 dark:text-green-400">
-              = {(gramPoints || 0).toFixed(2)} kg in gram points
+              = {(gramPoints || 0).toFixed(2)} kg
             </p>
           </div>
         </div>
