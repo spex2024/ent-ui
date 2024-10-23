@@ -10,8 +10,13 @@ const useAuth = () => {
   const [error, setError] = useState(null);
   const router = useRouter();
   const { clearCart } = useCartStore();
-  // const baseurl = "http://localhost:8080";
-  const baseurl = "https://api.spexafrica.app";
+  // // const baseurl = "http://localhost:8080";
+  // const baseurl = "https://api.spexafrica.app";
+
+  const baseurl =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:8080"
+      : "https://api.spexafrica.app";
 
   const login = async (data) => {
     try {
@@ -40,7 +45,7 @@ const useAuth = () => {
 
       if (response.data.success) {
         setSuccess(response.data.message);
-        clearCart()
+        clearCart();
         router.push("/login"); // or any public route
       }
       setSuccess(response.data.message);
@@ -134,14 +139,20 @@ const useAuth = () => {
     }
   };
 
-
   const cancelOrder = async (orderId) => {
     setError(null);
     try {
-      const response = await axios.post(`${baseurl}/api/orders/cancel`, { orderId }, { withCredentials: true });
+      const response = await axios.post(
+        `${baseurl}/api/orders/cancel`,
+        { orderId },
+        { withCredentials: true },
+      );
+
       if (response.status === 200) {
         setSuccess(response.data.message);
-        setTimeout(() => { window.location.reload(); }, 3000); // Delayed reload
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000); // Delayed reload
       } else {
         setError(response.data.message);
       }
@@ -149,7 +160,6 @@ const useAuth = () => {
       setError(error.response.data.message);
     }
   };
-
 
   // New function for updating the user profile
   const updateProfile = async (userId, userData) => {

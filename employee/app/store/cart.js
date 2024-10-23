@@ -2,8 +2,13 @@
 import create from "zustand";
 import axios from "axios";
 
-const baseurl = "https://api.spexafrica.app";
-// const baseurl = "http://localhost:8080";
+// const baseurl = "https://api.spexafrica.app";
+// // const baseurl = "http://localhost:8080";
+
+const baseurl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:8080"
+    : "https://api.spexafrica.app";
 
 const useCartStore = create((set) => ({
   success: null,
@@ -30,9 +35,9 @@ const useCartStore = create((set) => ({
 
     try {
       const response = await axios.post(
-          `${baseurl}/api/orders/order`,
-          orderData,
-          { withCredentials: true }
+        `${baseurl}/api/orders/order`,
+        orderData,
+        { withCredentials: true },
       );
 
       console.log(response.data.message);
@@ -52,9 +57,9 @@ const useCartStore = create((set) => ({
     } catch (error) {
       // Handle different error structures
       const errorMessage =
-          error.response?.data?.message ||
-          error.message ||
-          "An error occurred while placing the order.";
+        error.response?.data?.message ||
+        error.message ||
+        "An error occurred while placing the order.";
 
       set({
         error: errorMessage,
