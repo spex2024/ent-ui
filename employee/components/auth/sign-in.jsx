@@ -165,7 +165,7 @@ export default function SignIn() {
             </div>
           </form>
           <p className="mt-8 text-center text-sm text-gray-300">
-            Don not have an account?{" "}
+            Do not have an account?{" "}
             <Link
               className="text-[#71bc44] hover:underline font-medium"
               href="/register"

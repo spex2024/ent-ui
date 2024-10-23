@@ -44,9 +44,8 @@ export default function App() {
   const { cancelOrder, success, error } = useAuth();
 
   useEffect(() => {
-
     fetchOrders(); // Fetch orders directly from the order store
-  }, [ fetchOrders]);
+  }, [fetchOrders]);
 
   useEffect(() => {
     if (success) {
@@ -129,14 +128,24 @@ export default function App() {
           return (
             <div className="relative flex items-center justify-center gap-5 cursor-pointer">
               {order.status === "pending" ? (
-                <Tooltip content="Cancel Order">
-                  <CircleOff
-                    color={"#000"}
-                    size={22}
-                    strokeWidth={2}
-                    onClick={() => handleCancel(order._id)}
-                  />
-                </Tooltip>
+                <div className={`flex flex-col sm:flex-row gap-3`}>
+                  <Tooltip content="Cancel Order">
+                    <CircleOff
+                      color={"#000"}
+                      size={22}
+                      strokeWidth={2}
+                      onClick={() => handleCancel(order._id)}
+                    />
+                  </Tooltip>
+                  <Tooltip content="View Details">
+                    <Eye
+                      color={"#000"}
+                      size={22}
+                      strokeWidth={2}
+                      onClick={() => handleViewDetails(order)}
+                    />
+                  </Tooltip>
+                </div>
               ) : (
                 <Tooltip content="View Details">
                   <Eye
@@ -278,6 +287,9 @@ export default function App() {
                           <li key={index} className={`flex gap-4 text-xs`}>
                             <span>{meal.main}</span>
                             {/* Add any additional meal details here */}
+                            <span>{meal.protein}</span>
+                            <span>{meal.sauce}</span>
+                            <span>{meal.extras}</span>
                           </li>
                         ))}
                       </ul>
