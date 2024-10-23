@@ -123,15 +123,16 @@ export default function Component() {
             </CardHeader>
             <CardContent className="pt-6 bg-white dark:bg-green-800">
               {user ? (
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center text-emerald-600 dark:text-emerald-400">
+                <div className="text-xl sm:text-2xl lg:text-2xl font-bold text-center text-emerald-600 dark:text-emerald-400">
                   {stat.title === "Plastics Saved" ? (
-                    <div className="flex flex-col items-center justify-center gap-2">
+                    <div className="flex items-center justify-center gap-2">
                       <span>
                         {formatValue(stat.value, "", "", false)}
                         <sub className="text-xs">(plastics)</sub>
                       </span>
-                      <span className="text-base">
-                        = {formatValue(stat.subValue, "", stat.unit, true)}
+                       =
+                      <span className="text-2xl">
+                        {formatValue(stat.subValue, "", stat.unit, true)}
                         <sub className="text-xs">(points)</sub>
                       </span>
                     </div>
@@ -199,31 +200,49 @@ export default function Component() {
 
 function ImpactCard({ title, emissionSaved, gramPoints, points }) {
   return (
-    <div className="bg-white dark:bg-green-800 p-4 sm:p-6 rounded-lg shadow-md">
-      <h3 className="text-lg sm:text-xl font-bold mb-4 text-emerald-600 dark:text-emerald-400">
-        {title}
-      </h3>
-      <div className="flex flex-col gap-4">
-        <div className="flex items-center">
-          <Leaf
-            aria-hidden="true"
-            className="h-4 w-4 sm:h-12 sm:w-12 text-green-500 dark:text-green-400 mr-4"
-          />
-          <span className="text-base sm:text-lg font-medium text-green-700 dark:text-green-200">
-            Saved {emissionSaved || 0} plastics = {(gramPoints || 0).toFixed(2)}{" "}
-            kg in gram points
-          </span>
+    <Card className="overflow-hidden">
+      <CardHeader className="border-b border-green-200 dark:border-green-700 bg-gradient-to-r from-green-500 to-green-700">
+        <CardTitle className="text-xl sm:text-2xl font-semibold text-white">
+          {title}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="p-6 bg-white dark:bg-green-800 space-y-6">
+        <div className="flex items-center space-x-4">
+          <div className="flex-shrink-0 w-12 h-12 rounded-full bg-green-100 dark:bg-green-700 flex items-center justify-center">
+            <Leaf className="h-6 w-6 text-green-500 dark:text-green-300" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-green-700 dark:text-green-300">
+              Plastics Saved
+            </p>
+            <p className="text-2xl font-bold text-green-800 dark:text-green-100">
+              {emissionSaved || 0}
+              <span className="text-base ml-1 text-green-600 dark:text-green-300">
+                plastics
+              </span>
+            </p>
+            <p className="text-sm text-green-600 dark:text-green-400">
+              = {(gramPoints || 0).toFixed(2)} kg in gram points
+            </p>
+          </div>
         </div>
-        <div className="flex items-center">
-          <Coins
-            aria-hidden="true"
-            className="h-8 w-8  text-green-500 dark:text-green-400 mr-4"
-          />
-          <span className="text-base sm:text-lg font-medium text-green-700 dark:text-green-200">
-            Earned {(points || 0).toFixed(2)} Plastic Points!
-          </span>
+        <div className="flex items-center space-x-4">
+          <div className="flex-shrink-0 w-12 h-12 rounded-full bg-green-100 dark:bg-green-700 flex items-center justify-center">
+            <Coins className="h-6 w-6 text-green-500 dark:text-green-300" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-green-700 dark:text-green-300">
+              Plastic Points Earned
+            </p>
+            <p className="text-2xl font-bold text-green-800 dark:text-green-100">
+              {(points || 0).toFixed(2)}
+              <span className="text-base ml-1 text-green-600 dark:text-green-300">
+                points
+              </span>
+            </p>
+          </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }
