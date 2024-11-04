@@ -13,7 +13,10 @@ const useUserStore = create((set) => ({
     const baseurl =
       process.env.NODE_ENV === "development"
         ? "http://localhost:8080"
-        : "https://api.spexafrica.app";
+        : typeof window !== "undefined" &&
+            window.location.hostname.endsWith(".site")
+          ? "https://api.spexafrica.site"
+          : "https://api.spexafrica.app";
 
     try {
       const response = await axios.get(`${baseurl}/api/user/employee`, {
