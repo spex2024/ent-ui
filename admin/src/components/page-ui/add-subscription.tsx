@@ -40,7 +40,12 @@ export default function SubscriptionForm() {
     const selectedPlan = watch('plan')
     const paymentType = watch('paymentType')
 
-    const baseurl = 'https://api.spexafrica.app'
+    const baseurl = process.env.NODE_ENV === 'development'
+        ? 'http://localhost:8080'
+        : (typeof window !== 'undefined' && window.location.hostname.endsWith('.site'))
+            ? 'https://api.spexafrica.site'
+            : 'https://api.spexafrica.app';
+
 
     const onSubmit = async (data: SubscriptionFormInputs) => {
         setIsSubmitting(true)
@@ -138,10 +143,10 @@ export default function SubscriptionForm() {
                                                         <RadioGroupItem value="one-time" id="one-time" />
                                                         <Label htmlFor="one-time">One-time payment</Label>
                                                     </div>
-                                                    <div className="flex items-center space-x-2">
-                                                        <RadioGroupItem value="three-months" id="three-months" />
-                                                        <Label htmlFor="three-months">3-months installment</Label>
-                                                    </div>
+                                                    {/*<div className="flex items-center space-x-2">*/}
+                                                    {/*    <RadioGroupItem value="three-months" id="three-months" />*/}
+                                                    {/*    <Label htmlFor="three-months">3-months installment</Label>*/}
+                                                    {/*</div>*/}
                                                 </RadioGroup>
                                             )}
                                         />
