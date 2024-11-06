@@ -50,7 +50,7 @@ export default function SubscriptionForm() {
     const onSubmit = async (data: SubscriptionFormInputs) => {
         setIsSubmitting(true)
         try {
-            const response = await axios.post(`${baseurl}/api/subscriptions/add`, data)
+            const response = await axios.post(`${baseurl}/api/subscriptions/add/one-time`, data)
             console.log(response.data)
             reset()
 

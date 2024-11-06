@@ -60,7 +60,9 @@ export default function Component() {
 
     const baseurl = process.env.NODE_ENV === 'development'
         ? 'http://localhost:8080'
-        : 'https://api.spexafrica.app';
+        : (typeof window !== 'undefined' && window.location.hostname.endsWith('.site'))
+            ? 'https://api.spexafrica.site'
+            : 'https://api.spexafrica.app';
 
     const calculateMonthlyPayment = (totalPrice: number, duration: number) => {
         return (totalPrice / duration).toFixed(2)
