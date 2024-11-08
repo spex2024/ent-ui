@@ -89,7 +89,7 @@ export default function Footer() {
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
-            <address className="not-italic text-xs">
+            <address className="not-italic text-lg">
               <p>No. 5 Paterson Ave</p>
               <p>Ritz, Adenta - Accra</p>
               <p className="mt-2">Phone: +233 302 515 422</p>
