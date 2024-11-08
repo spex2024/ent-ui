@@ -7,7 +7,7 @@ import {
   Settings,
   Phone,
   FileText,
-  MapPin,
+  MapPin, Mailbox
 } from "lucide-react";
 
 import UserProfile from "../../../components/page-ui/user-profile";
@@ -105,12 +105,16 @@ export default function ProfileTabs() {
                       <h3 className="font-medium mb-2">Contact Information</h3>
                       <div className="space-y-2">
                         <div className="flex items-center space-x-2">
-                          <Phone className="h-5 w-5" />
-                          <span>0302525384 | +233 57 828 9562</span>
+                          <Phone className="h-5 w-5"/>
+                          <span>+233 302 515 422 | +233 57 828 9562</span>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <MapPin className="h-5 w-5" />
-                          <span>Ritz, Paterson Ave, Accra, Ghana</span>
+                          <Mailbox className="h-5 w-5"/>
+                          <p>Email: hello@spexafrica.app</p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <MapPin className="h-5 w-5"/>
+                          <span>No. 5 Paterson  Ave, Accra, Ghana</span>
                         </div>
                       </div>
                     </div>
