@@ -12,18 +12,34 @@ interface Meal {
     comments?: string;
 }
 
+interface Vendor {
+    _id: string;
+    name: string;
+    location: string;
+}
 // Define the Order type
 interface Order {
     _id: string;
     orderId: string;
-    user: string;
-    vendor: { _id: string; name: string; location: string };
+    user: User;
+    vendor: Vendor;
+    mealId:string;
+    mealName:string
+    options:{
+        protein:string;
+        sauce:string;
+        extras:[];
+    }
+    price:number;
+
+    selectedDays:[]
     quantity: number;
     status: string;
     totalPrice: number;
     imageUrl: string;
-    createdAt: string;
+    createdAt: Date ;
     userName?: string;
+    code : string
 }
 
 interface User {
@@ -39,6 +55,8 @@ interface AccordionCardProps {
     user: any;
     image: string;
 }
+
+
 
 export function AccordionCard({ name, location, user, image }: AccordionCardProps) {
     const [orders, setOrders] = useState<Order[]>([]);
