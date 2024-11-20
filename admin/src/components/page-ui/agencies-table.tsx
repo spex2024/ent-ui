@@ -14,11 +14,7 @@ interface Order {
     _id: string;
     orderId: string;
     totalPrice: number;
-    meals :[
-        meal:{
-            price:number
-        }
-    ];
+    price : number;
 
 }
 
@@ -65,16 +61,19 @@ export default function AgencyTable({ agencies }: AgencyTableProps) {
         setSelectedAgency(null);
     };
 
-    // Helper function to calculate total purchase
-    const calculateTotalPurchase = (agency: Agency) => {
-        return agency.users.reduce((total, user) => {
-            return total + user.orders.reduce((userTotal, order) => {
-                // Sum the prices of all meals in each order
-                const orderTotal = order.meals.reduce((mealTotal, meal) => mealTotal + meal.price, 0);
-                return userTotal + orderTotal;
+    const calculateTotalPurchase = (agency: Agency): number => {
+        // Sum up the price of all orders for all users in the agency
+        const usersTotal = agency.users.reduce((total, user) => {
+            const userTotal = user.orders.reduce((orderTotal, order) => {
+                return orderTotal + order.price; // Sum the price of each order
             }, 0);
+            return total + userTotal; // Add the user's total to the overall total
         }, 0);
+
+        return usersTotal; // Return the total price of all user orders
     };
+
+
 
 
     useEffect(() => {

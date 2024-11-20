@@ -55,6 +55,8 @@ export default function App() {
     }
   }, [success, error]);
 
+  console.log("Orders:",orders)
+
   // Sort orders by date and time in descending order if orders is defined
   const sortedOrders = Array.isArray(orders)
     ? [...orders].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
@@ -66,24 +68,28 @@ export default function App() {
   const currentOrders = sortedOrders.slice(indexOfFirstOrder, indexOfLastOrder);
 
   // Map order details including date and time
+// Map order details including vendor name and meal details
   const orderDetails = currentOrders.map((order) => ({
     _id: order?._id,
     orderId: order?.orderId,
-    vendor: order?.vendor.name, // assuming vendor has a name property
-    meals: order?.meals,
-    quantity: order?.meals.length, // Assuming each order has an array of meals
-    status: order?.status || "pending", // Default status if not defined
-    imageUrl: order?.imageUrl, // Assuming the imageUrl property exists
+    vendor:  order?.vendor.name , // Adjust as needed
+    meal: order?.mealName,
+    quantity: order?.quantity,
+    status: order?.status || 'pending',
+    imageUrl: order?.imageUrl,
     date: new Date(order?.createdAt).toLocaleDateString(),
     time: new Date(order?.createdAt).toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
+      hour: '2-digit',
+      minute: '2-digit',
     }),
-  }));
+    options: order?.options, // Include options if needed in UI
+    schedule: Array.isArray(order?.selectedDays) ? order?.selectedDays.join(', ') : 'No schedule selected',
+  }))
 
   const handleViewDetails = (order) => {
     setSelectedOrder(order);
     onOpen();
+    console.log(order)
   };
 
   const handleCancel = async (orderId) => {
@@ -101,12 +107,10 @@ export default function App() {
               style={{ width: "50px", height: "50px", objectFit: "cover" }}
             />
           );
-        case "meals":
+        case "meal":
           return (
             <div className="flex flex-col">
-              {order.meals.map((meal, index) => (
-                <p key={index}>{meal.main}</p>
-              ))}
+              {order?.meal}
             </div>
           );
         case "status":
@@ -171,7 +175,7 @@ export default function App() {
         <TableHeader
           columns={[
             { uid: "imageUrl", name: "Image" },
-            { uid: "meals", name: "Meal Name" },
+            { uid: "meal", name: "Meal Name" },
             { uid: "orderId", name: "Order ID" },
             { uid: "vendor", name: "Vendor" },
             { uid: "quantity", name: "Qty" },
@@ -195,7 +199,7 @@ export default function App() {
             <TableRow key={order.orderId}>
               {[
                 "imageUrl",
-                "meals",
+                "meal",
                 "orderId",
                 "vendor",
                 "quantity",
@@ -258,13 +262,11 @@ export default function App() {
                 )}
               </div>
               <ModalBody className="pt-16 mt-10">
+
                 {selectedOrder && (
                   <>
                     <p>
                       <strong>Order ID:</strong> {selectedOrder.orderId}
-                    </p>
-                    <p>
-                      <strong>Price:</strong> GH₵{selectedOrder.price || 0}
                     </p>
                     <p>
                       <strong>Quantity:</strong> {selectedOrder.quantity}
@@ -279,21 +281,28 @@ export default function App() {
                       <strong>Time:</strong> {selectedOrder.time}
                     </p>
                     <div
-                      className={`flex flex-col lg:flex-row lg:items-center gap-2`}
+                      className={`flex flex-col `}
                     >
-                      <strong>Meals:</strong>
-                      <ul>
-                        {selectedOrder.meals.map((meal, index) => (
-                          <li key={index} className={`flex gap-4 text-xs`}>
-                            <span>{meal.main}</span>
-                            {/* Add any additional meal details here */}
-                            <span>{meal.protein}</span>
-                            <span>{meal.sauce}</span>
-                            <span>{meal.extras}</span>
-                          </li>
-                        ))}
+                     <p> <strong>Main Meal:  </strong> {selectedOrder.meal} </p>
+                      <ul className={`flex flex-col gap-2 mt-2`}>
+                        <li><strong>Protein: </strong>{selectedOrder?.options.protein}</li>
+                        <li><strong>Sauce: </strong>{selectedOrder?.options.sauce}</li>
+                        <li><strong>Extras: </strong>
+                          {selectedOrder?.options.extras && selectedOrder.options.extras.length > 0
+                              ? selectedOrder.options.extras.map((extra, index) => (
+                                  <span
+                                      key={index}>{extra}{index < selectedOrder.options.extras.length - 1 ? ', ' : ''}</span>
+                              ))
+                              : 'Not selected'}
+                        </li>
+                        <li><strong>Schedule: </strong>
+                          {selectedOrder.schedule}
+                        </li>
+
+
                       </ul>
                     </div>
+                    {console.log("Selected Days:", selectedOrder.schedule)}
                   </>
                 )}
               </ModalBody>

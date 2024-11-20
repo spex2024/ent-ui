@@ -55,7 +55,7 @@ export default function FoodProductCard() {
         {mealItems.map(
           (meal: {
             _id: React.Key | null | undefined;
-            main: { name: any };
+            mealName: string;
             imageUrl: string | undefined;
             vendor: {
               location: string;
@@ -81,7 +81,7 @@ export default function FoodProductCard() {
             >
               <div className="relative aspect-[4/3] overflow-hidden">
                 <img
-                  alt={meal.main?.name || "Meal image"}
+                  alt={meal.mealName || "Meal image"}
                   className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
                   src={meal?.imageUrl}
                 />
@@ -105,11 +105,11 @@ export default function FoodProductCard() {
                     <Tooltip>
                       <TooltipTrigger>
                         <p className="text-xs sm:text-sm font-semibold line-clamp-1 mb-1 sm:mb-0">
-                          {meal.main?.name || "Unnamed Meal"}
+                          {meal.mealName || "Unnamed Meal"}
                         </p>
                       </TooltipTrigger>
                       <TooltipContent>
-                        <p>{meal.main?.name || "Unnamed Meal"}</p>
+                        <p>{meal.mealName || "Unnamed Meal"}</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>

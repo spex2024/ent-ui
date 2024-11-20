@@ -1,18 +1,26 @@
-"use client";
+'use client';
 
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { X } from "lucide-react";
+import { X, ShoppingCart, Calendar } from "lucide-react";
 import toast from "react-hot-toast";
 
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import useSelectedMealStore from "@/app/store/selection";
 import useCartStore from "@/app/store/cart";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function MealModal() {
-  const { selectedMeal, closeModal, handleOptionChange, selectedOptions } =
-      useSelectedMealStore();
+  const { selectedMeal, closeModal } = useSelectedMealStore();
   const { submitOrder, success, error } = useCartStore();
+  const [selectedDays, setSelectedDays] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState({
+    protein: "",
+    sauce: "",
+    extras: []
+  });
 
   useEffect(() => {
     if (success) {
@@ -28,8 +36,32 @@ export default function MealModal() {
     }
   }, [success, error]);
 
-  const placeOrder = (selectedMeal, selectedOptions) => {
-    submitOrder(selectedMeal, selectedOptions);
+  const handleDayChange = (day) => {
+    setSelectedDays((prev) =>
+        prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]
+    );
+  };
+
+  const handleOptionChange = (category, value) => {
+    setSelectedOptions((prev) => ({
+      ...prev,
+      [category]: category === 'extras'
+          ? prev.extras.includes(value)
+              ? prev.extras.filter(item => item !== value)
+              : [...prev.extras, value]
+          : value
+    }));
+  };
+
+  const placeOrder = () => {
+    submitOrder(
+      selectedMeal,
+      selectedDays,
+        selectedOptions,
+    );
+
+    console.log(selectedOptions,selectedDays);
+
   };
 
   if (!selectedMeal) return null;
@@ -48,7 +80,7 @@ export default function MealModal() {
             initial={{ scale: 0.9, y: 50 }}
         >
           <div
-              className="h-48 bg-cover bg-center"
+              className="h-40 bg-cover bg-center"
               style={{ backgroundImage: `url(${selectedMeal?.imageUrl})` }}
           />
           <button
@@ -57,43 +89,71 @@ export default function MealModal() {
           >
             <X className="w-5 h-5 text-gray-600" />
           </button>
-          <div className="max-h-[calc(90vh-12rem)] overflow-y-auto custom-scrollbar">
-            <div className="p-6 space-y-6">
-              <h2 className="text-2xl font-bold text-gray-800 text-center">
-                {selectedMeal.main.name}
-              </h2>
-              <p className="text-sm text-gray-600 text-center">
-                {selectedMeal.main.description}
-              </p>
-              <OptionSection
-                  options={selectedMeal.protein}
-                  selectedOption={selectedOptions["protein"]}
-                  title="Option-1"
-                  onOptionChange={(value) => handleOptionChange("protein", value)}
-              />
-              <OptionSection
-                  options={selectedMeal.sauce}
-                  selectedOption={selectedOptions["sauce"]}
-                  title="Option-2"
-                  onOptionChange={(value) => handleOptionChange("sauce", value)}
-              />
-              <OptionSection
-                  options={selectedMeal.extras}
-                  selectedOption={selectedOptions["extras"]}
-                  title="Option-3"
-                  onOptionChange={(value) => handleOptionChange("extras", value)}
-              />
-            </div>
+          <div className="p-4">
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">
+              {selectedMeal.mealName}
+            </h2>
+            <p className="text-sm text-gray-600 mb-4">
+              {selectedMeal.description}
+            </p>
+            <Tabs defaultValue="options" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="options">Options</TabsTrigger>
+                <TabsTrigger value="schedule">Schedule</TabsTrigger>
+              </TabsList>
+              <TabsContent value="options" className="space-y-4 mt-4">
+                <OptionSection
+                    options={selectedMeal.protein}
+                    selectedOption={selectedOptions.protein}
+                    title="Protein"
+                    onOptionChange={(value) => handleOptionChange("protein", value)}
+                />
+                <OptionSection
+                    options={selectedMeal.sauce}
+                    selectedOption={selectedOptions.sauce}
+                    title="Sauce"
+                    onOptionChange={(value) => handleOptionChange("sauce", value)}
+                />
+                <ExtrasSection
+                    options={selectedMeal.extra}
+                    selectedOptions={selectedOptions.extras}
+                    title="Extras"
+                    onOptionChange={(value) => handleOptionChange("extras", value)}
+                />
+              </TabsContent>
+              <TabsContent value="schedule" className="space-y-4 mt-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-lg font-semibold text-gray-700">Plan Your Week</h3>
+                  <Calendar className="w-5 h-5 text-[#71bc44]" />
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  {selectedMeal.daysAvailable.map((day, index) => (
+                      <button
+                          key={index}
+                          onClick={() => handleDayChange(day)}
+                          className={`p-2 rounded-lg text-sm font-medium transition-all duration-200 ease-in-out ${
+                              selectedDays.includes(day)
+                                  ? 'bg-[#71bc44] text-white shadow-md'
+                                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          }`}
+                      >
+                        {day}
+                      </button>
+                  ))}
+                </div>
+              </TabsContent>
+            </Tabs>
           </div>
-          <div className="p-6 bg-gray-50 border-t border-gray-200">
+          <div className="p-4 bg-gray-50 border-t border-gray-200">
             <button
-                className="w-full px-6 py-3 bg-green-500 text-white font-semibold rounded-full shadow-lg hover:bg-green-600 transition-colors"
+                className="w-full px-4 py-2 bg-[#71bc44] text-white font-semibold rounded-full shadow-md hover:bg-[#5fa338] transition-colors text-sm flex items-center justify-center space-x-2"
                 onClick={() => {
-                  placeOrder(selectedMeal, selectedOptions);
+                  placeOrder();
                   closeModal();
                 }}
             >
-              Place Order
+              <ShoppingCart className="w-4 h-4" />
+              <span>Place Order</span>
             </button>
           </div>
         </motion.div>
@@ -101,10 +161,10 @@ export default function MealModal() {
   );
 }
 
-function OptionSection({ title, options, selectedOption, onOptionChange }) {
+function OptionSection({ options, selectedOption, title, onOptionChange }) {
   return (
       <div className="space-y-2">
-        <h3 className="text-lg font-semibold text-gray-700">{title}</h3>
+        <h3 className="text-md font-semibold text-gray-700">{title}</h3>
         <RadioGroup value={selectedOption || ""} onValueChange={onOptionChange}>
           <div className="grid grid-cols-2 gap-2">
             {options.map((option, index) => (
@@ -113,20 +173,49 @@ function OptionSection({ title, options, selectedOption, onOptionChange }) {
                     className="flex items-center space-x-2 bg-gray-100 rounded-lg p-2 hover:bg-gray-200 transition-colors"
                 >
                   <RadioGroupItem
-                      className="text-green-500"
+                      className="text-[#71bc44]"
                       id={`${title}-${index}`}
-                      value={option.name}
+                      value={option}
                   />
                   <label
                       className="text-sm text-gray-700 cursor-pointer"
                       htmlFor={`${title}-${index}`}
                   >
-                    {option.name}
+                    {option}
                   </label>
                 </div>
             ))}
           </div>
         </RadioGroup>
+      </div>
+  );
+}
+
+function ExtrasSection({ options, selectedOptions, title, onOptionChange }) {
+  return (
+      <div className="space-y-2">
+        <h3 className="text-md font-semibold text-gray-700">{title}</h3>
+        <div className="grid grid-cols-2 gap-2">
+          {options?.map((option, index) => (
+              <div
+                  key={index}
+                  className="flex items-center space-x-2 bg-gray-100 rounded-lg p-2 hover:bg-gray-200 transition-colors"
+              >
+                <Checkbox
+                    id={`${title}-${option}`}
+                    checked={selectedOptions.includes(option)}
+                    onCheckedChange={() => onOptionChange(option)}
+                    className="text-[#71bc44]"
+                />
+                <Label
+                    htmlFor={`${title}-${option}`}
+                    className="text-sm text-gray-700 cursor-pointer"
+                >
+                  {option}
+                </Label>
+              </div>
+          ))}
+        </div>
       </div>
   );
 }

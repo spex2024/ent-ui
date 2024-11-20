@@ -17,23 +17,25 @@ const useCartStore = create((set) => ({
   error: null,
 
   // Submit the order directly without adding to cart
-  submitOrder: async (meal, options) => {
+  submitOrder: async (meal, selectedDays, options) => {
     // Destructure necessary fields from the meal object
-    const { _id, vendor, main, createdAt, imageUrl } = meal;
+    const { _id, vendor, price, mealName, createdAt, imageUrl } = meal;
 
     // Create the order object to send to the backend
     const orderData = {
       meal: {
         id: _id,
-        vendor: vendor._id,
-        main: main.name,
+        vendor,
+        mealName,
         createdAt,
         imageUrl,
-        price: main.price,
+        price,
         quantity: 1,
       },
-      options, // Extras, protein, etc.
+      selectedDays, // This should appear here if passed correctly
+      options, // Include options if relevant
     };
+    console.log("Order data being sent:", orderData);
 
     try {
       const response = await axios.post(
