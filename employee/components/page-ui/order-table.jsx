@@ -288,7 +288,7 @@ export default function App() {
                         <li><strong>Protein: </strong>{selectedOrder?.options?.protein}</li>
                         <li><strong>Sauce: </strong>{selectedOrder?.options?.sauce}</li>
                         <li><strong>Extras: </strong>
-                          {selectedOrder?.options.extras && selectedOrder.options?.extras.length > 0
+                          {selectedOrder?.options?.extras && selectedOrder.options?.extras.length > 0
                               ? selectedOrder?.options?.extras.map((extra, index) => (
                                   <span
                                       key={index}>{extra}{index < selectedOrder.options.extras.length - 1 ? ', ' : ''}</span>
