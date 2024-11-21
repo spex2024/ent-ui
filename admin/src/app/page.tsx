@@ -253,7 +253,7 @@ export default function Dashboard() {
                             <TableCell className="hidden lg:table-cell text-muted-foreground">
                               {new Date(order?.createdAt).toLocaleDateString()}
                             </TableCell>
-                            <TableCell className="text-right font-medium">GHS {order?.price.toFixed(2)}</TableCell>
+                            <TableCell className="text-right font-medium">GHS {order?.price?.toFixed(2)}</TableCell>
                           </TableRow>
                       ))}
                     </TableBody>
