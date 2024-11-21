@@ -55,7 +55,6 @@ export default function App() {
     }
   }, [success, error]);
 
-  console.log("Orders:",orders)
 
   // Sort orders by date and time in descending order if orders is defined
   const sortedOrders = Array.isArray(orders)
@@ -302,7 +301,6 @@ export default function App() {
 
                       </ul>
                     </div>
-                    {console.log("Selected Days:", selectedOrder.schedule)}
                   </>
                 )}
               </ModalBody>
