@@ -89,7 +89,7 @@ export default function App() {
   const handleViewDetails = (order) => {
     setSelectedOrder(order);
     onOpen();
-    console.log(order)
+
   };
 
   const handleCancel = async (orderId) => {
@@ -283,13 +283,13 @@ export default function App() {
                     <div
                       className={`flex flex-col `}
                     >
-                     <p> <strong>Main Meal:  </strong> {selectedOrder.meal} </p>
+                     <p> <strong>Main Meal:  </strong> {selectedOrder?.meal} </p>
                       <ul className={`flex flex-col gap-2 mt-2`}>
-                        <li><strong>Protein: </strong>{selectedOrder?.options.protein}</li>
-                        <li><strong>Sauce: </strong>{selectedOrder?.options.sauce}</li>
+                        <li><strong>Protein: </strong>{selectedOrder?.options?.protein}</li>
+                        <li><strong>Sauce: </strong>{selectedOrder?.options?.sauce}</li>
                         <li><strong>Extras: </strong>
-                          {selectedOrder?.options.extras && selectedOrder.options.extras.length > 0
-                              ? selectedOrder.options.extras.map((extra, index) => (
+                          {selectedOrder?.options.extras && selectedOrder.options?.extras.length > 0
+                              ? selectedOrder?.options?.extras.map((extra, index) => (
                                   <span
                                       key={index}>{extra}{index < selectedOrder.options.extras.length - 1 ? ', ' : ''}</span>
                               ))
