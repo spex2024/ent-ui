@@ -72,7 +72,7 @@ export default function App() {
   const orderDetails = currentOrders.map((order) => ({
     _id: order?._id,
     orderId: order?.orderId,
-    vendor:  order?.vendor.name , // Adjust as needed
+    vendor:  order?.vendor?.name , // Adjust as needed
     meal: order?.mealName,
     quantity: order?.quantity,
     status: order?.status || 'pending',
