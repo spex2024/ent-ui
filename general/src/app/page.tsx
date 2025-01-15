@@ -31,7 +31,7 @@ export default function SPEXLandingPage() {
     {
       icon: Building2,
       title: "Enterprises",
-      description: "Sustainable corporate lunches",
+      description: "Sustainable corporate meal",
       content: "Provide your employees with convenient, eco-friendly meal options. Boost morale and reduce your company's environmental impact.",
       cta: "Sign Up Your Company",
       color: "bg-[#71bc44]"
@@ -105,7 +105,7 @@ export default function SPEXLandingPage() {
                 Smart Pack Exchange
               </h1>
               <p className="text-2xl md:text-3xl font-semibold mb-8 text-white">
-                Corporate lunch in Reusable Packs
+                Corporate Meal In Reusable Packs
               </p>
             </motion.div>
             <motion.p

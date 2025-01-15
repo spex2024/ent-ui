@@ -71,7 +71,7 @@ export default function Component() {
               </div>
               <div className="relative z-10 flex flex-col items-start justify-end h-[400px] p-8 md:p-12">
                 <h2 className="text-4xl md:text-6xl font-bold mb-4 text-white max-w-2xl">
-                  Corporate Meal in Reusable Packs
+                  Corporate Meal In Reusable Packs
                 </h2>
                 <p className="text-xl mb-6 text-white/80 max-w-xl">
                   Be part of the sustainable food packaging revolution!
