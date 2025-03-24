@@ -41,6 +41,7 @@ interface Vendor {
     code: string;
     owner: string;
     orders: Order[];
+    categories: string[];
     totalSales: number;
     createdAt: Date; // Include created date
 }
@@ -141,6 +142,7 @@ export default function VendorTable({ vendors }: VendorTableProps) {
                             <TableRow className="text-xs">
                                 <TableHead>Image</TableHead>
                                 <TableHead>Name</TableHead>
+                                <TableHead>Plan</TableHead>
                                 <TableHead>Location</TableHead>
                                 <TableHead>Code</TableHead>
                                 <TableHead>Owner</TableHead>
@@ -165,6 +167,7 @@ export default function VendorTable({ vendors }: VendorTableProps) {
                                         />
                                     </TableCell>
                                     <TableCell>{limitWords(vendor.name, 4)}</TableCell>
+                                    <TableCell>{vendor.categories.map(plan => plan)}</TableCell>
                                     <TableCell>{limitWords(vendor.location, 3)}</TableCell>
                                     <TableCell>{vendor.code}</TableCell>
                                     <TableCell>{vendor.owner}</TableCell>
