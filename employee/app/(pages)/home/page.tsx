@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import {
   ChevronRight,
   ArrowRight,
@@ -8,7 +8,7 @@ import {
   WalletIcon,
   RotateCcw,
 } from "lucide-react";
-import Link from "next/link"; // Import the Link component
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,7 +21,6 @@ import {
 } from "@/components/ui/carousel";
 import useVendorStore from "@/app/store/vendor";
 import useUserStore from "@/app/store/profile";
-
 
 const menuItems = [
   {
@@ -41,9 +40,18 @@ const menuItems = [
     alt: "Return Pack",
     text: "Return a Pack",
     link: "/return-pack",
-    showNotification: true, // Add this flag to indicate where to show notification
+    showNotification: true,
   },
 ];
+
+// Restaurant type definition to improve type safety
+type Restaurant = {
+  _id: string;
+  name: string;
+  imageUrl: string;
+  location: string;
+  rating: string | number;
+};
 
 export default function Component() {
   const { vendors, fetchVendors } = useVendorStore();
@@ -53,7 +61,101 @@ export default function Component() {
     fetchVendors();
   }, [fetchVendors]);
 
+  const agency = user?.agency;
+  const connectedVendors = agency?.vendors || [];
   const packStatus = user?.pack?.status;
+
+  // Function to render restaurant carousel with optional link path
+  const renderRestaurantCarousel = (
+    restaurants: Restaurant[],
+    title: string,
+    linkPath?: string,
+  ) => {
+    if (!restaurants || restaurants.length === 0) return null;
+
+    return (
+      <div className="relative mb-12">
+        <h2 className="text-2xl font-bold mb-6">{title}</h2>
+        <Carousel className="w-full">
+          <CarouselContent className="-ml-2 md:-ml-4">
+            {restaurants.map((restaurant) => (
+              <CarouselItem
+                key={restaurant?._id}
+                className="pl-2 md:pl-4 sm:basis-full md:basis-1/4"
+              >
+                <div className="p-1">
+                  {linkPath ? (
+                    <Link href={linkPath}>
+                      <Card className="overflow-hidden cursor-pointer hover:shadow-md transition-shadow">
+                        <CardContent className="p-0 relative">
+                          <img
+                            alt={`${restaurant?.name}`}
+                            className="w-full h-36 object-cover"
+                            src={restaurant?.imageUrl || "/placeholder.svg"}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                          <div className="absolute bottom-0 left-0 right-0 p-2">
+                            <p className="text-sm font-bold text-white truncate">
+                              {restaurant?.name || "no name"}
+                            </p>
+                            <div className="flex items-center justify-between text-xs text-white/80">
+                              <span>{restaurant?.location}</span>
+                              <div className="flex items-center">
+                                <span className="text-yellow-400 mr-1">★</span>
+                                <span>{restaurant?.rating}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  ) : (
+                    <Card className="overflow-hidden">
+                      <CardContent className="p-0 relative">
+                        <img
+                          alt={`${restaurant?.name}`}
+                          className="w-full h-36 object-cover"
+                          src={restaurant?.imageUrl || "/placeholder.svg"}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                        <div className="absolute bottom-0 left-0 right-0 p-2">
+                          <p className="text-sm font-bold text-white truncate">
+                            {restaurant?.name || "no name"}
+                          </p>
+                          <div className="flex items-center justify-between text-xs text-white/80">
+                            <span>{restaurant?.location}</span>
+                            <div className="flex items-center">
+                              <span className="text-yellow-400 mr-1">★</span>
+                              <span>{restaurant?.rating}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <div className="absolute top-1/2 transform -translate-y-1/2 -left-4 z-10">
+            <CarouselPrevious>
+              <Button className="h-8 w-8" size="icon" variant="outline">
+                <ArrowRight className="h-4 w-4 transform rotate-180" />
+              </Button>
+            </CarouselPrevious>
+          </div>
+          <div className="absolute top-1/2 transform -translate-y-1/2 -right-4 z-10">
+            <CarouselNext>
+              <Button className="h-8 w-8" size="icon" variant="outline">
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </CarouselNext>
+          </div>
+          <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-background to-transparent pointer-events-none" />
+        </Carousel>
+      </div>
+    );
+  };
 
   return (
     <div className={`min-h-screen flex flex-col `}>
@@ -116,108 +218,15 @@ export default function Component() {
                 </Link>
               ))}
             </div>
-            <div className="relative">
-              <h2 className="text-2xl font-bold mb-6">Featured Restaurants</h2>
-              <Carousel className="w-full">
-                <CarouselContent className="-ml-2 md:-ml-4">
-                  {vendors.map(
-                    (restaurant: {
-                      _id: React.Key | null | undefined;
-                      name:
-                        | string
-                        | number
-                        | bigint
-                        | boolean
-                        | React.ReactElement<
-                            any,
-                            string | React.JSXElementConstructor<any>
-                          >
-                        | Iterable<React.ReactNode>
-                        | React.ReactPortal
-                        | Promise<React.AwaitedReactNode>
-                        | null
-                        | undefined;
-                      imageUrl: string | undefined;
-                      location:
-                        | string
-                        | number
-                        | bigint
-                        | boolean
-                        | React.ReactElement<
-                            any,
-                            string | React.JSXElementConstructor<any>
-                          >
-                        | Iterable<React.ReactNode>
-                        | React.ReactPortal
-                        | Promise<React.AwaitedReactNode>
-                        | null
-                        | undefined;
-                      rating:
-                        | string
-                        | number
-                        | bigint
-                        | boolean
-                        | React.ReactElement<
-                            any,
-                            string | React.JSXElementConstructor<any>
-                          >
-                        | Iterable<React.ReactNode>
-                        | React.ReactPortal
-                        | Promise<React.AwaitedReactNode>
-                        | null
-                        | undefined;
-                    }) => (
-                      <CarouselItem
-                        key={restaurant?._id}
-                        className="pl-2 md:pl-4 sm:basis-full md:basis-1/4"
-                      >
-                        <div className="p-1">
-                          <Card className="overflow-hidden">
-                            <CardContent className="p-0 relative">
-                              <img
-                                alt={`${restaurant?.name}`}
-                                className="w-full h-36 object-cover"
-                                src={restaurant?.imageUrl}
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                              <div className="absolute bottom-0 left-0 right-0 p-2">
-                                <p className="text-sm font-bold text-white truncate">
-                                  {restaurant?.name || "no name"}
-                                </p>
-                                <div className="flex items-center justify-between text-xs text-white/80">
-                                  <span>{restaurant?.location}</span>
-                                  <div className="flex items-center">
-                                    <span className="text-yellow-400 mr-1">
-                                      ★
-                                    </span>
-                                    <span>{restaurant?.rating}</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        </div>
-                      </CarouselItem>
-                    ),
-                  )}
-                </CarouselContent>
-                <div className="absolute top-1/2 transform -translate-y-1/2 -left-4 z-10">
-                  <CarouselPrevious>
-                    <Button className="h-8 w-8" size="icon" variant="outline">
-                      <ArrowRight className="h-4 w-4 transform rotate-180" />
-                    </Button>
-                  </CarouselPrevious>
-                </div>
-                <div className="absolute top-1/2 transform -translate-y-1/2 -right-4 z-10">
-                  <CarouselNext>
-                    <Button className="h-8 w-8" size="icon" variant="outline">
-                      <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </CarouselNext>
-                </div>
-                <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-background to-transparent pointer-events-none" />
-              </Carousel>
-            </div>
+
+            {/* Connected Vendors Section */}
+            {connectedVendors.length > 0 &&
+              renderRestaurantCarousel(
+                connectedVendors,
+                "Connected Restaurants",
+              )}
+            {/* Featured Restaurants Section */}
+            {renderRestaurantCarousel(vendors, "Featured Restaurants")}
           </div>
         </main>
       </div>
